@@ -12,5 +12,6 @@ For reference:
 * [SDK Platform release notes | Android Developers](https://developer.android.com/studio/releases/platforms)
 
 ### 15/09/2023 - Practical class
-* Goal: Install Android Studio and create a new project (the *Hello Android* app) using Andrdoid Studio's wizard.
+* Goal: Install Android Studio and create a new project (the *Hello Android* app) using Android Studio's wizard.
 * Challenge: From the miriad of questions that may arise, elect the two most relevant ones for refining your mental model of the Android platform. The professor will use them as talking points in the next class.
+
