@@ -11,8 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import isel.pdm.jokes.ui.theme.JokesTheme
+
+const val JokeTestTag = "JokeTestTag"
+const val FetchButtonTestTag = "FetchButtonTestTag"
+const val JokeScreenTestTag = "JokeScreenTestTag"
 
 fun fetchJoke(): String {
     Log.v(TAG, "Fetch joke")
@@ -21,17 +26,27 @@ fun fetchJoke(): String {
 
 @Composable
 fun JokeScreen() {
-    // A surface container using the 'background' color from the theme
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Log.v(TAG, "JokeScreen()")
-        val joke = remember { mutableStateOf("") }
-        Column {
-            Text(text = joke.value)
-            Button(onClick = { joke.value = fetchJoke() }) {
-                Text(text = "Fetch it!")
+    JokesTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize().testTag(JokeScreenTestTag),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Log.v(TAG, "JokeScreen()")
+            val joke = remember { mutableStateOf("") }
+            Column {
+                if (joke.value.isNotBlank()) {
+                    Text(
+                        text = joke.value,
+                        modifier = Modifier.testTag(JokeTestTag)
+                    )
+                }
+                Button(
+                    onClick = { joke.value = fetchJoke() },
+                    modifier = Modifier.testTag(FetchButtonTestTag)
+                ) {
+                    Text(text = "Fetch it!")
+                }
             }
         }
     }
@@ -40,7 +55,5 @@ fun JokeScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun JokeScreenPreview() {
-    JokesTheme {
-        JokeScreen()
-    }
+    JokeScreen()
 }

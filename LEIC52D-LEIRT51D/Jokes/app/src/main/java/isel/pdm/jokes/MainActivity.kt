@@ -16,9 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "onCreate() called")
         setContent {
-            JokesTheme {
-                JokeScreen()
-            }
+            JokeScreen()
         }
     }
 }
