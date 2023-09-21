@@ -44,4 +44,5 @@ Video lecture:
 ### 22/09/2023 - Practical class
 * Goal: Exercise building a UI with Jetpack Compose
 * Challenge 1: Build an application for counting persons entering and leaving a room. The application is comprised of a single screen that displays the current number of persons in the room and has two buttons, one for incrementing the count and another for decrementing it.
+* Challenge 1.5: Try to mimic the following design on your application https://henryegloff.com/simple-counter/
 * Project: Build the screen for displaying information about the application's authors. For now, focus on the screen's layout. No behaviour is required at this time.
