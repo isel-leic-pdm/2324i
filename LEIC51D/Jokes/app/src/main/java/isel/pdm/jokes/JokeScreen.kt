@@ -1,32 +1,27 @@
 package isel.pdm.jokes
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.jokes.ui.theme.JokesTheme
-
-fun fetchJoke(): String {
-    Log.v(TAG, "fetchJoke() called")
-    return "Chuck Norris didn't call the wrong number, you answered the wrong phone."
-}
+import kotlinx.coroutines.launch
 
 /**
  * Tags used to identify the components of the JokeScreen in automated tests
@@ -37,19 +32,26 @@ const val JokeTestTag = "JokeTestTag"
 const val JokeScreenTestTag = "JokeScreenTestTag"
 
 /**
- * Root composable for the screen that displays a joke
+ * Root composable for the screen that displays a joke.
+ * @param service the service used to fetch jokes.
  */
 @Composable
-fun JokeScreen() {
+fun JokeScreen(service: JokesService = NoOpJokeService) {
+
+    var internalJoke by remember { mutableStateOf<Joke?>(null) }
+    val scope = rememberCoroutineScope()
+
+//    LaunchedEffect(key1 = service) {
+//        internalJoke = service.fetchJoke()
+//    }
+
     JokesTheme {
-        Log.v(TAG, "JokeScreen: composing")
-        // A surface container using the 'background' color from the theme
         Surface(
-            modifier = Modifier.fillMaxSize().testTag(JokeScreenTestTag),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(JokeScreenTestTag),
             color = MaterialTheme.colorScheme.background
         ) {
-            var joke by remember { mutableStateOf("") }
-
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,21 +59,10 @@ fun JokeScreen() {
                     .fillMaxSize()
                     .padding(6.dp),
             ) {
-                Log.i(TAG, "Column: composing")
-                if (joke.isNotBlank()) {
-                    Text(
-                        text = joke,
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                            .testTag(JokeTestTag)
-                    )
-                }
+                internalJoke?.let { JokeView(joke = it) }
                 Button(
-                    onClick = { /*joke = fetchJoke()*/ },
-                    modifier = Modifier.testTag(FetchItTestTag)
+                    modifier = Modifier.testTag(FetchItTestTag),
+                    onClick = { scope.launch { internalJoke = service.fetchJoke() } }
                 ) {
                     Text(text = "Fetch it!")
                 }
@@ -83,7 +74,6 @@ fun JokeScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun JokeScreenPreview() {
-    JokesTheme {
-        JokeScreen()
-    }
+    JokeScreen(NoOpJokeService)
 }
+

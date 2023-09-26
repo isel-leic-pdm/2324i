@@ -2,11 +2,13 @@ package isel.pdm.jokes
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import isel.pdm.jokes.ui.theme.JokesTheme
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import org.junit.Rule
 import org.junit.Test
+import java.net.URL
 
 class JokeScreenTest {
 
@@ -15,41 +17,36 @@ class JokeScreenTest {
 
     @Test
     fun screen_initial_state_does_not_display_joke() {
-        // Start the app
-        composeTestRule.setContent {
-            JokesTheme {
-                JokeScreen()
-            }
-        }
-
+        // Arrange
+        // Act
+        composeTestRule.setContent { JokeScreen() }
+        // Assert
         composeTestRule.onNodeWithTag(JokeScreenTestTag).assertExists()
         composeTestRule.onNodeWithTag(JokeTestTag).assertDoesNotExist()
     }
 
     @Test
     fun screen_initial_state_displays_fetch_button() {
-        // Start the app
-        composeTestRule.setContent {
-            JokesTheme {
-                JokeScreen()
-            }
-        }
-
+        // Arrange
+        // Act
+        composeTestRule.setContent { JokeScreen() }
+        // Assert
         composeTestRule.onNodeWithTag(JokeScreenTestTag).assertExists()
         composeTestRule.onNodeWithTag(FetchItTestTag).assertExists()
     }
 
     @Test
-    fun after_fetch_button_is_pressed_joke_is_displayed() {
-        // Start the app
-        composeTestRule.setContent {
-            JokesTheme {
-                JokeScreen()
-            }
+    fun click_on_fetch_button_calls_jokes_service() {
+        // Arrange
+        val mockService = mockk<JokesService> {
+            coEvery { fetchJoke() } returns Joke(text = "Chuck Norris can divide by zero.", source = URL("http://tests.com"))
         }
-
-        composeTestRule.onNodeWithTag(JokeScreenTestTag).assertExists()
+        composeTestRule.setContent { JokeScreen(service = mockService) }
+        // Act
         composeTestRule.onNodeWithTag(FetchItTestTag).performClick()
-        composeTestRule.onNodeWithTag(JokeTestTag).assertExists()
+        // Assert
+        coVerify(exactly = 1) {
+            mockService.fetchJoke()
+        }
     }
 }

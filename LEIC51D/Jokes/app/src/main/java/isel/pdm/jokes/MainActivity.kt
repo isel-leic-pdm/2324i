@@ -16,34 +16,49 @@ import isel.pdm.jokes.ui.theme.JokesTheme
 const val TAG = "JOKES_TAG"
 
 /**
- * Lecture #2 script
+ * Lecture #3 script
  *
- * Step 1 - Observe
- *  - the structure of the project (including manifest)
- *  - the MainActivity class
- *  - the Greeting composable
- *  - the GreetingPreview composable and the preview pane in the IDE
- *  - the JokesTheme composable
- * Step 2 - Lets start building the Jokes app
- *  - cleanup the project (remove the Greeting composable and the GreetingPreview composable)
- *  - create a new composable named JokeScreen, which represents the screen that displays a joke
- * Step 3 - Lets implement the layout of the JokeScreen
- * Step 4 - Lets implement the logic of the JokeScreen (non realistic)
- *      - the joke is fetch from its provider (a fake one) whe the Fetch button is pressed, and displayed
- *      on the screen
- * Step 5 - Lets build automated tests for the JokeScreen
- *    - the tests should check that the joke is displayed when the Fetch button is pressed
- *    - the tests should check that the joke is not displayed until the Fetch button is pressed for
- *    the first time
- *    - the tests should check that the provider function is called when the Fetch button is pressed
- * Step 6 - Discuss the order of the previous two steps (Test Driven Development approach)
+ * Step 1 - Lets look at the solution of the first challenge and discuss:
+ *  - the separation between the UI and the domain logic
+ *  - the design criteria: domain data is immutable
+ *  - the requirements that stem from the need to build automated tests
+ *  - the flow of data (top to bottom) and the flow of events (bottom to top)
+ *  - the use of test doubles to test the UI (see MainScreenTests.kt)
+ *
+ * Step 2 - Effects in the UI with Jetpack Compose
+ *  - discuss the need to perform I/O in the UI and its consequences
+ *  - discuss Android's concurrency model
+ *  - Step 2.1 - Lets make the joke fetching asynchronous (suspend functions)
+ *  - Step 2.2 - The joke is fetched automatically upon composition (LaunchedEffect)
+ *  - Step 2.3 - The joke is fetched upon button click (rememberCoroutineScope)
+ *  - Step 2.4 - Lets make the joke fetching take its time
+ *      - By using a delay
+ *      - By blocking the UI thread :-/
+ *
+ * Step 3 - What happens if there's a reconfiguration?
+ *  - Lets talk about the Activity lifecycle and its consequences
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "onCreate() called")
         setContent {
-            JokeScreen()
+            JokeScreen(FakeJokesService())
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.v(TAG, "onStart() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.v(TAG, "onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.v(TAG, "onDestroy() called")
     }
 }
