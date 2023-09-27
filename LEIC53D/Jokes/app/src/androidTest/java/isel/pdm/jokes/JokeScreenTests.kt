@@ -1,10 +1,15 @@
 package isel.pdm.jokes
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import org.junit.Rule
 import org.junit.Test
+import java.net.URL
 
 class JokeScreenTests {
 
@@ -12,21 +17,35 @@ class JokeScreenTests {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun screen_in_initial_state_does_not_display_joke() {
-        composeTestRule.setContent {
-            JokeScreen()
-        }
-
+    fun screen_initial_state_does_not_display_joke() {
+        // Arrange
+        // Act
+        composeTestRule.setContent { JokeScreen() }
+        // Assert
         composeTestRule.onNodeWithTag(JokeTestTag).assertDoesNotExist()
     }
 
     @Test
-    fun when_fetch_button_is_pressed_joke_is_displayed() {
-        composeTestRule.setContent {
-            JokeScreen()
-        }
+    fun screen_initial_state_displays_fetch_button() {
+        // Arrange
+        // Act
+        composeTestRule.setContent { JokeScreen() }
+        // Assert
+        composeTestRule.onNodeWithTag(FetchItTestTag).assertIsDisplayed()
+    }
 
+    @Test
+    fun click_on_fetch_button_calls_jokes_service() {
+        // Arrange
+        val mockService = mockk<JokesService> {
+            coEvery { fetchJoke() } returns Joke(text = "Chuck Norris can divide by zero.", source = URL("http://tests.com"))
+        }
+        composeTestRule.setContent { JokeScreen(service = mockService) }
+        // Act
         composeTestRule.onNodeWithTag(FetchItTestTag).performClick()
-        composeTestRule.onNodeWithTag(JokeTestTag).assertExists()
+        // Assert
+        coVerify(exactly = 1) {
+            mockService.fetchJoke()
+        }
     }
 }
