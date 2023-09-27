@@ -76,7 +76,7 @@ Video lecture (in Portuguese): (recorded in LEIC51D class)
 * Android @ ISEL - 2023 - (03) Jetpack Compose (parte 2) _(coming soon)_
 
 
-### 28/09/2023 - Practical class
+### 27/09/2023 (Part 2) and 28/09/2023 - Practical class
 * Goal: Exercise building a UI with Jetpack Compose using state hoisting and effects
 * Challenge 2: Build a StopWatch application, for counting time. The application has a screen with the current count and buttons to start, stop and restart the count.
 * Project: Build the screen for playing the game (with partial implementation of the behavior, that is, moves are made but the rules of the game are not yet applied). Create automatic tests for the screen and for the game logic that is implemented. There's still no navigation between the screens.
