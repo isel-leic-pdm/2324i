@@ -63,9 +63,11 @@ For reference:
   * [Test doubles in Android](https://developer.android.com/training/testing/fundamentals/test-doubles)
   * [Mockk, a mocking library for Kotlin](https://mockk.io/)
 * [Challenge 1 solution](https://github.com/isel-leic-pdm/2324i/tree/main/challenges)
-
+* [Loading images](https://developer.android.com/jetpack/compose/graphics/images/loading)
+* [Coil](https://github.com/coil-kt/coil#jetpack-compose)
 
 ### 29/09/2023 - Practical class
 * Goal: Exercise building a UI with Jetpack Compose using state hoisting and effects
 * Challenge 2: Build a StopWatch application, for counting time. The application has a screen with the current count and buttons to start, stop and restart the count.
+* Challenge 2.5: Try to mimic the following design on your application https://www.behance.net/gallery/40534207/StopWatch-Day84100-My-UIUX-Free-SketchApp-Challenge
 * Project: Build the screen for playing the game (with partial implementation of the behavior, that is, moves are made but the rules of the game are not yet applied). Create automatic tests for the screen and for the game logic that is implemented. There's still no navigation between the screens.
