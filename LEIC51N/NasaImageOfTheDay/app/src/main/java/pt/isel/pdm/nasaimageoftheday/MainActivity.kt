@@ -11,11 +11,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import pt.isel.pdm.nasaimageoftheday.model.NasaImage
+import pt.isel.pdm.nasaimageoftheday.model.NasaImages
+import pt.isel.pdm.nasaimageoftheday.screens.MainScreen
+import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageView
+import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageViewPreview
 import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
 
 const val TAG: String = "NasaImageOfTheDay"
@@ -31,7 +38,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    var nasaImage by remember { mutableStateOf<NasaImage?>(null) }
+
+                    MainScreen(
+                        nasaImage = nasaImage,
+                        loadImage = { nasaImage = getNasaImage() }
+                    )
                 }
             }
         }
@@ -52,49 +64,12 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "onDestroy")
     }
 
-}
-
-
-
-@Composable
-fun MainScreen() {
-
-    Log.d(TAG, "MainScreen composition")
-    var showText = remember { mutableStateOf(false) }
-    Box()
-    {
-        if (showText.value == false) {
-            Button(
-                onClick = {
-                    Log.d(TAG, "Button Clicked")
-                    showText.value = true
-                    Log.d(TAG, "State is " + showText.value)
-                },
-                modifier = Modifier.align(Alignment.Center)
-            )
-            {
-                Text(text = "Load Image")
-            }
-        } else {
-            Text(text = "Here")
-        }
-
+    fun getNasaImage(): NasaImage {
+        return NasaImages.Images.random()
     }
+
 }
 
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NasaImageOfTheDayTheme {
-        Greeting("Android")
-    }
-}
+
