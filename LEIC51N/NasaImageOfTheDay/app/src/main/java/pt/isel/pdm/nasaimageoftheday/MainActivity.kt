@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.model.NasaImages
+import pt.isel.pdm.nasaimageoftheday.screens.EffectsScreen
 import pt.isel.pdm.nasaimageoftheday.screens.MainScreen
 import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageView
 import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageViewPreview
@@ -39,11 +40,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     var nasaImage by remember { mutableStateOf<NasaImage?>(null) }
-
+/*
                     MainScreen(
                         nasaImage = nasaImage,
                         loadImage = { nasaImage = getNasaImage() }
+
                     )
+ */
+                    EffectsScreen()
                 }
             }
         }

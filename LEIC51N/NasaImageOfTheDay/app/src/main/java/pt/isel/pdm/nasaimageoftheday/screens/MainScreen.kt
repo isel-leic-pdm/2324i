@@ -27,7 +27,7 @@ fun MainScreen(
 ) {
     LaunchedEffect(Unit)
     {
-
+        launch() {  }
     }
 
     val scope = rememberCoroutineScope()

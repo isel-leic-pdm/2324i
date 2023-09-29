@@ -30,7 +30,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun test_if_all_fields_appear_on_nasaimageview() {
-        val nasaImage = NasaImages.Images[0]
+        val nasaImage = NasaImage("title", "author", "description", "10-07-1923", "www.google.com")
         composeTestRule.setContent {
             NasaImageView(nasaImage = nasaImage)
         }
@@ -43,7 +43,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun test_if_nasaimage_without_author_doesnt_show_it() {
-        val nasaImage = NasaImage("",null, "","","")
+        val nasaImage = NasaImage("", null, "", "", "")
 
         composeTestRule.setContent {
             NasaImageView(nasaImage = nasaImage)

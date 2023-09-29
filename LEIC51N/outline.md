@@ -65,6 +65,8 @@ For reference:
 * [Challenge 1 solution](https://github.com/isel-leic-pdm/2324i/tree/main/challenges)
 * [Loading images](https://developer.android.com/jetpack/compose/graphics/images/loading)
 * [Coil](https://github.com/coil-kt/coil#jetpack-compose)
+* [Corrotinas Kotlin, com Pedro Félix](https://www.youtube.com/watch?v=K_fqNQz3UoU&list=PL8XxoCaL3dBhrsR7Sf4tVxOLCdrzfWTvG&index=1)
+* [Corrotinas: PC LEIC43D 2122v - Aula 16](https://www.youtube.com/watch?v=hFWVNIkciwY&list=PL8XxoCaL3dBiv-3pHZLbFGYsQiJa9X73o&index=16)
 
 ### 29/09/2023 - Practical class
 * Goal: Exercise building a UI with Jetpack Compose using state hoisting and effects
