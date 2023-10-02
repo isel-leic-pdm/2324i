@@ -26,13 +26,15 @@ import kotlinx.coroutines.launch
  *
  * SUBJECTIVITY ALERT: Personally, I prefer the [MainScreen] version of the screen, because it
  * is more declarative and the code is simpler to read. We only need to understand the semantics
- * of the [LaunchedEffect] composable, which is not that hard. On the other hand, the [MainScreenV2]
- * implementation uses an imperative style, which is more difficult to read and understand.
+ * of the LaunchedEffect composable, which is not that hard. On the other hand, the [MainScreenV2]
+ * implementation uses an imperative style, which makes the solution more difficult to understand.
  */
 @Composable
 fun MainScreenV2(stopWatch: StopWatch? = null) {
 
-    var internalStopWatch = stopWatch ?: StopWatch(startedAt = 0, stoppedAt = 0)
+    var internalStopWatch by remember {
+        mutableStateOf(stopWatch ?: StopWatch(startedAt = 0, stoppedAt = 0))
+    }
     var stopWatchValue by remember { mutableStateOf(internalStopWatch.value) }
 
     val scope = rememberCoroutineScope()

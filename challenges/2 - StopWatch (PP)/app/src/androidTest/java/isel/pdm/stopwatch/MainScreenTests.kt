@@ -39,6 +39,19 @@ class MainScreenTests {
     }
 
     @Test
+    fun the_stopwatch_value_is_zeroed_when_reset_button_is_clicked() {
+        // Arrange
+        val stopwatch = spyk(StopWatch(startedAt = 0, stoppedAt = 65210))
+        // Act
+        composeRule.setContent { MainScreen(stopwatch) }
+        composeRule.onNodeWithTag(RESET_BUTTON_TEST_TAG).performClick()
+        // Assert
+        composeRule.onNodeWithText("00:").assertExists()
+        composeRule.onNodeWithText("00,").assertExists()
+        composeRule.onNodeWithText("00").assertExists()
+    }
+
+    @Test
     fun start_of_zero_valued_stopWatch_is_called_when_start_button_is_clicked() {
         // Arrange
         val stopwatch = spyk(StopWatch(startedAt = 0, stoppedAt = 0))

@@ -32,6 +32,7 @@ fun MainScreen(stopWatch: StopWatch? = null) {
     var stopWatchValue by remember { mutableStateOf(internalStopWatch.value) }
 
     LaunchedEffect(key1 = internalStopWatch) {
+        stopWatchValue = internalStopWatch.value
         while (internalStopWatch.isStarted) {
             delay(10)
             stopWatchValue = internalStopWatch.value
