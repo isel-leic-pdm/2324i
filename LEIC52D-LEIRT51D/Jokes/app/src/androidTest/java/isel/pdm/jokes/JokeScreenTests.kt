@@ -15,7 +15,7 @@ class JokeScreenTests {
     @Test
     fun screen_on_initial_state_does_not_show_joke() {
         composeRule.setContent {
-            JokeScreen(NoOpJokeService)
+            JokeScreen(service = NoOpJokeService)
         }
 
         composeRule.onNodeWithTag(JokeTestTag).assertDoesNotExist()
@@ -24,21 +24,21 @@ class JokeScreenTests {
     @Test
     fun screen_on_initial_state_shows_fetch_button() {
         composeRule.setContent {
-            JokeScreen(NoOpJokeService)
+            JokeScreen(service = NoOpJokeService)
         }
 
-        composeRule.onNodeWithTag(FetchButtonTestTag).assertExists()
+        composeRule.onNodeWithTag(FetchItTestTag).assertExists()
     }
 
     @Test
     fun screen_shows_joke_after_fetch_button_click() {
         // Arrange
         composeRule.setContent {
-            JokeScreen(NoOpJokeService)
+            JokeScreen(service = NoOpJokeService)
         }
 
         // Act
-        composeRule.onNodeWithTag(FetchButtonTestTag).performClick()
+        composeRule.onNodeWithTag(FetchItTestTag).performClick()
 
         // Assert
         composeRule.onNodeWithTag(JokeTestTag).assertExists()
