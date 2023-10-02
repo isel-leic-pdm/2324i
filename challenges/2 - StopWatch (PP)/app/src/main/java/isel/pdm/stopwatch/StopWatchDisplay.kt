@@ -9,27 +9,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+const val StopWatchDisplayTestTag = "stopwatch-display"
+const val MinutesTestTag = "minutes-text"
+const val SecondsTestTag = "seconds-text"
+const val DeciSecondsTestTag = "deci-seconds-text"
+
 @Composable
 fun StopWatchDisplay(value: StopWatchValue, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier
+        modifier = modifier.testTag(StopWatchDisplayTestTag)
     ) {
         HeaderText(
+            testTag = MinutesTestTag,
             text = String.format("%02d:", value.minutes),
             header = stringResource(id = R.string.minutes_label)
         )
         HeaderText(
+            testTag = SecondsTestTag,
             text = String.format("%02d,", value.seconds),
             header = stringResource(id = R.string.seconds_label)
         )
         HeaderText(
+            testTag = DeciSecondsTestTag,
             text = String.format("%02d", value.milliseconds / 10),
             header = stringResource(id = R.string.deciseconds_label)
         )
@@ -37,13 +46,14 @@ fun StopWatchDisplay(value: StopWatchValue, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun HeaderText(text: String, header: String) {
+private fun HeaderText(testTag: String, text: String, header: String) {
     Column {
         Text(
             text = header,
             modifier = Modifier.offset(y = 16.dp).padding(start = 8.dp)
         )
         Text(
+            modifier = Modifier.testTag(testTag),
             text = text,
             style = TextStyle(letterSpacing = 4.sp),
             fontSize = MaterialTheme.typography.displayLarge.fontSize,
@@ -55,7 +65,7 @@ private fun HeaderText(text: String, header: String) {
 @Composable
 @Preview(showBackground = true)
 private fun HeaderTextPreview() {
-    HeaderText(text = "00:", header = "minutes")
+    HeaderText(testTag = MinutesTestTag, text = "00:", header = "minutes")
 }
 
 @Composable

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StopWatch</string>
+    <string name="minutes_label">minutes</string>
+    <string name="seconds_label">secondes</string>
+    <string name="deciseconds_label">décisecondes</string>
+    <string name="start_button_label">Démarrer</string>
+    <string name="stop_button_label">Arrêter</string>
+    <string name="reset_button_label">Effacer</string>
+</resources>

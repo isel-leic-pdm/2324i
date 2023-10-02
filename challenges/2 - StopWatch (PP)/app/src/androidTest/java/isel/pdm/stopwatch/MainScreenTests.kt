@@ -1,15 +1,15 @@
 package isel.pdm.stopwatch
 
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.mockk.spyk
 import io.mockk.verify
-
-import org.junit.Test
-
 import org.junit.Rule
+import org.junit.Test
 
 /**
  * Instrumented tests for the [MainScreen] composable.
@@ -21,6 +21,7 @@ import org.junit.Rule
  * See https://developer.android.com/training/testing/fundamentals/test-doubles for more
  * information about test doubles.
  */
+@ExperimentalTestApi
 class MainScreenTests {
 
     @get:Rule
@@ -33,9 +34,9 @@ class MainScreenTests {
         // Act
         composeRule.setContent { MainScreen(stopwatch) }
         // Assert
-        composeRule.onNodeWithText("01:").assertExists()
-        composeRule.onNodeWithText("05,").assertExists()
-        composeRule.onNodeWithText("21").assertExists()
+        composeRule.onNodeWithTag(MinutesTestTag).assertTextEquals("01:")
+        composeRule.onNodeWithTag(SecondsTestTag).assertTextEquals("05,")
+        composeRule.onNodeWithTag(DeciSecondsTestTag).assertTextEquals("21")
     }
 
     @Test
@@ -46,9 +47,9 @@ class MainScreenTests {
         composeRule.setContent { MainScreen(stopwatch) }
         composeRule.onNodeWithTag(RESET_BUTTON_TEST_TAG).performClick()
         // Assert
-        composeRule.onNodeWithText("00:").assertExists()
-        composeRule.onNodeWithText("00,").assertExists()
-        composeRule.onNodeWithText("00").assertExists()
+        composeRule.onNodeWithTag(MinutesTestTag).assertTextEquals("00:")
+        composeRule.onNodeWithTag(SecondsTestTag).assertTextEquals("00,")
+        composeRule.onNodeWithTag(DeciSecondsTestTag).assertTextEquals("00")
     }
 
     @Test
@@ -82,5 +83,32 @@ class MainScreenTests {
         composeRule.onNodeWithTag(START_BUTTON_TEST_TAG).performClick()
         // Assert
         verify(exactly = 1) { stopwatch.resume() }
+    }
+
+    @Test
+    fun clicking_the_start_button_enables_periodic_update_of_the_stopwatch_value() {
+        // Arrange
+        val stopwatch = StopWatch(startedAt = 0, stoppedAt = 0)
+        // Act
+        composeRule.setContent { MainScreen(stopwatch) }
+        composeRule.onNodeWithTag(START_BUTTON_TEST_TAG).performClick()
+        // Assert
+        composeRule.waitUntilDoesNotExist(
+            matcher = hasTextExactly("00"),
+            timeoutMillis = 500
+        )
+    }
+
+    @Test
+    fun clicking_the_reset_button_resets_the_stopwatch_value() {
+        // Arrange
+        val stopwatch = StopWatch(startedAt = 0, stoppedAt = 65210)
+        // Act
+        composeRule.setContent { MainScreen(stopwatch) }
+        composeRule.onNodeWithTag(RESET_BUTTON_TEST_TAG).performClick()
+        // Assert
+        composeRule.onNodeWithTag(MinutesTestTag).assertTextEquals("00:")
+        composeRule.onNodeWithTag(SecondsTestTag).assertTextEquals("00,")
+        composeRule.onNodeWithTag(DeciSecondsTestTag).assertTextEquals("00")
     }
 }
