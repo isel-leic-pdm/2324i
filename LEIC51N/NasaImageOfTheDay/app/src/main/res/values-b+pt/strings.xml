@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Image do Dia</string>
+    <string name="load_image">Carregar Imagem</string>
+    <string name="language">Português</string>
+    <string name="change_language">Alterar Idioma</string>
+
+</resources>

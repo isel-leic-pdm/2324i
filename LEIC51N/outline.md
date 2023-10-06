@@ -99,6 +99,7 @@ For reference:
 * [Guide to application architecture](https://developer.android.com/jetpack/guide)
 * [Application resources](https://developer.android.com/guide/topics/resources/providing-resources)
 * [Challenge 2 solution](https://github.com/isel-leic-pdm/2324i/tree/main/challenges)
+* [Resources in Compose](https://developer.android.com/jetpack/compose/resources)
 
 Video lecture (in Portuguese):
 * [Android @ ISEL - 2023 - (04) Jetpack Compose (considerações de desenho)](https://www.youtube.com/watch?v=4C2v3Bv54WM&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=4)

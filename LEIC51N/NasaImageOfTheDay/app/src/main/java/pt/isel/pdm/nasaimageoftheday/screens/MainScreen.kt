@@ -12,8 +12,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pt.isel.pdm.nasaimageoftheday.R
 import pt.isel.pdm.nasaimageoftheday.TAG
 import pt.isel.pdm.nasaimageoftheday.helpers.TestTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
@@ -45,7 +47,7 @@ fun MainScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
             {
-                Text(text = "Load Image")
+                Text(text = stringResource(R.string.load_image))
             }
         } else {
             NasaImageView(

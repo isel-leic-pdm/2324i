@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,12 +19,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.model.NasaImages
 import pt.isel.pdm.nasaimageoftheday.screens.EffectsScreen
 import pt.isel.pdm.nasaimageoftheday.screens.MainScreen
 import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageView
 import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageViewPreview
+import pt.isel.pdm.nasaimageoftheday.screens.playground.LocalizationScreen
+import pt.isel.pdm.nasaimageoftheday.screens.playground.MutableDataPlaygroundScreen
 import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
 
 const val TAG: String = "NasaImageOfTheDay"
@@ -39,19 +44,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    /*
                     var nasaImage by remember { mutableStateOf<NasaImage?>(null) }
-/*
                     MainScreen(
                         nasaImage = nasaImage,
                         loadImage = { nasaImage = getNasaImage() }
-
                     )
- */
-                    EffectsScreen()
+
+                     */
+                    MutableDataPlaygroundScreen();
                 }
             }
         }
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -73,7 +79,6 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
 
 
 
