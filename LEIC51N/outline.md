@@ -73,3 +73,37 @@ For reference:
 * Challenge 2: Build a StopWatch application, for counting time. The application has a screen with the current count and buttons to start, stop and restart the count.
 * Challenge 2.5: Try to mimic the following design on your application https://www.behance.net/gallery/40534207/StopWatch-Day84100-My-UIUX-Free-SketchApp-Challenge
 * Project: Build the screen for playing the game (with partial implementation of the behavior, that is, moves are made but the rules of the game are not yet applied). Create automatic tests for the screen and for the game logic that is implemented. There's still no navigation between the screens.
+
+## Week 4
+### 05/10/2023 - National Holiday
+### 06/10/2023 - Building Android UIs with Jetpack Compose (wraping up) 
+* Considerations on software design in Android using Jetpack Compose
+  * Clear separation of concerns between UI and domain logic
+* Domain logic is comprised of:
+  * Domain data (immutable)
+  * Domain operations (pure functions)
+* The UI is comprised of independent screens
+  * Each screen is comprised of:
+    * An Activity that hosts the screen
+    * A @Composable function that's responsible for building the screen's UI: i.e. the screen's root composable
+    * The screen's UI is comprised of @Composable functions that build the screen's details
+* UI state and behaviour management is made by:
+  * Pushing down state to the leaf @Composable functions
+  * Propagating events up to the screen's root @Composable function
+* Domain data is published to the UI as observable mutable state (i.e. using `mutableStateOf`)
+* We will soon include another element in this design: the view model. Stay tuned.
+* Application resources: internationalization and localization
+
+For reference:
+* [Architecting your Compose UI](https://developer.android.com/jetpack/compose/architecture)
+* [Guide to application architecture](https://developer.android.com/jetpack/guide)
+* [Application resources](https://developer.android.com/guide/topics/resources/providing-resources)
+* [Challenge 2 solution](https://github.com/isel-leic-pdm/2324i/tree/main/challenges)
+
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (04) Jetpack Compose (considerações de desenho)](https://www.youtube.com/watch?v=4C2v3Bv54WM&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=4)
+
+
+### 06/10/2023 - Practical class
+* Goal: Exercise the creation of solutions ensure a clear separation of concerns between UI and domain logic
+* Project: Complete the implementation of the screen for playing the game, along with the respective domain logic. The game is played locally, not involving communication with either the Web API (option C) or Firestore (option B). In the implementation, take into account that, subsequently,  communication will occur during the game. For now, there is still no navigation between the application's screens.
