@@ -115,3 +115,28 @@ Video lecture (in Portuguese):
 ### 06/10/2023 - Practical class
 * Goal: Exercise the creation of solutions ensure a clear separation of concerns between UI and domain logic
 * Project: Complete the implementation of the screen for playing the game, along with the respective domain logic. The game is played locally, not involving communication with either the Web API (option C) or Firestore (option B). In the implementation, take into account that, subsequently,  communication will occur during the game. For now, there is still no navigation between the application's screens.
+
+## Week 5
+### 09/10/2023 - Android UX: navigating between screens
+* UI navigation in Android
+  * Navigation between activities
+  * User experience: _user tasks_ and _back stack_
+* Intents: 
+  * Explicit - for navigating between activities in the same application
+  * Implicit - for navigating between activities in different applications
+  * Intent filters as a means for declaring the activities that can handle an intent
+
+For reference:
+* [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+* [Intents and intent filters](https://developer.android.com/guide/components/intents-filters)
+* [Sending the user to another app](https://developer.android.com/training/basics/intents/sending)
+* [Common intents](https://developer.android.com/guide/components/intents-common)
+
+Video lecture (in Portuguese): (__coming soon__)
+
+### 13/10/2023 - Practical class
+* Goal: Building the UI navigation of the project
+* Project: Complete the implementation of the screen for displaying information about the application's authors.
+* Project: Create the application's navigation graph and implement the navigation between the screens.
+* Project: Finish the implementation of the game's screen and the game logic, presuming that both players use the same device.
+* Project: Create automatic tests for all the screens and for the game logic that is implemented.
