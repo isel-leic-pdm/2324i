@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Jokes</string>
+    <string name="top_bar_go_back">Back</string>
+    <string name="top_bar_navigate_to_about">About</string>
 </resources>
