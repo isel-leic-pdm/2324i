@@ -1,4 +1,4 @@
-package isel.pdm.jokes
+package isel.pdm.jokes.daily
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import isel.pdm.jokes.Joke
+import isel.pdm.jokes.JokesService
+import isel.pdm.jokes.NoOpJokeService
 import isel.pdm.jokes.ui.theme.JokesTheme
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -38,7 +41,11 @@ const val JokeScreenTestTag = "JokeScreenTestTag"
  * @param service the service used to fetch jokes.
  */
 @Composable
-fun JokeScreen(joke: Joke? = null, service: JokesService = NoOpJokeService) {
+fun JokeScreen(
+    joke: Joke? = null,
+    service: JokesService = NoOpJokeService,
+    onInfoRequested: () -> Unit = { }
+) {
 
     var internalJoke by remember { mutableStateOf(joke) }
     val scope = rememberCoroutineScope()
@@ -64,7 +71,10 @@ fun JokeScreen(joke: Joke? = null, service: JokesService = NoOpJokeService) {
                 Button(
                     modifier = Modifier.testTag(FetchItTestTag),
                     onClick = {
-                        scope.launch { internalJoke = service.fetchJoke() }
+                        scope.launch {
+                            onInfoRequested()
+                            //internalJoke = service.fetchJoke()
+                        }
                     }
                 ) {
                     Text(text = "Fetch it!")

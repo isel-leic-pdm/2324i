@@ -6,6 +6,9 @@ import org.junit.Test
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import isel.pdm.jokes.daily.FetchItTestTag
+import isel.pdm.jokes.daily.JokeScreen
+import isel.pdm.jokes.daily.JokeTestTag
 
 class JokeScreenTests {
 
