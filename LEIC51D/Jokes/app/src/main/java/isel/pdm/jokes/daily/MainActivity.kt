@@ -1,10 +1,12 @@
 package isel.pdm.jokes.daily
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.jokes.FakeJokesService
+import isel.pdm.jokes.about.AboutActivity
 
 const val TAG = "JOKES_TAG"
 
@@ -32,7 +34,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "onCreate() called")
         setContent {
-            JokeScreen(FakeJokesService())
+            JokeScreen(
+                service = FakeJokesService(),
+                onInfoRequested = { AboutActivity.navigateTo(this) }
+            )
         }
     }
 
