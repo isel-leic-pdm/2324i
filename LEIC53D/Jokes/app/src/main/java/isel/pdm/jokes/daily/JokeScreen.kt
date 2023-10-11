@@ -1,15 +1,17 @@
-package isel.pdm.jokes
+package isel.pdm.jokes.daily
 
+import android.media.tv.BroadcastInfoRequest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import isel.pdm.jokes.Joke
+import isel.pdm.jokes.JokesService
+import isel.pdm.jokes.NoOpJokeService
+import isel.pdm.jokes.ui.NavigationHandlers
+import isel.pdm.jokes.ui.TopBar
 import isel.pdm.jokes.ui.theme.JokesTheme
 import kotlinx.coroutines.launch
 
@@ -35,29 +42,31 @@ const val JokeScreenTestTag = "JokeScreenTestTag"
  * Root composable for the screen that displays a joke.
  * @param service the service used to fetch jokes.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JokeScreen(service: JokesService = NoOpJokeService) {
+fun JokeScreen(
+    service: JokesService = NoOpJokeService,
+    onInfoRequested: () -> Unit = { }
+) {
 
     var internalJoke by remember { mutableStateOf<Joke?>(null) }
     val scope = rememberCoroutineScope()
 
-//    LaunchedEffect(key1 = service) {
-//        internalJoke = service.fetchJoke()
-//    }
-
     JokesTheme {
-        Surface(
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
                 .testTag(JokeScreenTestTag),
-            color = MaterialTheme.colorScheme.background
-        ) {
+            topBar = { TopBar(
+                navigation = NavigationHandlers(onInfoRequested = onInfoRequested)
+            ) }
+        ) { it ->
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(6.dp),
+                    .padding(it),
             ) {
                 internalJoke?.let { JokeView(joke = it) }
                 Button(

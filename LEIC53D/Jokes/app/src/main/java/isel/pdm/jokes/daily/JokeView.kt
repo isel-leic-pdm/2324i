@@ -1,4 +1,4 @@
-package isel.pdm.jokes
+package isel.pdm.jokes.daily
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import isel.pdm.jokes.Joke
 import isel.pdm.jokes.ui.theme.JokesTheme
 import java.net.URL
 

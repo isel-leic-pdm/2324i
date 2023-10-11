@@ -7,6 +7,9 @@ import androidx.compose.ui.test.performClick
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import isel.pdm.jokes.daily.FetchItTestTag
+import isel.pdm.jokes.daily.JokeScreen
+import isel.pdm.jokes.daily.JokeTestTag
 import org.junit.Rule
 import org.junit.Test
 import java.net.URL
