@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">NasaImageOfTheDay</string>
+    <string name="app_name">Nasa Images</string>
     <string name="load_image">Load Image</string>
     <string name="language">English</string>
     <string name="change_language">Change Language</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="top_bar_go_back">back</string>
+    <string name="top_bar_navigate_to_about">about</string>
+    <string name="about">About</string>
+    <string name="activity_info_no_suitable_app">Could not find a suitable application</string>
 </resources>

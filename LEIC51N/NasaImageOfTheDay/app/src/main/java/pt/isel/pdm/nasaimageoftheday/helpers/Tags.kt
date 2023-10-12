@@ -5,3 +5,9 @@ object TestTags {
     const val SingleNasaViewTestTag = "SingleNasaViewTestTag"
     const val AuthorOnNasaImageView = "AuthorOnNasaImageView"
 }
+
+object AndroidTags
+{
+    const val TagName: String = "NasaImageOfTheDay"
+
+}
