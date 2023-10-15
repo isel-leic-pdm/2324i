@@ -31,6 +31,7 @@ const val TAG = "JOKES_APP_TAG"
  * - It orchestrates the creation of the view model and the interaction
  *   between the view and the view model
  * Step 6 - What about the AboutActivity? Does it need a view model?
+ * Step 7 - Lets add tests to the JokeScreenViewModel
  * Step 7 - What about presentation state? How should it be managed?
  */
 class MainActivity : ComponentActivity() {

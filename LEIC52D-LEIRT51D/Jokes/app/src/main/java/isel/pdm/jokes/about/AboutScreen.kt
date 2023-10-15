@@ -42,6 +42,8 @@ data class SocialInfo(val link: Uri, @DrawableRes val imageId: Int)
  * Tags used to identify the components of the AboutScreen in automated tests
  */
 const val AboutScreenTestTag = "AboutScreenTestTag"
+const val AuthorInfoTestTag = "AuthorInfoTestTag"
+const val SocialsElementTestTag = "SocialsElementTestTag"
 
 /**
  * Root composable for the about screen, the one that displays information about the app.
@@ -86,7 +88,9 @@ fun AboutScreen(
 private fun Author(onSendEmailRequested: () -> Unit = { }) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onSendEmailRequested() }
+        modifier = Modifier
+            .testTag(AuthorInfoTestTag)
+            .clickable { onSendEmailRequested() }
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_author),
@@ -123,7 +127,10 @@ private fun Social(@DrawableRes id: Int, onClick: () -> Unit) {
     Image(
         painter = painterResource(id = id),
         contentDescription = null,
-        modifier = Modifier.sizeIn(maxWidth = 64.dp).clickable { onClick() }
+        modifier = Modifier
+            .sizeIn(maxWidth = 64.dp)
+            .testTag(SocialsElementTestTag)
+            .clickable { onClick() }
     )
 }
 
