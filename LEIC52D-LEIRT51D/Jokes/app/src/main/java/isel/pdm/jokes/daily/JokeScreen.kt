@@ -72,8 +72,7 @@ fun JokeScreen(
                     modifier = Modifier.testTag(FetchItTestTag),
                     onClick = {
                         scope.launch {
-                            onInfoRequested()
-                            //internalJoke = service.fetchJoke()
+                            internalJoke = service.fetchJoke()
                         }
                     }
                 ) {
