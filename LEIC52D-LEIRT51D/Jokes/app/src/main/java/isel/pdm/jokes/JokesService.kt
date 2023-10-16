@@ -1,6 +1,10 @@
 package isel.pdm.jokes
 
+import android.util.Log
+import isel.pdm.jokes.daily.TAG
+import kotlinx.coroutines.delay
 import java.net.URL
+import kotlin.random.Random
 
 /**
  * Contract of the service that provides jokes
@@ -35,7 +39,13 @@ class FakeJokesService : JokesService {
         ),
     )
 
-    override suspend fun fetchJoke(): Joke = jokes[0]
+    override suspend fun fetchJoke(): Joke {
+        Log.v(TAG, "Fetching joke")
+        delay(5000)
+        val index = Random.nextInt(0, jokes.size - 1)
+        Log.v(TAG, "Got joke")
+        return jokes[index]
+    }
 }
 
 /**

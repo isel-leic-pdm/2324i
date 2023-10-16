@@ -16,7 +16,7 @@
             android:name=".about.AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".daily.MainActivity"
+            android:name=".daily.JokeActivity"
             android:exported="true"
             android:theme="@style/Theme.Jokes">
             <intent-filter>

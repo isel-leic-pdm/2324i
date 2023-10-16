@@ -1,14 +1,12 @@
 package isel.pdm.jokes.daily
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.jokes.Joke
 import isel.pdm.jokes.JokesService
 import isel.pdm.jokes.NoOpJokeService
+import isel.pdm.jokes.ui.NavigationHandlers
+import isel.pdm.jokes.ui.RefreshFab
+import isel.pdm.jokes.ui.TopBar
 import isel.pdm.jokes.ui.theme.JokesTheme
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -31,52 +32,53 @@ import java.net.URL
  * Tags used to identify the components of the JokeScreen in automated tests
  * (see app/src/androidTest/java/isel/pdm/chucknorris/JokeScreenTests.kt)
  */
+/**
+ * Tags used to identify the components of the MainScreen in automated tests
+ */
 const val FetchItTestTag = "FetchItTestTag"
 const val JokeTestTag = "JokeTestTag"
-const val JokeScreenTestTag = "JokeScreenTestTag"
+const val MainScreenTestTag = "JokeScreenTestTag"
 
 /**
  * Root composable for the screen that displays a joke.
  * @param joke the joke to be displayed. If null, no joke is displayed.
- * @param service the service used to fetch jokes.
+ * @param onFetch the callback invoked when the user clicks the "Fetch it!" button.
+ * @param onInfoRequested the callback invoked when the user clicks the "Info" button.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JokeScreen(
     joke: Joke? = null,
-    service: JokesService = NoOpJokeService,
+    onFetch: () -> Unit = { },
     onInfoRequested: () -> Unit = { }
 ) {
 
-    var internalJoke by remember { mutableStateOf(joke) }
-    val scope = rememberCoroutineScope()
-
     JokesTheme {
-        Surface(
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag(JokeScreenTestTag),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Log.i(TAG, "JokeScreen content: composing")
+                .padding(bottom = 16.dp)
+                .testTag(MainScreenTestTag),
+            floatingActionButton = {
+                RefreshFab(
+                    onClick = onFetch,
+                    modifier = Modifier.testTag(FetchItTestTag)
+                )
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            topBar = {
+                TopBar(navigation = NavigationHandlers(onInfoRequested = onInfoRequested))
+            }
+        ) { innerPadding ->
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(6.dp),
+                    .padding(innerPadding),
             ) {
-                val currentJoke = internalJoke
-                if (currentJoke != null)
-                    JokeView(joke = currentJoke)
-                Button(
-                    modifier = Modifier.testTag(FetchItTestTag),
-                    onClick = {
-                        scope.launch {
-                            internalJoke = service.fetchJoke()
-                        }
-                    }
-                ) {
-                    Text(text = "Fetch it!")
+                joke?.let {
+                    JokeView(joke = it)
                 }
             }
         }
@@ -90,6 +92,6 @@ fun JokeScreenPreview() {
         text = "This graveyard looks overcrowded. People must be dying to get in there.",
         source = URL("https://www.keeplaughingforever.com/corny-dad-jokes")
     )
-    JokeScreen(aJoke, NoOpJokeService)
+    JokeScreen(aJoke)
 }
 

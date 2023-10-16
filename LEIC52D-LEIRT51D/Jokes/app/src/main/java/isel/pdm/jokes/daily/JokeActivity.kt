@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import isel.pdm.jokes.FakeJokesService
 import isel.pdm.jokes.about.AboutActivity
 
@@ -32,16 +33,20 @@ const val TAG = "JOKES_APP_TAG"
  *   between the view and the view model
  * Step 6 - What about the AboutActivity? Does it need a view model?
  * Step 7 - Lets add tests to the JokeScreenViewModel
- * Step 7 - What about presentation state? How should it be managed?
  */
-class MainActivity : ComponentActivity() {
+class JokeActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<JokeScreenViewModel>()
+    private val service = FakeJokesService()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "MainActivity.onCreate() called")
         setContent {
             JokeScreen(
-                service = FakeJokesService(),
-                onInfoRequested = { AboutActivity.navigateTo(this) }
+                onInfoRequested = { AboutActivity.navigateTo(this) },
+                onFetch = { viewModel.fetchJoke(service) },
+                joke = viewModel.joke
             )
         }
     }
