@@ -1,5 +1,7 @@
 package isel.pdm.jokes
 
+import android.util.Log
+import isel.pdm.jokes.daily.TAG
 import kotlinx.coroutines.delay
 import java.net.URL
 import kotlin.random.Random
@@ -42,7 +44,10 @@ class FakeJokesService : JokesService {
     )
 
     override suspend fun fetchJoke(): Joke {
+        Log.v(TAG, "fetching joke...")
+        delay(3000)
         val index = Random.nextInt(from = 0, until = jokes.size)
+        Log.v(TAG, "joke fetched")
         return jokes[index]
     }
 }

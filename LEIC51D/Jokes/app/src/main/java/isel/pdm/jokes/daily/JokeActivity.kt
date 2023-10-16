@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import isel.pdm.jokes.FakeJokesService
 import isel.pdm.jokes.about.AboutActivity
 
@@ -33,13 +34,18 @@ const val TAG = "JOKES_TAG"
  * Step 7 - Lets add tests to the JokeScreenViewModel
  * Step 8 - Add loading state to the JokeScreen
  */
-class MainActivity : ComponentActivity() {
+class JokeActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<JokeScreenViewModel>()
+    private val service = FakeJokesService()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "onCreate() called")
         setContent {
             JokeScreen(
-                service = FakeJokesService(),
+                joke = viewModel.joke,
+                onFetchRequested = { viewModel.fetchJoke(service) },
                 onInfoRequested = { AboutActivity.navigateTo(this) }
             )
         }
