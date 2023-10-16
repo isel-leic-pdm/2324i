@@ -132,7 +132,9 @@ For reference:
 * [Sending the user to another app](https://developer.android.com/training/basics/intents/sending)
 * [Common intents](https://developer.android.com/guide/components/intents-common)
 
-Video lecture (in Portuguese): (__coming soon__)
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (05) Navegação](https://www.youtube.com/watch?v=DPd4hKkRRO8&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=5)
+
 
 ### 13/10/2023 - Practical class
 * Goal: Building the UI navigation of the project
@@ -140,3 +142,30 @@ Video lecture (in Portuguese): (__coming soon__)
 * Project: Create the application's navigation graph and implement the navigation between the screens.
 * Project: Finish the implementation of the game's screen and the game logic, presuming that both players use the same device.
 * Project: Create automatic tests for all the screens and for the game logic that is implemented.
+
+## Week 6
+### 16/10/2023 - State management in Android (part 1)
+* Activity component, revisited: 
+  * Lifecycle: behaviour on reconfiguration
+* State management in Android
+  * Presentation state vs application state
+  * Application state, characterized:
+    * Local to the screen
+    * Global to the application (i.e. shared across screens) 
+* View model
+  * Purpose and motivation
+  * Lifecycle
+  * As a means to preserve local application state across configuration changes
+  * As the host of the execution of the screen's domain logic
+
+For reference:
+* [ViewModel overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
+  * [ViewModel lifecycle](https://developer.android.com/topic/libraries/architecture/viewmodel#lifecycle)
+  * [Use Kotlin coroutines with lifecycle-aware components](https://developer.android.com/topic/libraries/architecture/coroutines#viewmodelscope)
+* [Testing Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines/test) 
+
+Video lecture (in Portuguese): (__coming soon__)
+
+### 20/10/2023 - Practical class
+* Goal: Make the project's screens resilient to configuration changes 
+* Project: Add view models to the project's screens that require resilience to configuration changes. Do not forget the automatic tests.
