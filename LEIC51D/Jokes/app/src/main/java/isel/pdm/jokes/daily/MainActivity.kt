@@ -1,6 +1,5 @@
 package isel.pdm.jokes.daily
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -11,23 +10,28 @@ import isel.pdm.jokes.about.AboutActivity
 const val TAG = "JOKES_TAG"
 
 /**
- * Lecture #5 script
+ * Lecture #6 script (state management)
  *
- * Step 1 - Lets briefly review the application's structure
- * Step 2 - Describe the application's UX (navigation)
- * Step 3 - Lets create the About screen, using the same structure as before
- *     Step 3.1 - Create the AboutActivity.
- *     Step 3.2 - Create the AboutScreen. Empty, at first.
- * Step 4 - Add a top bar to both screens.
- *     Step 4.1 - Start by describing the top bar composable and the possible actions.
- *     Step 4.2 - Add the top bar to the Joke Screen with navigation to the About screen.
- *     Step 4.3 - Add the top bar to the About Screen with back navigation.
- * Step 5 - Implement the AboutScreen.
- * Step 6 - Refactor the main screen so that it uses the RefreshFab composable.
- *     Step 5.1 - Describe the RefreshFab composable.
- *     Step 5.2 - Use it on the MainScreen.
- * Step 7 - Add a delay to the joke fetching and observe the consequences of a reconfiguration.
- * Step 8 - Lets add a ViewModel to the MainScreen.
+ * Step 1 - Finish the JokeScreen implementation from last lecture
+ *  - Add the Refresh Fab to the JokeScreen
+ * Step 2 - What happens when to the JokeScreen when a reconfiguration occurs?
+ * Step 2.1 - When the joke is already displayed: the state is lost!
+ * Step 2.2 - When the joke is being fetched: the joke is never displayed!
+ *            What happens to the fetch operation?
+ * Step 3 - Add a view model to the JokeScreen, to be used:
+ * - as the container of the application state local to the screen
+ * - as the host of the execution of the use case (the fetch operation)
+ * Step 4 - We now have the trifecta of the MVVM pattern:
+ * - the view (the JokeScreen)
+ * - the view model (the JokeScreenViewModel)
+ * - the model (the Joke and the JokesService)
+ * Step 5 - What's the role of the activity?
+ * - It deals with navigation
+ * - It orchestrates the creation of the view model and the interaction
+ *   between the view and the view model
+ * Step 6 - What about the AboutActivity? Does it need a view model?
+ * Step 7 - Lets add tests to the JokeScreenViewModel
+ * Step 8 - Add loading state to the JokeScreen
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
