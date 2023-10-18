@@ -10,6 +10,7 @@ import io.mockk.mockk
 import isel.pdm.jokes.daily.FetchItTestTag
 import isel.pdm.jokes.daily.JokeScreen
 import isel.pdm.jokes.daily.JokeTestTag
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import java.net.URL
@@ -38,17 +39,15 @@ class JokeScreenTests {
     }
 
     @Test
-    fun click_on_fetch_button_calls_jokes_service() {
+    fun click_on_fetch_button_calls_onFetchRequested() {
         // Arrange
-        val mockService = mockk<JokesService> {
-            coEvery { fetchJoke() } returns Joke(text = "Chuck Norris can divide by zero.", source = URL("http://tests.com"))
-        }
-        composeTestRule.setContent { JokeScreen(service = mockService) }
+        var called = false
         // Act
+        composeTestRule.setContent {
+            JokeScreen(onFetchRequested = { called = true })
+        }
         composeTestRule.onNodeWithTag(FetchItTestTag).performClick()
         // Assert
-        coVerify(exactly = 1) {
-            mockService.fetchJoke()
-        }
+        assertTrue(called)
     }
 }

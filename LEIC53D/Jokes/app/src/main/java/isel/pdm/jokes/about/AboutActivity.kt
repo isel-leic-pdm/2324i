@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import isel.pdm.jokes.R
-import isel.pdm.jokes.daily.MainActivity
+import isel.pdm.jokes.daily.JokeActivity
 import isel.pdm.jokes.daily.TAG
 
 /**
@@ -19,7 +19,7 @@ import isel.pdm.jokes.daily.TAG
 class AboutActivity : ComponentActivity() {
 
     companion object {
-        fun navigateTo(origin: MainActivity): Unit {
+        fun navigateTo(origin: JokeActivity): Unit {
             val intent = Intent(origin, AboutActivity::class.java)
             origin.startActivity(intent)
         }

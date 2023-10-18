@@ -1,5 +1,6 @@
-package isel.pdm.jokes
+package isel.pdm.jokes.domain
 
+import isel.pdm.jokes.Joke
 import org.junit.Test
 import java.net.URL
 

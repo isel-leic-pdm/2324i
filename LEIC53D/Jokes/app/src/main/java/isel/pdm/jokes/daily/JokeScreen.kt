@@ -40,18 +40,14 @@ const val JokeScreenTestTag = "JokeScreenTestTag"
 
 /**
  * Root composable for the screen that displays a joke.
- * @param service the service used to fetch jokes.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JokeScreen(
-    service: JokesService = NoOpJokeService,
+    joke: Joke? = null,
+    onFetchRequested: () -> Unit = { },
     onInfoRequested: () -> Unit = { }
 ) {
-
-    var internalJoke by remember { mutableStateOf<Joke?>(null) }
-    val scope = rememberCoroutineScope()
-
     JokesTheme {
         Scaffold(
             modifier = Modifier
@@ -68,10 +64,10 @@ fun JokeScreen(
                     .fillMaxSize()
                     .padding(it),
             ) {
-                internalJoke?.let { JokeView(joke = it) }
+                joke?.let { JokeView(joke = it) }
                 Button(
                     modifier = Modifier.testTag(FetchItTestTag),
-                    onClick = { scope.launch { internalJoke = service.fetchJoke() } }
+                    onClick = onFetchRequested
                 ) {
                     Text(text = "Fetch it!")
                 }
@@ -83,5 +79,5 @@ fun JokeScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun JokeScreenPreview() {
-    JokeScreen(NoOpJokeService)
+    JokeScreen()
 }
