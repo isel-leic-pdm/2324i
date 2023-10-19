@@ -8,4 +8,6 @@
     <string name="top_bar_navigate_to_about">about</string>
     <string name="about">About</string>
     <string name="activity_info_no_suitable_app">Could not find a suitable application</string>
+    <string name="Loading">Loading</string>
+    <string name="Dismiss">Dismiss</string>
 </resources>

@@ -144,11 +144,15 @@ Video lecture (in Portuguese): (__coming soon__)
   * Application state, characterized:
     * Local to the screen
     * Global to the application (i.e. shared across screens) 
-* View model
-  * Purpose and motivation
-  * Lifecycle
-  * As a means to preserve local application state across configuration changes
-  * As the host of the execution of the screen's domain logic
+* Presentation State
+	* rememberSaveable
+	* Parcelable
+* Application state
+	* View model
+	  * Purpose and motivation
+	  * Lifecycle
+	  * As a means to preserve local application state across configuration changes
+	  * As the host of the execution of the screen's domain logic
 
 For reference:
 * [State in composables](https://developer.android.com/jetpack/compose/state#state-in-composables)

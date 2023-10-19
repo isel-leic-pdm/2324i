@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import pt.isel.pdm.nasaimageoftheday.helpers.TestTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
-import pt.isel.pdm.nasaimageoftheday.model.NasaImages
+import pt.isel.pdm.nasaimageoftheday.services.NasaImages
 
 @Composable
 @Preview()
