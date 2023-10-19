@@ -1,4 +1,4 @@
-package pt.isel.pdm.nasaimageoftheday.screens
+package pt.isel.pdm.nasaimageoftheday.screens.playground
 
 import android.util.Log
 import androidx.compose.material3.Button

@@ -133,3 +133,37 @@ Video lecture (in Portuguese): (__coming soon__)
 * Project: Create the application's navigation graph and implement the navigation between the screens.
 * Project: Finish the implementation of the game's screen and the game logic, presuming that both players use the same device.
 * Project: Create automatic tests for all the screens and for the game logic that is implemented.
+
+
+## Week 6
+### 19/10/2023 - State management in Android (part 1)
+* Activity component, revisited: 
+  * Lifecycle: behaviour on reconfiguration
+* State management in Android
+  * Presentation state vs application state
+  * Application state, characterized:
+    * Local to the screen
+    * Global to the application (i.e. shared across screens) 
+* View model
+  * Purpose and motivation
+  * Lifecycle
+  * As a means to preserve local application state across configuration changes
+  * As the host of the execution of the screen's domain logic
+
+For reference:
+* [State in composables](https://developer.android.com/jetpack/compose/state#state-in-composables)
+* [Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+* [Parcelize](https://developer.android.com/kotlin/parcelize)
+* [ViewModel overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
+  * [ViewModel lifecycle](https://developer.android.com/topic/libraries/architecture/viewmodel#lifecycle)
+  * [Use Kotlin coroutines with lifecycle-aware components](https://developer.android.com/topic/libraries/architecture/coroutines#viewmodelscope)
+* [Testing Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines/test) 
+
+
+### 20/10/2023 - Practical class
+* Goal: Make the project's screens resilient to configuration changes 
+* Project: Add view models to the project's screens that require resilience to configuration changes. Do not forget the automatic tests.
+
+
+
+

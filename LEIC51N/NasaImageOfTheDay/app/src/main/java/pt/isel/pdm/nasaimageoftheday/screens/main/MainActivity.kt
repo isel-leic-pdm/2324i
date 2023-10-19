@@ -16,7 +16,6 @@ import pt.isel.pdm.nasaimageoftheday.helpers.AndroidTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.model.NasaImages
 import pt.isel.pdm.nasaimageoftheday.screens.about.AboutActivity
-import pt.isel.pdm.nasaimageoftheday.screens.aboutprep.zAboutActivity
 import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
 
 

@@ -7,6 +7,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,8 +17,6 @@ import pt.isel.pdm.nasaimageoftheday.R
 import pt.isel.pdm.nasaimageoftheday.helpers.AndroidTags
 import pt.isel.pdm.nasaimageoftheday.helpers.TestTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
-import pt.isel.pdm.nasaimageoftheday.screens.aboutprep.CustomTopBar
-import pt.isel.pdm.nasaimageoftheday.screens.aboutprep.zNavigationHandlers
 import pt.isel.pdm.nasaimageoftheday.screens.components.NasaImageView
 import pt.isel.pdm.nasaimageoftheday.screens.components.NavigationHandlers
 import pt.isel.pdm.nasaimageoftheday.screens.components.TopBar
@@ -66,45 +65,3 @@ fun MainScreen(
 
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScreen2(
-    nasaImage: NasaImage?,
-    loadImage: () -> Unit,
-    aboutRequested: () -> Unit
-) {
-    Log.d(AndroidTags.TagName, "MainScreen composition")
-
-    Scaffold(
-        topBar = {
-            CustomTopBar(
-                navigation = zNavigationHandlers(
-                    navigateToAboutHandler = aboutRequested
-                )
-            )
-        }
-    )
-    { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues))
-        {
-            if (nasaImage == null) {
-                Button(
-                    onClick = {
-                        loadImage()
-                    },
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                {
-                    Text(text = stringResource(R.string.load_image))
-                }
-            } else {
-                NasaImageView(
-                    nasaImage = nasaImage,
-                    modifier = Modifier.testTag(TestTags.SingleNasaViewTestTag)
-                )
-            }
-
-        }
-    }
-}
