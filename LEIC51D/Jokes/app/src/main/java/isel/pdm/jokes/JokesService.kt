@@ -16,6 +16,8 @@ interface JokesService {
     suspend fun fetchJoke(): Joke
 }
 
+class FetchJokeException(message: String, cause: Throwable? = null) : Exception(message, cause)
+
 /**
  * Fake implementation of the JokesService. It will replaced by a real implementation
  * in a future lecture.
