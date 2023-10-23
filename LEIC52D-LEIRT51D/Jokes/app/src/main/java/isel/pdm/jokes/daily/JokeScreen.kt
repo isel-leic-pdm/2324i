@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import isel.pdm.jokes.Joke
 import isel.pdm.jokes.JokesService
 import isel.pdm.jokes.NoOpJokeService
+import isel.pdm.jokes.R
+import isel.pdm.jokes.ui.ErrorAlert
 import isel.pdm.jokes.ui.NavigationHandlers
 import isel.pdm.jokes.ui.RefreshFab
 import isel.pdm.jokes.ui.TopBar
@@ -48,11 +50,10 @@ const val MainScreenTestTag = "JokeScreenTestTag"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JokeScreen(
-    joke: Joke? = null,
+    joke: LoadState = Idle,
     onFetch: () -> Unit = { },
     onInfoRequested: () -> Unit = { }
 ) {
-
     JokesTheme {
         Scaffold(
             modifier = Modifier
@@ -61,6 +62,7 @@ fun JokeScreen(
                 .testTag(MainScreenTestTag),
             floatingActionButton = {
                 RefreshFab(
+                    refreshing = joke is Loading,
                     onClick = onFetch,
                     modifier = Modifier.testTag(FetchItTestTag)
                 )
@@ -77,10 +79,21 @@ fun JokeScreen(
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-                joke?.let {
-                    JokeView(joke = it)
+                if (joke is Loaded) {
+                    joke.result.getOrNull()?.let {
+                        JokeView(joke = it)
+                    }
                 }
             }
+        }
+
+        if (joke is Loaded && joke.result.isFailure) {
+            ErrorAlert(
+                title = R.string.error_api_title,
+                message = R.string.error_could_not_reach_api,
+                buttonText = R.string.error_retry_button_text,
+                onDismiss = onFetch
+            )
         }
     }
 }
@@ -92,6 +105,6 @@ fun JokeScreenPreview() {
         text = "This graveyard looks overcrowded. People must be dying to get in there.",
         source = URL("https://www.keeplaughingforever.com/corny-dad-jokes")
     )
-    JokeScreen(aJoke)
+    JokeScreen()
 }
 

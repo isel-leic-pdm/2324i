@@ -17,6 +17,14 @@ interface JokesService {
 }
 
 /**
+ * Represents an error that occurred while fetching a joke.
+ * @param message The error message
+ * @param cause The cause of the error, if any
+ */
+class FetchJokeException(message: String, cause: Throwable? = null)
+    : Exception(message, cause)
+
+/**
  * Fake implementation of the JokesService. It will replaced by a real implementation
  * in a future lecture.
  */
