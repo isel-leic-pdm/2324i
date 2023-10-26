@@ -169,5 +169,29 @@ For reference:
 * Project: Add view models to the project's screens that require resilience to configuration changes. Do not forget the automatic tests.
 
 
+## Week 7
+### 26/10/2023 - Comunication with HTTP APIs
+[Android Application class](https://developer.android.com/reference/android/app/Application)
+  * Motivation and lifecycle 
+  * Using Application for [manual dependency injection](https://developer.android.com/training/dependency-injection/manual#basics-manual-di)
+* The Android device as an HTTP client
+  * Motivation
+  * Consequences of distribution
+  * [Required permissions](https://developer.android.com/training/basics/network-ops/connecting)
+* HTTP comunication with [OkHttp](https://square.github.io/okhttp/)
+  * Programming model
+  * Making asynchronous requests 
+  * Bridging between OkHttp's and Kotlin's concurrency models
+* JSON serialization and desserialization with [Gson](https://github.com/google/gson)
 
+For reference:
+* [Deserialize generic objects with Gson](https://www.baeldung.com/kotlin/gson-typetoken)
+* [Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines)
+* [suspendCancellableCoroutine](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/suspend-cancellable-coroutine.html)
+* [Coroutines: Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
+
+
+### 27/10/2023 - Practical class
+* Project: (Option C) Create your API client, including all DTOs, abstractions and services. If the API isn't yet usable, implement the global ranking screen using a fake service.
+* Project: (Option B) Create the screen that will show the list of favourite games using a fake service.
 
