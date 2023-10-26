@@ -3,4 +3,7 @@
     <string name="top_bar_go_back">Back</string>
     <string name="top_bar_navigate_to_about">About\n</string>
     <string name="activity_info_no_suitable_app">Could not find a suitable application</string>
+    <string name="error_api_title">Error accessing the server</string>
+    <string name="error_retry_button_text">Retry</string>
+    <string name="error_could_not_reach_api">Please check if the device is connected to the internet</string>
 </resources>

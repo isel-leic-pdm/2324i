@@ -11,13 +11,13 @@ import kotlinx.coroutines.launch
 
 class JokeScreenViewModel : ViewModel() {
 
-    private var _joke by mutableStateOf<Joke?>(null)
-    val joke: Joke?
-        get() = _joke
+    var joke by mutableStateOf<LoadState>(Idle)
+        private set
 
     fun fetchJoke(service: JokesService) {
         viewModelScope.launch {
-            _joke = service.fetchJoke()
+            joke = Loading
+            joke = Loaded(runCatching { service.fetchJoke() })
         }
     }
 }
