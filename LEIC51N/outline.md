@@ -171,7 +171,7 @@ For reference:
 
 ## Week 7
 ### 26/10/2023 - Comunication with HTTP APIs
-[Android Application class](https://developer.android.com/reference/android/app/Application)
+* [Android Application class](https://developer.android.com/reference/android/app/Application)
   * Motivation and lifecycle 
   * Using Application for [manual dependency injection](https://developer.android.com/training/dependency-injection/manual#basics-manual-di)
 * The Android device as an HTTP client
@@ -182,7 +182,7 @@ For reference:
   * Programming model
   * Making asynchronous requests 
   * Bridging between OkHttp's and Kotlin's concurrency models
-* JSON serialization and desserialization with [Gson](https://github.com/google/gson)
+* JSON serialization and deserialization with [Gson](https://github.com/google/gson)
 
 For reference:
 * [Deserialize generic objects with Gson](https://www.baeldung.com/kotlin/gson-typetoken)

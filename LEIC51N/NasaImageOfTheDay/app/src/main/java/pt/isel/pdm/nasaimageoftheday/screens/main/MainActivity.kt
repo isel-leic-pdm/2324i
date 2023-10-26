@@ -31,6 +31,7 @@ import pt.isel.pdm.nasaimageoftheday.R
 import pt.isel.pdm.nasaimageoftheday.helpers.AndroidTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.screens.about.AboutActivity
+import pt.isel.pdm.nasaimageoftheday.services.DependencyContainer
 import pt.isel.pdm.nasaimageoftheday.services.FakeNasaImageOfTheDayService
 import pt.isel.pdm.nasaimageoftheday.services.NasaImageOfTheDayService
 import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
@@ -38,7 +39,10 @@ import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val nasaService: NasaImageOfTheDayService by lazy { FakeNasaImageOfTheDayService() }
+    private val nasaService: NasaImageOfTheDayService by
+        lazy {
+            (application as DependencyContainer).imageService
+        }
     private val viewModel: MainScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(AndroidTags.TagName, "MainActivity.onCreate")

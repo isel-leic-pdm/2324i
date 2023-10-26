@@ -20,7 +20,7 @@ class MainScreenViewModel : ViewModel() {
     fun fetchNasaImage(service: NasaImageOfTheDayService) {
         isLoading = true
 
-        viewModelScope.launch {
+        val job = viewModelScope.launch {
             try {
                 nasaImage = service.getImageOfTheDay()
             } catch (e: Exception) {
@@ -28,6 +28,7 @@ class MainScreenViewModel : ViewModel() {
             }
             isLoading = false
         }
+
 
     }
 

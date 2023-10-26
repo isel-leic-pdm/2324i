@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".NasaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,11 +17,6 @@
         tools:targetApi="31">
         <activity
             android:name=".screens.about.AboutActivity"
-            android:exported="false"
-            android:label="@string/title_activity_about"
-            android:theme="@style/Theme.NasaImageOfTheDay" />
-        <activity
-            android:name=".screens.aboutprep.zAboutActivity"
             android:exported="false"
             android:label="@string/title_activity_about"
             android:theme="@style/Theme.NasaImageOfTheDay" />
