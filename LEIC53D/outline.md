@@ -163,8 +163,64 @@ For reference:
   * [Use Kotlin coroutines with lifecycle-aware components](https://developer.android.com/topic/libraries/architecture/coroutines#viewmodelscope)
 * [Testing Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines/test) 
 
-Video lecture (in Portuguese): (__coming soon__)
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (06) Gestão de estado (parte 1)](https://www.youtube.com/watch?v=0TQmDxItbqQ&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=6)
 
 ### 18/10/2023 (Part 2) and 20/10/2023 - Practical class
 * Goal: Make the project's screens resilient to configuration changes 
 * Project: Add view models to the project's screens that require resilience to configuration changes. Do not forget the automatic tests.
+
+## Week 7
+### 25/10/2023 - No classes today
+
+### 27/10/2023 - HTTP communication
+* The Android device as an HTTP client
+  * Motivation and consequences of distribution
+  * Required permissions
+* HTTP comunication with OkHttp
+  * Programming model
+  * Making asynchronous requests
+  * Bridging between OkHttp's and Kotlin's concurrency models
+* JSON serialization and desserialization with Gson
+* Android Application class
+  * Motivation and lifecycle
+  * Using Application for manual dependency injection
+
+For reference:
+* [Permissions overview](https://developer.android.com/guide/topics/permissions/overview)
+* [Permissions for network access](https://developer.android.com/training/basics/network-ops/connecting)
+* [OkHttp](https://square.github.io/okhttp/)
+  * [Making asynchronous requests](https://square.github.io/okhttp/recipes/#asynchronous-get-kt-java)
+* [Gson](https://github.com/google/gson#gson)
+* [Application class](https://developer.android.com/reference/android/app/Application)
+  * [Manual dependency injection with Application](https://developer.android.com/training/dependency-injection/manual#basics-manual-di)
+
+Other links: 
+* [Ngrok](https://ngrok.com/)
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (07) Comunicação HTTP](https://www.youtube.com/watch?v=LwO_o0flPB4&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=7)
+
+## Week 8
+### 01/11/2023 - National holiday (no classes)
+
+### 03/11/2023 - State management in Android (part 2)
+* Navigation between activities, revisited
+  * Sending data between activities using Intent extras
+    * Parcelable contract
+    * Parcelable implementation generator and the @Parcelize annotation
+* Application state vs presentation state, revisited
+  * Presentation state:
+    * Preserving it outside the hosting process: Parcelable contract, again
+    * Saving and restoring state in Jetpack Compose: rememberSaveable
+
+For reference:
+* [Lists and grids in Jetpack Compose](https://developer.android.com/jetpack/compose/lists)
+* [Sending data between activities](https://developer.android.com/guide/components/activities/parcelables-and-bundles#sdba)
+  * [Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+  * [Parcelable implementation generator](https://developer.android.com/kotlin/parcelize)
+* [Saving UI state](https://developer.android.com/topic/libraries/architecture/saving-states)
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (08) Gestão de estado (parte 2)](https://www.youtube.com/watch?v=GdqCaKdYKzY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=8)
+

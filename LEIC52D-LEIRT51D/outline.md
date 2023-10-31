@@ -161,8 +161,69 @@ For reference:
   * [Use Kotlin coroutines with lifecycle-aware components](https://developer.android.com/topic/libraries/architecture/coroutines#viewmodelscope)
 * [Testing Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines/test) 
 
-Video lecture (in Portuguese): (__coming soon__)
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (06) Gestão de estado (parte 1)](https://www.youtube.com/watch?v=0TQmDxItbqQ&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=6)
 
 ### 19/10/2023 - Practical class
 * Goal: Make the project's screens resilient to configuration changes 
 * Project: Add view models to the project's screens that require resilience to configuration changes. Do not forget the automatic tests.
+
+## Week 7
+### 23/10/2023 - HTTP communication
+* The Android device as an HTTP client
+  * Motivation and consequences of distribution
+  * Required permissions
+* HTTP comunication with OkHttp
+  * Programming model
+  * Making asynchronous requests
+  * Bridging between OkHttp's and Kotlin's concurrency models
+* JSON serialization and desserialization with Gson
+* Android Application class
+  * Motivation and lifecycle
+  * Using Application for manual dependency injection
+
+For reference:
+* [Permissions overview](https://developer.android.com/guide/topics/permissions/overview)
+* [Permissions for network access](https://developer.android.com/training/basics/network-ops/connecting)
+* [OkHttp](https://square.github.io/okhttp/)
+  * [Making asynchronous requests](https://square.github.io/okhttp/recipes/#asynchronous-get-kt-java)
+* [Gson](https://github.com/google/gson#gson)
+* [Application class](https://developer.android.com/reference/android/app/Application)
+  * [Manual dependency injection with Application](https://developer.android.com/training/dependency-injection/manual#basics-manual-di)
+
+Other links: 
+* [Ngrok](https://ngrok.com/)
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (07) Comunicação HTTP](https://www.youtube.com/watch?v=LwO_o0flPB4&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=7)
+
+### 26/10/2023 - Practical class
+* Goal: Implement the communication with the Web API (for Option C)
+* Project: (Option C) Implement the aspects related to HTTP communication on the game screen. This includes creating the DTOs and implementing the service used for interaction with the API.
+* Project: (Option B) Consolidate the implementation of the application's screen's and the game logic presuming that both players use the same device. Create automatic tests for all the screens and for the game logic that is implemented.
+
+## Week 8
+### 30/10/2023 - State management in Android (part 2)
+* Navigation between activities, revisited
+  * Sending data between activities using Intent extras
+    * Parcelable contract
+    * Parcelable implementation generator and the @Parcelize annotation
+* Application state vs presentation state, revisited
+  * Presentation state:
+    * Preserving it outside the hosting process: Parcelable contract, again
+    * Saving and restoring state in Jetpack Compose: rememberSaveable
+
+For reference:
+* [Lists and grids in Jetpack Compose](https://developer.android.com/jetpack/compose/lists)
+* [Sending data between activities](https://developer.android.com/guide/components/activities/parcelables-and-bundles#sdba)
+  * [Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+  * [Parcelable implementation generator](https://developer.android.com/kotlin/parcelize)
+* [Saving UI state](https://developer.android.com/topic/libraries/architecture/saving-states)
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (08) Gestão de estado (parte 2)](https://www.youtube.com/watch?v=GdqCaKdYKzY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=8)
+
+### 02/11/2023 - Practical class
+* Goal: Implement the project's screens containing lists
+* Project: (Option C) Implement the screen for displaying the global ranking. This includes the implementation of the service used for interaction with the API. Do not forget the automatic tests.
+* Project: (Option B) Implement the screen for displaying the list of favorite games. Use a fake implementation of the service used for interaction with Firestore. Do not forget the automatic tests.
