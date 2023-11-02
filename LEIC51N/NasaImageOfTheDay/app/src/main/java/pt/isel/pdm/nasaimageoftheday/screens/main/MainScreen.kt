@@ -65,6 +65,7 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(12.dp)
+                    .testTag(TestTags.LoadImageButton)
             )
             {
                 Text(text = stringResource(R.string.load_image))

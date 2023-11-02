@@ -2,6 +2,7 @@ package pt.isel.pdm.nasaimageoftheday.services
 
 import kotlinx.coroutines.delay
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
+import java.time.LocalDate
 
 class FakeNasaImageOfTheDayService : NasaImageOfTheDayService {
 
@@ -14,6 +15,15 @@ class FakeNasaImageOfTheDayService : NasaImageOfTheDayService {
             throw IllegalStateException("No more images to serve")
 
         return NasaImages.Images[currIdx++]
+    }
+
+    override suspend fun getImageOf(date: LocalDate): NasaImage {
+        delay(2000)
+        return NasaImages.Images[currIdx++]
+    }
+
+    override suspend fun getImages(startDate: LocalDate, endDate: LocalDate): List<NasaImage> {
+        return NasaImages.Images
     }
 }
 

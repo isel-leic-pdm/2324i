@@ -31,23 +31,21 @@ import pt.isel.pdm.nasaimageoftheday.R
 import pt.isel.pdm.nasaimageoftheday.helpers.AndroidTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.screens.about.AboutActivity
+import pt.isel.pdm.nasaimageoftheday.screens.components.BaseComponentActivity
 import pt.isel.pdm.nasaimageoftheday.services.DependencyContainer
 import pt.isel.pdm.nasaimageoftheday.services.FakeNasaImageOfTheDayService
 import pt.isel.pdm.nasaimageoftheday.services.NasaImageOfTheDayService
 import pt.isel.pdm.nasaimageoftheday.ui.theme.NasaImageOfTheDayTheme
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : BaseComponentActivity<MainScreenViewModel>() {
 
-    private val nasaService: NasaImageOfTheDayService by
-        lazy {
-            (application as DependencyContainer).imageService
-        }
-    private val viewModel: MainScreenViewModel by viewModels()
+    private val nasaService: NasaImageOfTheDayService by lazy { dependencyContainer.imageService }
+    override val viewModel: MainScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(AndroidTags.TagName, "MainActivity.onCreate")
         super.onCreate(savedInstanceState)
-        setContent {
+        safeSetContent {
             NasaImageOfTheDayTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -61,11 +59,6 @@ class MainActivity : ComponentActivity() {
                         },
                         navigateToAbout = { AboutActivity.navigate(this) }
                     )
-
-                    LoadingScreen(viewModel.isLoading)
-
-                    ErrorMessage(viewModel.error)
-
                 }
             }
         }
@@ -90,57 +83,6 @@ class MainActivity : ComponentActivity() {
 
 }
 
-@Composable
-private fun LoadingScreen(
-    isLoading: Boolean
-) {
-
-    if (!isLoading)
-        return
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White.copy(alpha = 0.8f))
-    )
-    {
-        Text(
-            text = stringResource(id = R.string.Loading),
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
-
-@Composable
-private fun ErrorMessage(error: String?) {
-
-    var dismiss by rememberSaveable { mutableStateOf(false) }
-
-    if (error == null || dismiss)
-        return
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Red.copy(alpha = 0.5f))
-    )
-    {
-        Text(
-            text = error,
-            modifier = Modifier.align(Alignment.Center)
-        )
-        Button(
-            onClick = {
-                dismiss = true
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(12.dp)
-        ) {
-            Text(text = stringResource(id = R.string.Dismiss))
-        }
-    }
-}
 
 
 

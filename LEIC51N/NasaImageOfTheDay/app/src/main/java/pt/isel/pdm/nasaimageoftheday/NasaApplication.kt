@@ -17,9 +17,14 @@ class NasaApplication : Application(), DependencyContainer {
     override val imageService by lazy {
         //FakeNasaImageOfTheDayService()
         RemoteNasaImageService(
-            "S6RMxbTyb9pAqhr823IBOzI3BNdtplUVxRRqw4z1",
-            "https://api.nasa.gov/planetary/apod"
+            RemoteServiceApiKey,
+            RemoteServiceBaseUrl
         )
     }
 
+    companion object
+    {
+        const val RemoteServiceApiKey = "S6RMxbTyb9pAqhr823IBOzI3BNdtplUVxRRqw4z1"
+        const val RemoteServiceBaseUrl = "https://api.nasa.gov/planetary/apod"
+    }
 }

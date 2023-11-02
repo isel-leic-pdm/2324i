@@ -81,3 +81,24 @@ fun NasaImageView(nasaImage: NasaImage, modifier: Modifier = Modifier) {
 
     }
 }
+
+@Composable
+fun NasaImageTextView(nasaImage: NasaImage, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(3.dp)
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+    ) {
+
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+        ) {
+            Text(text = nasaImage.date)
+
+            if (nasaImage.author != null)
+                Text(text = nasaImage.author.trim())
+        }
+    }
+}

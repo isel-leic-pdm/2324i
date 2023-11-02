@@ -9,27 +9,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
+import pt.isel.pdm.nasaimageoftheday.screens.components.BaseViewModel
 import pt.isel.pdm.nasaimageoftheday.services.NasaImageOfTheDayService
 import java.lang.Exception
+import java.time.LocalDate
 
-class MainScreenViewModel : ViewModel() {
+class MainScreenViewModel : BaseViewModel() {
     var nasaImage by mutableStateOf<NasaImage?>(null)
-    var isLoading by mutableStateOf(false)
-    var error by mutableStateOf<String?>(null)
-
-    fun fetchNasaImage(service: NasaImageOfTheDayService) {
-        isLoading = true
-
-        val job = viewModelScope.launch {
-            try {
-                nasaImage = service.getImageOfTheDay()
-            } catch (e: Exception) {
-                error = e.toString()
-            }
-            isLoading = false
-        }
 
 
+    private var date = LocalDate.now()
+
+    fun fetchNasaImage(service: NasaImageOfTheDayService) = safeCall {
+        nasaImage = service.getImageOf(date)
+        date = date.minusDays(1)
     }
 
+
 }
+

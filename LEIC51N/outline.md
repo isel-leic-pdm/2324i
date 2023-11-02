@@ -196,7 +196,7 @@ For reference:
 * Project: (Option B) Create the screen that will show the list of favourite games using a fake service.
 
 ## Week 8
-### 30/10/2023 - State management in Android (part 2)
+### 02/10/2023 - State management in Android (part 2)
 * Automated tests in Android Studio (continuation)
 	* Testing Activities
 	* Testing ViewModels 
