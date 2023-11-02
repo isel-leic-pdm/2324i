@@ -195,3 +195,33 @@ For reference:
 * Project: (Option C) Create your API client, including all DTOs, abstractions and services. If the API isn't yet usable, implement the global ranking screen using a fake service.
 * Project: (Option B) Create the screen that will show the list of favourite games using a fake service.
 
+## Week 8
+### 30/10/2023 - State management in Android (part 2)
+* Automated tests in Android Studio (continuation)
+	* Testing Activities
+	* Testing ViewModels 
+
+* Navigation between activities, revisited
+  * Sending data between activities using Intent extras
+    * Parcelable contract
+    * Parcelable implementation generator and the @Parcelize annotation
+* Application state vs presentation state, revisited
+  * Presentation state:
+    * Preserving it outside the hosting process: Parcelable contract, again
+    * Saving and restoring state in Jetpack Compose: rememberSaveable
+
+For reference:
+* [Lists and grids in Jetpack Compose](https://developer.android.com/jetpack/compose/lists)
+* [Sending data between activities](https://developer.android.com/guide/components/activities/parcelables-and-bundles#sdba)
+  * [Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+  * [Parcelable implementation generator](https://developer.android.com/kotlin/parcelize)
+* [Testing Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines/test) 
+* [Testing Jetpack Compose UIs](https://developer.android.com/jetpack/compose/testing)
+
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (08) Gestão de estado (parte 2)](https://www.youtube.com/watch?v=GdqCaKdYKzY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=8)
+
+### 03/11/2023 - Practical class
+* Goal: Implement the project's screens containing lists
+* Project: (Option C) Implement the screen for displaying the global ranking. This includes the implementation of the service used for interaction with the API. Do not forget the automatic tests.
+* Project: (Option B) Implement the screen for displaying the list of favorite games. Use a fake implementation of the service used for interaction with Firestore. Do not forget the automatic tests.
