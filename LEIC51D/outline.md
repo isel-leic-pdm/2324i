@@ -230,3 +230,27 @@ Video lecture (in Portuguese):
 * Goal: Implement the project's screens containing lists
 * Project: (Option C) Implement the screen for displaying the global ranking. This includes the implementation of the service used for interaction with the API. Do not forget the automatic tests.
 * Project: (Option B) Implement the screen for displaying the list of favorite games. Use a fake implementation of the service used for interaction with Firestore. Do not forget the automatic tests.
+
+## Week 9
+### 06/11/2023 - Considerations on software design in Android: coding session
+* Building the Tic-Tac-Toe application
+  * Specifying the application's User eXperience (UX)
+    * Identifying the application's screens and their purpose
+    * Specifying the application's navigation graph
+  * Identification of the main elements of the solution
+    * Domain data (immutable)
+    * Domain operations (pure functions)
+    * Presentation state (hosted on the view model)
+    * Application state
+      * Local to the screen (hosted on the view model)
+      * Global to the application (hosted on the Application class)
+* Building the application, tests first
+  * Automated tests as a means of specifying the application's behaviour
+
+Video lecture (in Portuguese): (__coming soon__)
+
+### 10/11/2023 - Practical class
+* Goal: Implement the project's screens that collect data from the user and store it in the application's state
+* Project: (Option C) To implement the screen for collecting user credentials (username and password) using a fake repository implementation that will contain the user token resulting from the login procedure. Modify the remaining screens to make use of this repository. Next week we will replace the fake implementation with a real one, using the DataStore API. Do not forget the automatic tests.
+* Project: (Option B) To implement the screen for collecting user information (nickname and motto) using a fake repository implementation that contains this information. Modify the remaining screens to make use of this repository. Next week we will replace the fake implementation with a real one, using the DataStore API.
+
