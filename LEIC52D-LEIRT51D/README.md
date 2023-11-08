@@ -1,2 +1,2 @@
-# 2324i - LEIC52D-LEIRT51D
-[Lecture's outline](./outline.md)
+### 2324i - LEIC52D-LEIRT51D
+[Lectures' outline](./outline.md)
