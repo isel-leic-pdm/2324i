@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +20,7 @@ import pt.isel.pdm.nasaimageoftheday.R
 data class NavigationHandlers(
     val onBackHandler: (() -> Unit)? = null,
     val navigateToAboutHandler: (() -> Unit)? = null,
+    val navigateToListHandler: (() -> Unit)? = null,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,6 +44,12 @@ fun TopBar(
                 action = navigationHandlers.navigateToAboutHandler,
                 image = Icons.Default.Info,
                 string = R.string.top_bar_navigate_to_about
+            )
+
+            ConditionalIconButton(
+                action = navigationHandlers.navigateToListHandler,
+                image = Icons.Default.List,
+                string = R.string.top_bar_navigate_to_list
             )
         }
 

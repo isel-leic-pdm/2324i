@@ -16,6 +16,11 @@
         android:theme="@style/Theme.NasaImageOfTheDay"
         tools:targetApi="31">
         <activity
+            android:name=".screens.detail.DetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_detail"
+            android:theme="@style/Theme.NasaImageOfTheDay" />
+        <activity
             android:name=".screens.list.ListActivity"
             android:exported="false"
             android:label="@string/title_activity_list"

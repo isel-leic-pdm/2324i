@@ -225,3 +225,12 @@ Video lecture (in Portuguese):
 * Goal: Implement the project's screens containing lists
 * Project: (Option C) Implement the screen for displaying the global ranking. This includes the implementation of the service used for interaction with the API. Do not forget the automatic tests.
 * Project: (Option B) Implement the screen for displaying the list of favorite games. Use a fake implementation of the service used for interaction with Firestore. Do not forget the automatic tests.
+
+## Week 9
+### 09/10/2023 - State management in Android (part 2)
+* Continuation...
+
+### 10/11/2023 - Practical class
+* Goal: Implement the project's screens that collect data from the user and store it in the application's state
+* Project: (Option C) To implement the screen for collecting user credentials (username and password) using a fake repository implementation that will contain the user token resulting from the login procedure. Modify the remaining screens to make use of this repository. 
+* Project: (Option B) To implement the screen for collecting user information (nickname and motto) using a fake repository implementation that contains this information. Modify the remaining screens to make use of this repository. 

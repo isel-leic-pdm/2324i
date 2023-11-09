@@ -31,7 +31,8 @@ import pt.isel.pdm.nasaimageoftheday.screens.components.TopBar
 fun MainScreen(
     nasaImage: NasaImage?,
     loadImage: () -> Unit,
-    navigateToAbout: () -> Unit
+    navigateToAbout: () -> Unit,
+    navigateToList: () -> Unit
 ) {
     Log.d(AndroidTags.TagName, "MainScreen composition")
 
@@ -39,7 +40,8 @@ fun MainScreen(
         topBar = {
             TopBar(
                 navigationHandlers = NavigationHandlers(
-                    navigateToAboutHandler = navigateToAbout
+                    navigateToAboutHandler = navigateToAbout,
+                    navigateToListHandler = navigateToList
                 )
             )
         }

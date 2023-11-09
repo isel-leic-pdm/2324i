@@ -1,5 +1,6 @@
 package pt.isel.pdm.nasaimageoftheday.screens.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import pt.isel.pdm.nasaimageoftheday.helpers.AndroidTags
 import pt.isel.pdm.nasaimageoftheday.helpers.TestTags
 import pt.isel.pdm.nasaimageoftheday.model.NasaImage
 import pt.isel.pdm.nasaimageoftheday.services.NasaImages
@@ -84,6 +86,7 @@ fun NasaImageView(nasaImage: NasaImage, modifier: Modifier = Modifier) {
 
 @Composable
 fun NasaImageTextView(nasaImage: NasaImage, modifier: Modifier = Modifier) {
+    Log.d(AndroidTags.TagName, nasaImage.date)
     Box(
         modifier = modifier
             .fillMaxWidth()

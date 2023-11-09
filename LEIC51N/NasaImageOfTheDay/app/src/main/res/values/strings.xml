@@ -11,4 +11,7 @@
     <string name="Loading">Loading</string>
     <string name="Dismiss">Dismiss</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="top_bar_navigate_to_list">list</string>
+    <string name="load_images">Load Images</string>
+    <string name="title_activity_detail">DetailActivity</string>
 </resources>
