@@ -1,5 +1,6 @@
 package isel.pdm.demos.tictactoe
 
+import isel.pdm.demos.tictactoe.domain.UserInfo
 import org.junit.Test
 
 class UserInfoTests {

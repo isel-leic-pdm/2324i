@@ -1,5 +1,7 @@
 package isel.pdm.demos.tictactoe
 
+import isel.pdm.demos.tictactoe.domain.UserInfo
+import isel.pdm.demos.tictactoe.domain.validateUserInfoParts
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
