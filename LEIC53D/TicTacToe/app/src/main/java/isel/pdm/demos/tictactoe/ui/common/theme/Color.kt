@@ -1,4 +1,4 @@
-package isel.pdm.demos.tictactoe.ui.theme
+package isel.pdm.demos.tictactoe.ui.common.theme
 
 import androidx.compose.ui.graphics.Color
 

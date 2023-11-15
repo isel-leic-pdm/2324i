@@ -1,17 +1,17 @@
-package isel.pdm.demos.tictactoe.preferences
+package isel.pdm.demos.tictactoe.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
-class UserPreferencesActivity : ComponentActivity() {
-
+/**
+ * The application's main activity.
+ */
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            UserPreferencesScreen(
-                userInfo = null
-            )
+            TODO()
         }
     }
 }

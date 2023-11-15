@@ -1,4 +1,4 @@
-package isel.pdm.demos.tictactoe.main
+package isel.pdm.demos.tictactoe.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +21,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.demos.tictactoe.R
-import isel.pdm.demos.tictactoe.ui.theme.TicTacToeTheme
+import isel.pdm.demos.tictactoe.ui.common.theme.TicTacToeTheme
+
+/**
+ * The tag used to identify the main screen.
+ */
+const val MainScreenTag = "MainScreen"
+
+/**
+ * The tag used to identify the main screen's button used to start the game.
+ */
+const val PlayButtonTag = "PlayButton"
+
 
 /**
  * The application's main screen.
