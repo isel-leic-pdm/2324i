@@ -42,7 +42,7 @@ const val PlayButtonTag = "PlayButton"
 fun MainScreen(onPlayRequested: () -> Unit) {
     TicTacToeTheme {
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().testTag(MainScreenTag)
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceAround,

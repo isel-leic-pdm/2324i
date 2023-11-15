@@ -13,16 +13,17 @@ class UserPreferencesActivityTestsWithIntent {
 
     @get:Rule
     val testRule = createActivityAndPreserveDependenciesComposeRule<UserPreferencesActivity>(
-        // TODO: Uncomment the following lines
-//        UserPreferencesActivity.createIntent(
-//            ctx = ApplicationProvider.getApplicationContext(),
-//            userInfo = UserInfo("test", "test")
-//        )
+        UserPreferencesActivity.createIntent(
+            ctx = ApplicationProvider.getApplicationContext(),
+            userInfo = UserInfo("test", "test")
+        )
     )
 
     @Test
     fun screen_is_in_view_mode_if_userInfo_extra_is_passed_to_the_activity() {
-        TODO()
+        testRule.composeTestRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(EditModeTestTag).assertDoesNotExist()
+        testRule.composeTestRule.onNodeWithTag(ViewModeTestTag).assertExists()
     }
 
     @Test
@@ -37,5 +38,39 @@ class UserPreferencesActivityTestsWithIntent {
                 condition = { activity.isFinishing }
             )
         }
+    }
+
+    @Test
+    fun pressing_the_edit_button_in_view_mode_starts_the_activity_in_edit_mode() {
+        // Arrange
+        // Act
+        testRule.composeTestRule.onNodeWithTag(EditButtonTag).performClick()
+        // Assert
+        testRule.composeTestRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(EditModeTestTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(ViewModeTestTag).assertDoesNotExist()
+    }
+
+    @Test
+    fun once_in_edit_mode_the_screen_continues_in_that_mode_regardless_of_reconfigurations() {
+        // Arrange
+        testRule.composeTestRule.onNodeWithTag(EditButtonTag).performClick()
+        // Act
+        testRule.scenario.recreate()
+        // Assert
+        testRule.composeTestRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(EditModeTestTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(ViewModeTestTag).assertDoesNotExist()
+    }
+
+    @Test
+    fun once_in_view_mode_the_screen_continues_in_that_mode_regardless_of_reconfigurations() {
+        // Arrange
+        // Act
+        testRule.scenario.recreate()
+        // Assert
+        testRule.composeTestRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(EditModeTestTag).assertDoesNotExist()
+        testRule.composeTestRule.onNodeWithTag(ViewModeTestTag).assertExists()
     }
 }

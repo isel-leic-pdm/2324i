@@ -1,4 +1,4 @@
-package isel.pdm.demos.tictactoe
+package isel.pdm.demos.tictactoe.domain
 
 import isel.pdm.demos.tictactoe.domain.UserInfo
 import isel.pdm.demos.tictactoe.domain.toUserInfoOrNull

@@ -32,13 +32,13 @@ class PreserveDefaultDependencies<A : ComponentActivity>(
     override fun apply(test: Statement, description: Description): Statement =
         object : Statement() {
             override fun evaluate() {
-                // TODO: Save the default dependencies
+                val defaultUserInfoRepo = testApplication.userInfoRepository
                 try {
                     val testStatement = composeTestRule.apply(test, description)
                     testStatement.evaluate()
                 }
                 finally {
-                    // TODO: Restore the default dependencies
+                    testApplication.userInfoRepository = defaultUserInfoRepo
                 }
             }
         }

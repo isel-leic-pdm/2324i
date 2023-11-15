@@ -4,6 +4,11 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import isel.pdm.demos.tictactoe.domain.UserInfo
+import isel.pdm.demos.tictactoe.domain.UserInfoRepository
 import isel.pdm.demos.tictactoe.ui.common.NavigateBackTag
 import isel.pdm.demos.tictactoe.utils.createActivityAndPreserveDependenciesComposeRule
 import org.junit.Rule
@@ -16,7 +21,9 @@ class UserPreferencesActivityTests {
 
     @Test
     fun screen_is_in_edit_mode_if_no_extra_is_passed_to_the_activity() {
-        TODO()
+        testRule.composeTestRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(EditModeTestTag).assertExists()
+        testRule.composeTestRule.onNodeWithTag(ViewModeTestTag).assertDoesNotExist()
     }
 
     @Test
@@ -35,12 +42,39 @@ class UserPreferencesActivityTests {
 
     @Test
     fun pressing_save_button_in_edit_mode_with_valid_input_finishes_the_activity() {
-        TODO()
+        // Arrange
+        val mockRepo = mockk<UserInfoRepository> {
+            coEvery { updateUserInfo(any()) } returns Unit
+        }
+        testRule.testApplication.userInfoRepository = mockRepo
+        testRule.composeTestRule.onNodeWithTag(NickInputFieldTag).performTextInput("nick")
+        testRule.composeTestRule.onNodeWithTag(MottoInputFieldTag).performTextInput("motto")
+        // Act
+        testRule.composeTestRule.onNodeWithTag(SaveButtonTag).performClick()
+        // Assert
+        testRule.scenario.onActivity { activity ->
+            testRule.composeTestRule.waitUntil(
+                timeoutMillis = 200,
+                condition = { activity.isFinishing }
+            )
+        }
     }
 
     @Test
     fun pressing_save_button_in_edit_mode_with_valid_input_stores_the_info() {
-        TODO()
+        // Arrange
+        val mockRepo = mockk<UserInfoRepository> {
+            coEvery { updateUserInfo(any()) } returns Unit
+        }
+        testRule.testApplication.userInfoRepository = mockRepo
+        val enteredNick = "nick"
+        val enteredMotto = "motto"
+        testRule.composeTestRule.onNodeWithTag(NickInputFieldTag).performTextInput(enteredNick)
+        testRule.composeTestRule.onNodeWithTag(MottoInputFieldTag).performTextInput(enteredMotto)
+        // Act
+        testRule.composeTestRule.onNodeWithTag(SaveButtonTag).performClick()
+        // Assert
+        coVerify { mockRepo.updateUserInfo(UserInfo(enteredNick, enteredMotto)) }
     }
 
     @Test

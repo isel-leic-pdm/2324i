@@ -25,5 +25,7 @@
         </activity>
 
         <activity android:name=".ui.preferences.UserPreferencesActivity" />
+
+        <activity android:name=".ui.game.lobby.LobbyActivity" />
     </application>
 </manifest>
