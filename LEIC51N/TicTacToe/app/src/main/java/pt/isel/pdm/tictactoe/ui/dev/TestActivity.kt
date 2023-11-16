@@ -1,6 +1,7 @@
 package pt.isel.pdm.tictactoe.ui.dev
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -21,8 +22,15 @@ import pt.isel.pdm.tictactoe.TicTacToeApplication
 import pt.isel.pdm.tictactoe.ui.theme.TicTacToeTheme
 
 class TestActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val service = (application as TicTacToeApplication).matchmakingService
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            val lobbies = service.getLobbies()
+            for (l in lobbies)
+                Log.d("Test", l.toString())
+        }
     }
 }
