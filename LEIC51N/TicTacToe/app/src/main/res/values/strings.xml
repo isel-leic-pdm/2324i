@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="start">start</string>
+    <string name="user_name">user name</string>
+    <string name="enter_user_name">Enter your desired User name</string>
+    <string name="loading">loading</string>
+    <string name="dismiss">dismiss</string>
+    <string name="title_activity_lobby">LobbyActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+</resources>
