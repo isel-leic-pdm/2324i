@@ -227,6 +227,7 @@ Video lecture (in Portuguese):
 * Project: (Option B) Implement the screen for displaying the list of favorite games. Use a fake implementation of the service used for interaction with Firestore. Do not forget the automatic tests.
 
 ## Week 9
+
 ### 09/10/2023 - State management in Android (part 2)
 * Continuation...
 
@@ -234,3 +235,25 @@ Video lecture (in Portuguese):
 * Goal: Implement the project's screens that collect data from the user and store it in the application's state
 * Project: (Option C) To implement the screen for collecting user credentials (username and password) using a fake repository implementation that will contain the user token resulting from the login procedure. Modify the remaining screens to make use of this repository. 
 * Project: (Option B) To implement the screen for collecting user information (nickname and motto) using a fake repository implementation that contains this information. Modify the remaining screens to make use of this repository. 
+
+## Week 10
+### 16/11/2023 - Building the TicTacToe application: part 1
+* Persistency using Firebase's Firestore:
+  * Overview of the provided data model (i.e. Document DB)
+    * [Documents, collections and references](https://firebase.google.com/docs/firestore/data-model)
+    * [Data types](https://firebase.google.com/docs/firestore/manage-data/data-types)
+  * Android SDK API overview:
+    * [Adding, updating](https://firebase.google.com/docs/firestore/manage-data/add-data) and [deleting](https://firebase.google.com/docs/firestore/manage-data/delete-data) data
+    * Reading data
+      * [Queries](https://firebase.google.com/docs/firestore/query-data/get-data) and [observable queries](https://firebase.google.com/docs/firestore/query-data/listen)
+
+* Lobby system and concurrency 
+	  
+For reference:
+  * [Adding Firebase to an Android project](https://firebase.google.com/docs/android/setup?hl=en&authuser=0)
+  * [Getting started with Firebase emulator](https://firebase.google.com/docs/emulator-suite/connect_and_prototype?database=Firestore)
+  * [Connecting the app to the Firebase emulator (Testing)](https://firebase.google.com/docs/emulator-suite/connect_firestore)
+
+### 17/11/2023 - Practical class
+* Project: (Option C) Start integration with your remote API, designing the model and DTOs required in order to make communication possible. 
+* Project: (Option B) Start integration with Firestore, design your server-side model, the operations and the overall flow required to support all the application features
