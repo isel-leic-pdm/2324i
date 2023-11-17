@@ -1,6 +1,5 @@
 package isel.pdm.demos.tictactoe.ui.main
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,20 +24,25 @@ import isel.pdm.demos.tictactoe.R
 import isel.pdm.demos.tictactoe.ui.common.theme.TicTacToeTheme
 
 /**
- * The tag used to identify the start game button.
+ * The tag used to identify the main screen.
+ */
+const val MainScreenTag = "MainScreen"
+
+/**
+ * The tag used to identify the main screen's button used to start the game.
  */
 const val PlayButtonTag = "PlayButton"
 
+
 /**
  * The application's main screen.
- * @param onPlayRequested the callback to invoke when the user requests to start a game.
+ * @param onPlayRequested The callback to invoke when the user requests to play a game.
  */
 @Composable
 fun MainScreen(onPlayRequested: () -> Unit) {
     TicTacToeTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize().testTag(MainScreenTag)
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
@@ -64,8 +68,8 @@ fun MainScreen(onPlayRequested: () -> Unit) {
 
                 Button(
                     onClick = onPlayRequested,
-                    modifier = Modifier.testTag(PlayButtonTag),
-                    shape = MaterialTheme.shapes.small
+                    shape = MaterialTheme.shapes.small,
+                    modifier = Modifier.testTag(PlayButtonTag)
                 ) {
                     Text(
                         text = stringResource(id = R.string.start_game_button_text),
@@ -80,12 +84,6 @@ fun MainScreen(onPlayRequested: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreviewLight() {
-    MainScreen(onPlayRequested = { })
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun MainScreenPreviewDark() {
+fun MainScreenPreview() {
     MainScreen(onPlayRequested = { })
 }

@@ -40,7 +40,6 @@ class UserPreferencesScreenTests {
     @Test
     fun in_view_mode_input_fields_are_populated_with_the_user_info() {
         // Arrange
-        val motto = requireNotNull(userInfo.motto)
         composeTree.setContent {
             UserPreferencesScreen(
                 userInfo = userInfo,
@@ -51,7 +50,7 @@ class UserPreferencesScreenTests {
         // Act
         // Assert
         composeTree.onNodeWithText(userInfo.nick).assertExists()
-        composeTree.onNodeWithText(motto).assertExists()
+        composeTree.onNodeWithText(userInfo.motto ?: "").assertExists()
     }
 
     @Test
@@ -220,7 +219,7 @@ class UserPreferencesScreenTests {
         // Act
         composeTree.onNodeWithTag(SaveButtonTag).performClick()
         // Assert
-        assertNotNull("Expected non null userInfo", userInfoToSave)
+        assertNotNull(userInfoToSave)
         val expectedUserInfo = UserInfo(enteredNick.trim(), enteredMoto.trim())
         assertEquals(expectedUserInfo, userInfoToSave)
     }

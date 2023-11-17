@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.platform.app.InstrumentationRegistry
-import isel.pdm.demos.tictactoe.ui.TicTacToeTestApplication
+import isel.pdm.demos.tictactoe.TicTacToeTestApplication
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -23,10 +23,8 @@ class PreserveDefaultDependencies<A : ComponentActivity>(
     val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<A>, A>
 ) : TestRule {
 
-    val testApplication: TicTacToeTestApplication = InstrumentationRegistry
-        .getInstrumentation()
-        .targetContext
-        .applicationContext as TicTacToeTestApplication
+    val testApplication: TicTacToeTestApplication =
+        ApplicationProvider.getApplicationContext() as TicTacToeTestApplication
 
     val scenario:ActivityScenario<A>
         get () = composeTestRule.activityRule.scenario
@@ -50,14 +48,14 @@ class PreserveDefaultDependencies<A : ComponentActivity>(
  * Creates a compose rule that saves and restores the default dependencies and
  * starts an activity of type <A>.
  */
-inline fun <reified A : ComponentActivity> createPreserveDependenciesComposeRule() =
+inline fun <reified A : ComponentActivity> createActivityAndPreserveDependenciesComposeRule() =
     PreserveDefaultDependencies(createAndroidComposeRule<A>())
 
 /**
  * Creates a compose rule that saves and restores the default dependencies and
  * starts an activity of type <A> with an intent containing the received intent.
  */
-inline fun <reified A : ComponentActivity> createPreserveDependenciesComposeRule(intent: Intent) =
+inline fun <reified A : ComponentActivity> createActivityAndPreserveDependenciesComposeRule(intent: Intent) =
     PreserveDefaultDependencies(
         AndroidComposeTestRule(
             activityRule = ActivityScenarioRule(intent),

@@ -6,16 +6,18 @@ import androidx.compose.ui.test.performClick
 import io.mockk.coEvery
 import io.mockk.mockk
 import isel.pdm.demos.tictactoe.TicTacToeTestApplication
+import isel.pdm.demos.tictactoe.domain.UserInfo
 import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenTag
 import isel.pdm.demos.tictactoe.ui.preferences.UserPreferencesScreenTag
-import isel.pdm.demos.tictactoe.utils.createPreserveDependenciesComposeRule
+import isel.pdm.demos.tictactoe.utils.createActivityAndPreserveDependenciesComposeRule
+import kotlinx.coroutines.delay
 import org.junit.Rule
 import org.junit.Test
 
 class MainActivityTests {
 
     @get:Rule
-    val testRule = createPreserveDependenciesComposeRule<MainActivity>()
+    val testRule = createActivityAndPreserveDependenciesComposeRule<MainActivity>()
 
     /**
      * Shortcut to the [TicTacToeTestApplication] instance, used to access the dependencies.
@@ -36,7 +38,6 @@ class MainActivityTests {
 
     @Test
     fun pressing_play_navigates_to_lobby_if_user_info_exists() {
-        // We presume that the mock contains a user info
         composeTree.onNodeWithTag(PlayButtonTag).performClick()
         composeTree.waitForIdle()
         composeTree.onNodeWithTag(LobbyScreenTag).assertExists()
@@ -54,5 +55,24 @@ class MainActivityTests {
         composeTree.waitForIdle()
         // Assert
         composeTree.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+    }
+
+    @Test
+    fun pressing_play_navigates_to_lobby_if_user_info_exists_regardless_of_reconfigurations() {
+        // Arrange
+        testApplication.userInfoRepository = mockk {
+            coEvery { getUserInfo() } coAnswers {
+                delay(1000)
+                UserInfo("test nickname", "the motto")
+            }
+        }
+
+        // Act
+        composeTree.onNodeWithTag(PlayButtonTag).performClick()
+        testRule.scenario.recreate()
+        composeTree.waitForIdle()
+
+        // Assert
+        composeTree.onNodeWithTag(LobbyScreenTag).assertExists()
     }
 }

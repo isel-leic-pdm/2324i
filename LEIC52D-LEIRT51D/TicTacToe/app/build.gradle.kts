@@ -15,7 +15,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "isel.pdm.demos.tictactoe.ui.TickTackToeTestRunner"
+        testInstrumentationRunner = "isel.pdm.demos.tictactoe.TicTacToeTestRunner"
         // testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -86,6 +86,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     testImplementation("io.mockk:mockk-android:1.13.8")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

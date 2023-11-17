@@ -75,7 +75,7 @@ fun UserPreferencesScreen(
     onNavigateBackRequested: () -> Unit
 ) {
     TicTacToeTheme {
-        var isEditMode by remember { mutableStateOf(userInfo == null) }
+        var isEditMode by rememberSaveable { mutableStateOf(false) }
         if (userInfo == null || isEditMode) {
             UserPreferencesScreenEditMode(
                 initialUserInfo = userInfo,
@@ -87,7 +87,7 @@ fun UserPreferencesScreen(
             UserPreferencesScreenViewMode(
                 userInfo = userInfo,
                 onEditRequested = { isEditMode = true },
-                onNavigateBackRequested = { }
+                onNavigateBackRequested = onNavigateBackRequested
             )
         }
     }
@@ -157,8 +157,8 @@ private fun UserPreferencesScreenEditMode(
     onSaveRequested: (UserInfo) -> Unit,
     onNavigateBackRequested: () -> Unit
 ) {
-    var nick by remember { mutableStateOf(initialUserInfo?.nick ?: "") }
-    var motto by remember { mutableStateOf(initialUserInfo?.motto ?: "") }
+    var nick by rememberSaveable { mutableStateOf(initialUserInfo?.nick ?: "") }
+    var motto by rememberSaveable { mutableStateOf(initialUserInfo?.motto ?: "") }
 
     Scaffold(
         modifier = Modifier

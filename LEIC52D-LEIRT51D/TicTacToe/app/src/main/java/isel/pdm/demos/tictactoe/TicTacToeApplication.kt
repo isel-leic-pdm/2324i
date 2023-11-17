@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import isel.pdm.demos.tictactoe.domain.UserInfoRepository
+import isel.pdm.demos.tictactoe.storage.UserInfoDataStore
 
 const val TAG = "TicTacToeApp"
 
@@ -20,6 +21,8 @@ interface DependenciesContainer {
  */
 class TicTacToeApplication : Application(), DependenciesContainer {
 
+    private val dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_info")
+
     override val userInfoRepository: UserInfoRepository
-        get() = TODO()
+        get() = UserInfoDataStore(dataStore)
 }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,8 +75,8 @@ fun UserPreferencesScreen(
     onNavigateBackRequested: () -> Unit
 ) {
     TicTacToeTheme {
-        var isInEditMode by remember { mutableStateOf(userInfo == null) }
-        if (userInfo == null || isInEditMode) {
+        var isEditMode by rememberSaveable { mutableStateOf(false) }
+        if (userInfo == null || isEditMode) {
             UserPreferencesScreenEditMode(
                 initialUserInfo = userInfo,
                 onSaveRequested = onSaveRequested,
@@ -85,7 +86,7 @@ fun UserPreferencesScreen(
         else {
             UserPreferencesScreenViewMode(
                 userInfo = userInfo,
-                onEditRequested = { isInEditMode = true },
+                onEditRequested = { isEditMode = true },
                 onNavigateBackRequested = onNavigateBackRequested
             )
         }
@@ -156,8 +157,8 @@ private fun UserPreferencesScreenEditMode(
     onSaveRequested: (UserInfo) -> Unit,
     onNavigateBackRequested: () -> Unit
 ) {
-    var nick by remember { mutableStateOf(initialUserInfo?.nick ?: "") }
-    var motto by remember { mutableStateOf(initialUserInfo?.motto ?: "") }
+    var nick by rememberSaveable { mutableStateOf(initialUserInfo?.nick ?: "") }
+    var motto by rememberSaveable { mutableStateOf(initialUserInfo?.motto ?: "") }
 
     Scaffold(
         modifier = Modifier
@@ -166,7 +167,7 @@ private fun UserPreferencesScreenEditMode(
         floatingActionButton = {
             SaveFab(
                 enabled = nick.isNotBlank(),
-                onClick = { toUserInfoOrNull(nick.trim(), motto.trim())?.let { onSaveRequested(it) }}
+                onClick = { toUserInfoOrNull(nick.trim(), motto.trim())?.let { onSaveRequested(it) } }
             )
         },
         topBar = { TopBar(NavigationHandlers(onNavigateBackRequested)) },

@@ -15,7 +15,7 @@ class MainScreenTests {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun initially_the_start_game_button_is_available() {
+    fun main_screen_displays_play_button() {
         // Arrange
         composeTestRule.setContent {
             MainScreen(onPlayRequested = { })
@@ -26,7 +26,7 @@ class MainScreenTests {
     }
 
     @Test
-    fun pressing_the_start_game_button_calls_the_onPlayRequested_callback() {
+    fun pressing_play_calls_onPlayRequested_callback() {
         // Arrange
         var playRequested = false
         composeTestRule.setContent {

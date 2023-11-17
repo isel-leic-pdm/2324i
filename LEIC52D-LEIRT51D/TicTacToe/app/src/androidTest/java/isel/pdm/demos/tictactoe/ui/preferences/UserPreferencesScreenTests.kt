@@ -9,7 +9,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import isel.pdm.demos.tictactoe.domain.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.NavigateBackTag
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -194,9 +196,9 @@ class UserPreferencesScreenTests {
         // Act
         composeTree.onNodeWithTag(SaveButtonTag).performClick()
         // Assert
-        Assert.assertNotNull(userInfoToSave)
+        assertNotNull(userInfoToSave)
         val expectedUserInfo = UserInfo(expectedNick, expectedMoto)
-        Assert.assertEquals(expectedUserInfo, userInfoToSave)
+        assertEquals(expectedUserInfo, userInfoToSave)
     }
 
     @Test
@@ -217,13 +219,9 @@ class UserPreferencesScreenTests {
         // Act
         composeTree.onNodeWithTag(SaveButtonTag).performClick()
         // Assert
-        Assert.assertNotNull("User info should not be null", userInfoToSave)
+        assertNotNull(userInfoToSave)
         val expectedUserInfo = UserInfo(enteredNick.trim(), enteredMoto.trim())
-        Assert.assertEquals(
-            "Expected $expectedUserInfo but got $userInfoToSave",
-            expectedUserInfo,
-            userInfoToSave
-        )
+        assertEquals(expectedUserInfo, userInfoToSave)
     }
 
     @Test
@@ -273,6 +271,6 @@ class UserPreferencesScreenTests {
         // Act
         composeTree.onNodeWithTag(NavigateBackTag).performClick()
         // Assert
-        Assert.assertTrue(navigateBackRequested)
+        assertTrue(navigateBackRequested)
     }
 }
