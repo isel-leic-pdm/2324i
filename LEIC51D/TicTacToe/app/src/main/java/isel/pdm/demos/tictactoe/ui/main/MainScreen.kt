@@ -39,7 +39,10 @@ const val PlayButtonTag = "PlayButton"
  * @param onPlayRequested The callback to invoke when the user requests to play a game.
  */
 @Composable
-fun MainScreen(onPlayRequested: () -> Unit) {
+fun MainScreen(
+    onPlayEnabled: Boolean = true,
+    onPlayRequested: () -> Unit
+) {
     TicTacToeTheme {
         Surface(
             modifier = Modifier.fillMaxSize().testTag(MainScreenTag)
@@ -67,6 +70,7 @@ fun MainScreen(onPlayRequested: () -> Unit) {
                 )
 
                 Button(
+                    enabled = onPlayEnabled,
                     onClick = onPlayRequested,
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier.testTag(PlayButtonTag)
