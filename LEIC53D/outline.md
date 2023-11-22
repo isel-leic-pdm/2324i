@@ -240,9 +240,58 @@ Video lecture (in Portuguese): (recorded in LEIC51D class)
 * Building the application, tests first
   * Automated tests as a means of specifying the application's behaviour
 
-Video lecture (in Portuguese): (__coming soon__)
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (09) Sessão de codificação: Tic Tac Toe](https://www.youtube.com/watch?v=nedq2Rt2aZI&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=9)
 
 ### 08/11/2023 (Part 2) and 10/11/2023 - Practical class
 * Goal: Implement the project's screens that collect data from the user and store it in the application's state
 * Project: (Option C) To implement the screen for collecting user credentials (username and password) using a fake repository implementation that will contain the user token resulting from the login procedure. Modify the remaining screens to make use of this repository. Next week we will replace the fake implementation with a real one, using the DataStore API. Do not forget the automatic tests.
 * Project: (Option B) To implement the screen for collecting user information (nickname and motto) using a fake repository implementation that contains this information. Modify the remaining screens to make use of this repository. Next week we will replace the fake implementation with a real one, using the DataStore API.
+
+## Week 10
+### 15/11/2023 (Part 1) - State management in Android (part 3)
+* Building the application, tests first (continued)
+  * Automated tests as a means of specifying the application's behaviour
+* Android concurrency model, continued: Kotlin flows
+  * Purpose and motivation (comparison with Kotlin Sequences)
+  * Transformations, e.g. `map`, `filter`
+  * Terminal operations, e.g. `collect`, `first`, `last`
+* Persistent storage of application state
+  * For simple data (schemaless) and with low volume, using DataStore
+  * The DataStore API: Preferences DataStore
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (10a) Sessão de codificação: Tic Tac Toe](https://www.youtube.com/watch?v=jkGwXMTHurY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=10)
+* [Android @ ISEL - 2023 - (10b) Gestão de estado (parte 3)](https://www.youtube.com/watch?v=K123jevBEQc&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=11)
+
+For reference:
+* [Kotlin Flows](https://kotlinlang.org/docs/flow.html)
+* [Kotlin Flows on Android](https://developer.android.com/kotlin/flow#jetpack)
+* [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+
+### 15/11/2023 (Part 2) and 17/11/2023 - Practical class
+* Goal: Implement the project's screens that collect data from the user and store it in the application's state
+* Project: (Option C) Implement the repository that will contain the user token resulting from the login procedure using the DataStore API. Do not forget the automatic tests.
+* Project: (Option B) Implement the repository that will contain the user information (nickname and motto) using the DataStore API. Do not forget the automatic tests.
+
+## Week 11
+### 22/11/2023 (Part 1) - Data flows in Android (part 1)
+* Interaction models (a.k.a. data flow models)
+  * Pull model: the data is pulled from the destination to the source (receptor's initiative)
+  * Push model: the data is pushed from the source to the destination (emitter's initiative)
+* Data flows in Android using the push model
+  * Between the `Activity` and its `ViewModel`
+    * `StateFlow` and `MutableStateFlow` - motivation and applicability
+  * Between the `Activity` and the `@Composable` function that implements its screen
+    * Extension function `collectAsState` - motivation and applicability
+
+Video lecture (in Portuguese): (recorded in LEIC51D class)
+* [Android @ ISEL - 2023 - (11) Fluxos de dados em Android (parte 1)](https://www.youtube.com/watch?v=Yk2rwi7YIBY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=12)
+
+For reference:
+* [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+* [State and Jetpack Composes](https://developer.android.com/jetpack/compose/state#use-other-types-of-state-in-jetpack-compose)
+
+### 22/11/2023 (Part 2) and 24/11/2023 - Practical class
+* Goal: Increase the robustness of our application, making sure it is resilient to configuration changes
+* Project: Finish the implementation of pending functionalities, making sure that they are resilient to configuration changes. Optionally, redesign the solution architecture to use a push interaction model, using Kotlin flows. The redesign should be incremental, one screen at a time. Don't forget the automated tests.
