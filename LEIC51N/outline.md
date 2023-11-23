@@ -257,3 +257,11 @@ For reference:
 ### 17/11/2023 - Practical class
 * Project: (Option C) Start integration with your remote API, designing the model and DTOs required in order to make communication possible. 
 * Project: (Option B) Start integration with Firestore, design your server-side model, the operations and the overall flow required to support all the application features
+
+## Week 11
+### 23/11/2023 - Building the TicTacToe application: part 2
+* Continuation...
+
+### 24/11/2023 - Practical class
+* Goal: Increase the robustness of our application
+* Project: Finish the implementation of pending functionalities, making sure that they are resilient to configuration changes.
