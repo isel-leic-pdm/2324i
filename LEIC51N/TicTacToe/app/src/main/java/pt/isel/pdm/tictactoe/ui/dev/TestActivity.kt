@@ -19,18 +19,60 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import pt.isel.pdm.tictactoe.TicTacToeApplication
+import pt.isel.pdm.tictactoe.model.GameLobby
+import pt.isel.pdm.tictactoe.model.GameSession
 import pt.isel.pdm.tictactoe.ui.theme.TicTacToeTheme
 
 class TestActivity : ComponentActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val service = (application as TicTacToeApplication).matchmakingService
+        var game by mutableStateOf<GameSession?>(null)
+        var lobby by mutableStateOf<GameLobby?>(null)
+        var currOper by mutableStateOf<String?>(null)
+
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            val lobbies = service.getLobbies()
-            for (l in lobbies)
-                Log.d("Test", l.toString())
+        setContent {
+            TicTacToeTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+
+                    if (game == null && lobby == null && currOper == null) {
+                        Column {
+                            Button(onClick = {
+                                currOper = "Create"
+                                lifecycleScope.launch {
+                                    game = service.createLobbyAndWaitForPlayer("Test")
+                                }
+                            }) {
+                                Text(text = "Create n Wait")
+                            }
+                            Button(onClick = {
+                                lifecycleScope.launch {
+                                    currOper = "Join"
+                                    lobby = service.getLobbies().filter { it.displayName == "Test" }
+                                        .first()
+                                    game = service.joinLobby("P2", lobby!!)
+                                }
+                            }) {
+                                Text(text = "Join")
+                            }
+                        }
+                    }
+                    if (game != null) {
+                        Text(text = "Matchmaking complete\n$game")
+                    } else if (lobby != null) {
+                        Text(text = "Lobby created \n$lobby ")
+                    } else if (currOper != null) {
+                        Text("Loading $currOper")
+                    }
+
+
+                }
+            }
         }
     }
 }

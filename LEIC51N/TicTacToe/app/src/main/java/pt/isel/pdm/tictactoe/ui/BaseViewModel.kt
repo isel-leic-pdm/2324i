@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 open class BaseViewModel : ViewModel() {
+
     var isLoading by mutableStateOf<Boolean>(false)
     var error by mutableStateOf<String?>(null)
 
