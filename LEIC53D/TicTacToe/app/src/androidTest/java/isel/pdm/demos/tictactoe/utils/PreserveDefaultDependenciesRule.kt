@@ -18,6 +18,7 @@ import org.junit.runners.model.Statement
  * Tests that make use of this rule are allowed to replace the globally accessible dependencies by
  * other doubles that serve their purposes. The behaviour of the remaining tests
  * is preserved by saving the default dependencies and restoring them after the execution of the test.
+ * The rule also ensures that an Activity of type <A> is started before the test is executed.
  */
 class PreserveDefaultDependencies<A : ComponentActivity>(
     val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<A>, A>
@@ -65,4 +66,46 @@ inline fun <reified A : ComponentActivity> createActivityAndPreserveDependencies
                 activity
             }
         )
+    )
+
+/**
+ * Test rule that ensures that the default dependencies are preserved after the test is executed.
+ *
+ * Tests that make use of this rule are allowed to replace the globally accessible dependencies by
+ * other doubles that serve their purposes. The behaviour of the remaining tests
+ * is preserved by saving the default dependencies and restoring them after the execution of the test.
+ *
+ * This rule does not start an activity before the test is executed. The test is responsible for
+ * starting the activity.
+ */
+class PreserveDefaultDependenciesNoActivity() : TestRule {
+
+    val testApplication: TicTacToeTestApplication =
+        ApplicationProvider.getApplicationContext() as TicTacToeTestApplication
+
+    override fun apply(test: Statement, description: Description): Statement =
+        object : Statement() {
+            override fun evaluate() {
+                val defaultUserInfoRepo = testApplication.userInfoRepository
+                try {
+                    test.evaluate()
+                }
+                finally {
+                    testApplication.userInfoRepository = defaultUserInfoRepo
+                }
+            }
+        }
+}
+
+
+/**
+ * Creates a compose rule that saves and restores the default dependencies. If the test needs
+ * to start an activity, it is responsible for starting it.
+ */
+fun createPreserveDefaultDependenciesComposeRuleNoActivity() =
+    AndroidComposeTestRule<TestRule, ComponentActivity>(
+        activityRule = PreserveDefaultDependenciesNoActivity(),
+        activityProvider = {
+            error("This rule does not provide an Activity. Launch and use the Activity yourself.")
+        }
     )

@@ -1,5 +1,6 @@
 package isel.pdm.demos.tictactoe.ui.main
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +34,9 @@ const val MainScreenTag = "MainScreen"
  */
 const val PlayButtonTag = "PlayButton"
 
-
 /**
  * The application's main screen.
- * @param onPlayRequested The callback to invoke when the user requests to play a game.
+ * @param onPlayRequested the callback to invoke when the user requests to start a game.
  */
 @Composable
 fun MainScreen(
@@ -45,7 +45,9 @@ fun MainScreen(
 ) {
     TicTacToeTheme {
         Surface(
-            modifier = Modifier.fillMaxSize().testTag(MainScreenTag)
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(MainScreenTag),
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
@@ -72,8 +74,8 @@ fun MainScreen(
                 Button(
                     enabled = onPlayEnabled,
                     onClick = onPlayRequested,
-                    shape = MaterialTheme.shapes.small,
-                    modifier = Modifier.testTag(PlayButtonTag)
+                    modifier = Modifier.testTag(PlayButtonTag),
+                    shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = stringResource(id = R.string.start_game_button_text),
@@ -88,6 +90,13 @@ fun MainScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+fun MainScreenPreviewLight() {
     MainScreen(onPlayRequested = { })
 }
+
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun MainScreenPreviewDark() {
+    MainScreen(onPlayRequested = { })
+}
+

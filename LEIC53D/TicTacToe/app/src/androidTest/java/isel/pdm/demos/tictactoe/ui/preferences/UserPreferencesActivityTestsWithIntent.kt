@@ -3,7 +3,7 @@ package isel.pdm.demos.tictactoe.ui.preferences
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
-import isel.pdm.demos.tictactoe.domain.UserInfo
+import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.NavigateBackTag
 import isel.pdm.demos.tictactoe.utils.createActivityAndPreserveDependenciesComposeRule
 import org.junit.Rule

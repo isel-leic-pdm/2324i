@@ -6,22 +6,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import isel.pdm.demos.tictactoe.DependenciesContainer
+import isel.pdm.demos.tictactoe.R
 import isel.pdm.demos.tictactoe.domain.Idle
 import isel.pdm.demos.tictactoe.domain.Loaded
-import isel.pdm.demos.tictactoe.domain.UserInfo
 import isel.pdm.demos.tictactoe.domain.getOrNull
 import isel.pdm.demos.tictactoe.domain.idle
+import isel.pdm.demos.tictactoe.domain.user.UserInfo
+import isel.pdm.demos.tictactoe.ui.common.ErrorAlert
 import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyActivity
 import isel.pdm.demos.tictactoe.ui.preferences.UserPreferencesActivity
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
- * The application's main activity.
+ * The application's main activity, that hosts the main screen.
  */
 class MainActivity : ComponentActivity() {
 
@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            vm.userInfo.collect {
-                if (it is Loaded) {
+            vm.userInfo.collectLatest {
+                if (it is Loaded && it.value.isSuccess) {
                     doNavigation(userInfo = it.getOrNull())
                     vm.resetToIdle()
                 }
@@ -42,13 +42,21 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val state by vm.userInfo.collectAsState(initial = idle())
+            val userInfo by vm.userInfo.collectAsState(initial = idle())
             MainScreen(
-                onPlayEnabled = state is Idle,
-                onPlayRequested = {
-                    vm.fetchUserInfo()
-                }
+                onPlayEnabled = userInfo is Idle,
+                onPlayRequested = { vm.fetchUserInfo() }
             )
+
+            userInfo.let {
+                if (it is Loaded && it.value.isFailure)
+                    ErrorAlert(
+                        title = R.string.failed_to_read_preferences_error_dialog_title,
+                        message = R.string.failed_to_read_preferences_error_dialog_text,
+                        buttonText = R.string.failed_to_read_preferences_error_dialog_ok_button,
+                        onDismiss = { vm.resetToIdle() }
+                    )
+            }
         }
     }
 

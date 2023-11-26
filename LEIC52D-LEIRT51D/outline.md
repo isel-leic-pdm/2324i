@@ -300,3 +300,35 @@ For reference:
 * Goal: Increase the robustness of our application, making sure it is resilient to configuration changes
 * Project: Finish the implementation of pending functionalities, making sure that they are resilient to configuration changes. Optionally, redesign the solution architecture to use a push interaction model, using Kotlin flows. The redesign should be incremental, one screen at a time. Don't forget the automated tests.
 
+## Week 12
+### 27/11/2023 - Data flows in Android (part 2)
+* Data flows in Android using the push model (continued)
+  * Between the `Activity` and its `ViewModel`, revisited
+  * Between the `Activity` and the `@Composable` revisited
+  * Between the domain and the `ViewModel`
+* Discussion of the resulting architecture and its properties
+* Persistency using Firebase's Firestore:
+  * Overview of the provided data model (i.e. Document DB)
+    * Documents, collections and references
+    * Data types
+  * Android SDK API overview:
+    * Adding, updating and deleting data
+    * Reading data: Queries and observable queries
+
+Video lecture (in Portuguese): __(coming soon)__
+
+For reference:
+* [Add Firebase to your Android project](https://firebase.google.com/docs/android/setup?hl=en&authuser=0)
+* [Connect your app and start prototyping | Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite/connect_and_prototype?database=Firestore)
+* [Cloud Firestore Data model](https://firebase.google.com/docs/firestore/data-model)
+* [Supported data types | Firestore](https://firebase.google.com/docs/firestore/manage-data/data-types)
+* [Add data to Cloud Firestore](https://firebase.google.com/docs/firestore/manage-data/add-data)
+* [Delete data from Cloud Firestore](https://firebase.google.com/docs/firestore/manage-data/delete-data)
+* [Get data with Cloud Firestore](https://firebase.google.com/docs/firestore/query-data/get-data)
+* [Get real time updates with Cloud Firestore](https://firebase.google.com/docs/firestore/query-data/listen)
+* [Install, configure and integrate Local Emulator Suite](https://firebase.google.com/docs/emulator-suite/install_and_configure) 
+
+### 30/11/2023 - Practical class
+* Goal: Increase the robustness of our application
+* Project: Finish the implementation of pending functionalities, making sure that they are resilient to configuration changes. Optionally, redesign the solution architecture to use a push interaction model, using Kotlin flows. The redesign should be incremental, one screen at a time. Don't forget the automated tests.
+* Project: (Option B) Implement the lobby using Firestore. Do not forget the automated tests.

@@ -1,46 +1,47 @@
 package isel.pdm.demos.tictactoe.ui.main
 
-import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.test.core.app.ActivityScenario
 import io.mockk.coEvery
 import io.mockk.mockk
-import isel.pdm.demos.tictactoe.TicTacToeTestApplication
-import isel.pdm.demos.tictactoe.domain.UserInfo
+import isel.pdm.demos.tictactoe.ui.common.ErrorAlertTestTag
 import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenTag
 import isel.pdm.demos.tictactoe.ui.preferences.UserPreferencesScreenTag
-import isel.pdm.demos.tictactoe.utils.createActivityAndPreserveDependenciesComposeRule
-import kotlinx.coroutines.delay
+import isel.pdm.demos.tictactoe.utils.PreserveDefaultDependenciesNoActivity
+import isel.pdm.demos.tictactoe.utils.createPreserveDefaultDependenciesComposeRuleNoActivity
 import org.junit.Rule
 import org.junit.Test
 
 class MainActivityTests {
 
     @get:Rule
-    val testRule = createActivityAndPreserveDependenciesComposeRule<MainActivity>()
+    val testRule = createPreserveDefaultDependenciesComposeRuleNoActivity()
 
-    /**
-     * Shortcut to the [TicTacToeTestApplication] instance, used to access the dependencies.
-     */
-    private val testApplication: TicTacToeTestApplication
-        get() = testRule.testApplication
-
-    /**
-     * Shortcut to the [ComposeTestRule] instance, used to access the composition tree.
-     */
-    private val composeTree: ComposeTestRule
-        get() = testRule.composeTestRule
+    private val testApplication by lazy {
+        (testRule.activityRule as PreserveDefaultDependenciesNoActivity).testApplication
+    }
 
     @Test
     fun initially_the_main_screen_is_displayed() {
-        composeTree.onNodeWithTag(MainScreenTag).assertExists()
+        // Arrange
+        ActivityScenario.launch(MainActivity::class.java).use {
+            // Act
+            // Assert
+            testRule.onNodeWithTag(MainScreenTag).assertExists()
+        }
     }
 
     @Test
     fun pressing_play_navigates_to_lobby_if_user_info_exists() {
-        composeTree.onNodeWithTag(PlayButtonTag).performClick()
-        composeTree.waitForIdle()
-        composeTree.onNodeWithTag(LobbyScreenTag).assertExists()
+        // Arrange
+        ActivityScenario.launch(MainActivity::class.java).use {
+            // Act
+            testRule.onNodeWithTag(PlayButtonTag).performClick()
+            testRule.waitForIdle()
+            // Assert
+            testRule.onNodeWithTag(LobbyScreenTag).assertExists()
+        }
     }
 
     @Test
@@ -50,29 +51,40 @@ class MainActivityTests {
             coEvery { getUserInfo() } returns null
         }
 
-        // Act
-        composeTree.onNodeWithTag(PlayButtonTag).performClick()
-        composeTree.waitForIdle()
-        // Assert
-        composeTree.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        ActivityScenario.launch(MainActivity::class.java).use {
+            // Act
+            testRule.onNodeWithTag(PlayButtonTag).performClick()
+            testRule.waitForIdle()
+            // Assert
+            testRule.onNodeWithTag(UserPreferencesScreenTag).assertExists()
+        }
     }
 
     @Test
     fun pressing_play_navigates_to_lobby_if_user_info_exists_regardless_of_reconfigurations() {
         // Arrange
+        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+            // Act
+            testRule.onNodeWithTag(PlayButtonTag).performClick()
+            scenario.onActivity { it.recreate() }
+            // Assert
+            testRule.onNodeWithTag(LobbyScreenTag).assertExists()
+        }
+    }
+
+    @Test
+    fun an_error_message_is_displayed_if_an_error_occurs_while_loading_user_info() {
+        // Arrange
         testApplication.userInfoRepository = mockk {
-            coEvery { getUserInfo() } coAnswers {
-                delay(1000)
-                UserInfo("test nickname", "the motto")
-            }
+            coEvery { getUserInfo() } throws Exception()
         }
 
-        // Act
-        composeTree.onNodeWithTag(PlayButtonTag).performClick()
-        testRule.scenario.recreate()
-        composeTree.waitForIdle()
-
-        // Assert
-        composeTree.onNodeWithTag(LobbyScreenTag).assertExists()
+        ActivityScenario.launch(MainActivity::class.java).use {
+            // Act
+            testRule.onNodeWithTag(PlayButtonTag).performClick()
+            testRule.waitForIdle()
+            // Assert
+            testRule.onNodeWithTag(ErrorAlertTestTag).assertExists()
+        }
     }
 }

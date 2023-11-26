@@ -80,7 +80,7 @@ fun <T> saveSuccess(value: T): Saved<T> = saved(Result.success(value))
 fun <T> saveFailure(error: Throwable): Saved<T> = saved(Result.failure(error))
 
 /**
- * Returns the result of the load operation, if one is available.
+ * Returns the result of the I/O operation, if one is available.
  */
 fun <T> IOState<T>.getOrNull(): T? = when (this) {
     is Loaded -> value.getOrNull()
@@ -88,8 +88,8 @@ fun <T> IOState<T>.getOrNull(): T? = when (this) {
 }
 
 /**
- * Returns the result of the load operation, if one is available, or throws
- * the exception that caused the load operation to fail. If the load operation
+ * Returns the result of the I/O operation, if one is available, or throws
+ * the exception that caused the operation to fail. If the operation
  * is still in progress, an [IllegalStateException] is thrown.
  */
 fun <T> IOState<T>.getOrThrow(): T = when (this) {
@@ -98,7 +98,7 @@ fun <T> IOState<T>.getOrThrow(): T = when (this) {
 }
 
 /**
- * Returns the exception that caused the load operation to fail, if one is available.
+ * Returns the exception that caused the I/O operation to fail, if one is available.
  */
 fun <T> IOState<T>.exceptionOrNull(): Throwable? = when (this) {
     is Loaded -> value.exceptionOrNull()

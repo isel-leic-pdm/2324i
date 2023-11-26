@@ -2,6 +2,7 @@ package isel.pdm.demos.tictactoe.ui.common.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Red100 = Color(0xA9F297A2)
 val Red200 = Color(0xfff297a2)
 val Red300 = Color(0xffea6d7e)
 val Red500 = Color(0xfff30007)

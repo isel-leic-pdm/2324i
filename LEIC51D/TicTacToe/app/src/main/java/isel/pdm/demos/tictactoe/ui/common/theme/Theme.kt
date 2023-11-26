@@ -21,7 +21,10 @@ private val lightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     onBackground = Red500,
     secondary = Red500,
-    error = Red800
+    error = Red800,
+    primaryContainer = Color.White,
+    onPrimaryContainer = Color.Black,
+    onSecondaryContainer = Color.Gray,
 )
 
 private val darkColorScheme = darkColorScheme(

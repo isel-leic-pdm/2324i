@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import isel.pdm.demos.tictactoe.domain.UserInfo
+import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.NavigateBackTag
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

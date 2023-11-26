@@ -26,7 +26,12 @@ class LobbyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LobbyScreen()
+            LobbyScreen(
+                playersInLobby = emptyList(),
+                onPlayerSelected = { TODO() },
+                onNavigateBackRequested = { TODO() },
+                onNavigateToPreferencesRequested = { TODO() }
+            )
         }
     }
 }

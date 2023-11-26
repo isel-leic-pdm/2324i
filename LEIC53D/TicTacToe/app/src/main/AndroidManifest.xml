@@ -28,4 +28,5 @@
 
         <activity android:name=".ui.game.lobby.LobbyActivity" />
     </application>
+
 </manifest>

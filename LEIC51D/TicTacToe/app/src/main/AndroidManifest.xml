@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicTacToe"
         tools:targetApi="34">
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
@@ -26,6 +27,6 @@
         <activity android:name=".ui.preferences.UserPreferencesActivity" />
 
         <activity android:name=".ui.game.lobby.LobbyActivity" />
-
     </application>
+
 </manifest>

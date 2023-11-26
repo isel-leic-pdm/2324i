@@ -1,10 +1,9 @@
 package isel.pdm.demos.tictactoe.ui.main
 
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import isel.pdm.demos.tictactoe.ui.main.MainScreen
-import isel.pdm.demos.tictactoe.ui.main.PlayButtonTag
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -23,6 +22,7 @@ class MainScreenTests {
         // Act
         // Assert
         composeTestRule.onNodeWithTag(PlayButtonTag).assertExists()
+        composeTestRule.onNodeWithTag(PlayButtonTag).assertIsEnabled()
     }
 
     @Test
