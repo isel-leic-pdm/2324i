@@ -2,6 +2,8 @@ package isel.pdm.demos.tictactoe.domain.game
 
 import kotlinx.coroutines.flow.Flow
 
+class UnreachableLobbyException : Exception()
+
 /**
  * Sum type used to describe events occurring while the player is in the lobby.
  *
@@ -21,6 +23,7 @@ interface Lobby {
      * It cannot be entered again until left.
      * @return the flow of lobby events
      * @throws IllegalStateException    if the lobby was already entered
+     * @throws UnreachableLobbyException if the lobby is unreachable
      */
     suspend fun enter(localPlayer: PlayerInfo): Flow<LobbyEvent>
 

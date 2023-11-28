@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Implementation of the Game's lobby using Firebase's Firestore.
  */
-class LobbyFirebase : Lobby {
+class LobbyFirebase() : Lobby {
 
     override suspend fun enter(localPlayer: PlayerInfo): Flow<LobbyEvent> {
         TODO("Not yet implemented")

@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "465045002285",
+    "project_id": "demos-tic-tac-toe",
+    "storage_bucket": "demos-tic-tac-toe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465045002285:android:aec1d29cabb7073751c0a4",
+        "android_client_info": {
+          "package_name": "isel.pdm.demos.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465045002285-qd26iq4b90tkhandpln9m3r4j9v3s4rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrk3SSQorCLb8ylMCMicuaGO3tmPxzjF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "465045002285-qd26iq4b90tkhandpln9m3r4j9v3s4rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465045002285:android:29d4aefc0e498ec251c0a4",
+        "android_client_info": {
+          "package_name": "palbp.laboratory.demos.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465045002285-qd26iq4b90tkhandpln9m3r4j9v3s4rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrk3SSQorCLb8ylMCMicuaGO3tmPxzjF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "465045002285-qd26iq4b90tkhandpln9m3r4j9v3s4rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
