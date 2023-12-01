@@ -13,14 +13,22 @@ data class Cell(
     val state: CellState
 ) {
 
+    companion object {
+        fun createCell(idx: Int, state: CellState): Cell {
+            val row = idx / 3
+            val col = idx % 3
+
+            return Cell(col, row, state)
+        }
+    }
+
 }
+
 operator fun MutableList<Cell>.set(cell: Cell, value: Cell) {
     this[cell.row * 3 + cell.col] = value
 }
 
 object Cells {
-
-
 
     val emptyBoard: List<Cell> = List(9) {
         Cell(it % 3, it / 3, CellState.EMPTY)

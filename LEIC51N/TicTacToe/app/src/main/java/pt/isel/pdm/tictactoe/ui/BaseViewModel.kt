@@ -1,5 +1,6 @@
 package pt.isel.pdm.tictactoe.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,8 @@ open class BaseViewModel : ViewModel() {
 
     var isLoading by mutableStateOf<Boolean>(false)
     var error by mutableStateOf<String?>(null)
+
+    protected val viewModelTag: String = this.javaClass.simpleName
 
     protected fun loadingAndErrorAwareScope(function: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch {
@@ -36,6 +39,7 @@ open class BaseViewModel : ViewModel() {
             function(cs)
         } catch (e: Exception) {
             error = e.toString()
+            Log.e(viewModelTag, e.toString(),e)
         }
     }
 

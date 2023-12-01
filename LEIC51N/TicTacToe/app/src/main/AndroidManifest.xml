@@ -17,15 +17,17 @@
             android:name=".ui.dev.TestActivity"
             android:exported="true"
             android:label="@string/title_activity_test"
-            android:theme="@style/Theme.TicTacToe" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.TicTacToe">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.lobby.LobbyActivity"
+            android:exported="false"
+            android:label="@string/title_activity_lobby"
+            android:theme="@style/Theme.TicTacToe" />
+
+        <activity
+            android:name=".ui.game.GameActivity"
             android:exported="false"
             android:label="@string/title_activity_lobby"
             android:theme="@style/Theme.TicTacToe" />
@@ -33,7 +35,13 @@
             android:name=".ui.home.HomeActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.TicTacToe"/>
+            android:theme="@style/Theme.TicTacToe">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

@@ -7,7 +7,8 @@ class FakeUserRepository : UserRepository {
     private var user: UserInfo? = null
     override suspend fun getUserData(): UserInfo? {
         delay(1000)
-        return UserInfo("asd")
+        // return UserInfo("asd")
+        return user
     }
 
     override suspend fun setUserData(usr: UserInfo) {

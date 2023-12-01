@@ -262,6 +262,21 @@ For reference:
 ### 23/11/2023 - Building the TicTacToe application: part 2
 * Continuation...
 
-### 24/11/2023 - Practical class
-* Goal: Increase the robustness of our application
-* Project: Finish the implementation of pending functionalities, making sure that they are resilient to configuration changes.
+## Week 12
+
+### 30/11/2023 - Data flows in Android (part 1)
+* Interaction models (a.k.a. data flow models)
+  * Pull model: the data is pulled from the destination to the source (receptor's initiative)
+  * Push model: the data is pushed from the source to the destination (emitter's initiative)
+* Data flows in Android using the push model
+  * Between the `Activity` and its `ViewModel`
+    * `StateFlow` and `MutableStateFlow` - motivation and applicability
+  * Between the `Activity` and the `@Composable` function that implements its screen
+    * Extension function `collectAsState` - motivation and applicability
+
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (11) Fluxos de dados em Android (parte 1)](https://www.youtube.com/watch?v=Yk2rwi7YIBY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=12)
+
+For reference:
+* [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+* [State and Jetpack Composes](https://developer.android.com/jetpack/compose/state#use-other-types-of-state-in-jetpack-compose)

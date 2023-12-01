@@ -7,4 +7,8 @@
     <string name="dismiss">dismiss</string>
     <string name="title_activity_lobby">LobbyActivity</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="top_bar_go_back">back</string>
+    <string name="refresh">refresh\n</string>
+    <string name="add">add</string>
+    <string name="title_activity_game">GameActivity</string>
 </resources>

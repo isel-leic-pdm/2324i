@@ -29,6 +29,9 @@ class FirestoreMatchmakingService(
         const val GamePlayer2Field = "player2"
         const val GameIsPlayer1Turn = "isPlayer1Turn"
         const val GameIdField = "gameId"
+        const val GameBoardField = "board"
+
+        const val EmptyGameBoard = "         "
 
     }
 
@@ -60,8 +63,8 @@ class FirestoreMatchmakingService(
 
             //esperar pelo gameid
 
-            val gameId = waitForDocumentToChange(
-                lobbyDoc
+            val gameId = lobbyDoc.waitForDocumentToChange(
+
             ) { lobbySnapshot ->
 
                 if (lobbySnapshot == null || lobbySnapshot.exists() == false)
@@ -83,6 +86,8 @@ class FirestoreMatchmakingService(
                     GamePlayer1Field to userName,
                     GameIsPlayer1Turn to Random().nextBoolean(),
                     GameIdField to gameId,
+                    GameBoardField to EmptyGameBoard
+
                 )
             ).await()
 
@@ -90,7 +95,7 @@ class FirestoreMatchmakingService(
             lobbyDoc.delete().await()
 
             //esperar por P2 name
-            waitForDocumentToChange(gameDoc) { gameSnapshot ->
+            gameDoc.waitForDocumentToChange() { gameSnapshot ->
                 if (gameSnapshot == null || gameSnapshot.exists() == false)
                     throw Exception("Game $gameId not found")
 
@@ -130,8 +135,16 @@ class FirestoreMatchmakingService(
         lobbyReference.update(LobbyGameIdField, gameId)
             .await()
 
+        lobbyReference.waitForDocumentToChange() { lobbySnapshot ->
+            if (lobbySnapshot == null || lobbySnapshot.exists() == false)
+                return@waitForDocumentToChange Unit
+
+            return@waitForDocumentToChange null
+        }
+
+
         //Player 2 waits for lobby to be destroyed
-        waitForDocumentToChange(lobbyReference) { lobbySnapshot ->
+        lobbyReference.waitForDocumentToChange() { lobbySnapshot ->
             if (lobbySnapshot == null || lobbySnapshot.exists() == false)
                 return@waitForDocumentToChange Unit
 
@@ -165,37 +178,6 @@ class FirestoreMatchmakingService(
     }
 
 
-    suspend fun <T> waitForDocumentToChange(
-        doc: DocumentReference,
-        predicate: (DocumentSnapshot?) -> T
-    ): T {
-        return suspendCancellableCoroutine { continuation ->
-            var listener: ListenerRegistration? = null
-            listener = doc.addSnapshotListener { docSnapshot, err ->
-                try {
-                    if (err != null)
-                        continuation.resumeWithException(Exception(err.message))
-                    else {
-                        val ret = predicate(docSnapshot)
-                        if (ret != null)
-                            continuation.resume(ret)
-                    }
-
-                } catch (e: Exception) {
-                    continuation.resumeWithException(e)
-                } finally {
-                    if (continuation.isCompleted)
-                        listener!!.remove()
-                }
-            }
-
-            continuation.invokeOnCancellation {
-                listener.remove()
-            }
-        }
-    }
-
-
     class FirestoreLobby(
         override val displayName: String,
         override val id: String
@@ -209,11 +191,13 @@ class FirestoreMatchmakingService(
         override val player1: String,
         override val player2: String,
         override val isPlayer1Turn: Boolean,
-        override val gameId: String
+        override val gameId: String, override val board: String = ""
     ) : GameSession {
         override fun toString(): String {
-            return "FirestoreGame(player1='$player1', player2='$player2', isPlayer1Turn=$isPlayer1Turn, gameId='$gameId')"
+            return "FirestoreGame(player1='$player1', player2='$player2', isPlayer1Turn=$isPlayer1Turn, gameId='$gameId', board='$board' )"
         }
     }
 
+
 }
+
