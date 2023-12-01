@@ -274,9 +274,9 @@ For reference:
   * Between the `Activity` and the `@Composable` function that implements its screen
     * Extension function `collectAsState` - motivation and applicability
 
-Video lecture (in Portuguese):
-* [Android @ ISEL - 2023 - (11) Fluxos de dados em Android (parte 1)](https://www.youtube.com/watch?v=Yk2rwi7YIBY&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=12)
 
 For reference:
 * [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 * [State and Jetpack Composes](https://developer.android.com/jetpack/compose/state#use-other-types-of-state-in-jetpack-compose)
+* [Data Store](https://developer.android.com/topic/libraries/architecture/datastore)
+* [Data Store API Reference](https://developer.android.com/jetpack/androidx/releases/datastore)
