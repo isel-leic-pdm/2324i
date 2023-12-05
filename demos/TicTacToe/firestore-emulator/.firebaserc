@@ -1,0 +1,5 @@
+{
+  "projects": {
+    "default": "demos-tic-tac-toe"
+  }
+}

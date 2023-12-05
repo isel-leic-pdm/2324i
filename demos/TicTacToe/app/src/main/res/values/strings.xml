@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Tic Tac Toe</string>
+
+    <!-- Top bar -->
+    <string name="top_bar_go_back">Navigate back</string>
+    <string name="top_bar_navigate_to_prefs">Navigate to preferences</string>
+
+    <!-- Main screen -->
+    <string name="start_game_button_text">Play</string>
+
+    <!-- User Preferences screen -->
+    <string name="preferences_screen_title">How others see you</string>
+    <string name="preferences_screen_nickname_tip">Your nickname</string>
+    <string name="preferences_screen_moto_tip">Your moto</string>
+    <string name="failed_to_read_preferences_error_dialog_title">Fatal Error</string>
+    <string name="failed_to_read_preferences_error_dialog_text">Failed to read local data store</string>
+    <string name="failed_to_read_preferences_error_dialog_ok_button">OK</string>
+    <string name="failed_to_save_preferences_error_dialog_title">Fatal Error</string>
+    <string name="failed_to_save_preferences_error_dialog_text">Failed to save user info to local data store. Is there any space left on your device? </string>
+    <string name="failed_to_save_preferences_error_dialog_retry_button">Retry</string>
+
+    <!-- Lobby screen -->
+    <string name="lobby_screen_title">Available players</string>
+    <string name="failed_to_enter_lobby_dialog_title">Fatal Error</string>
+    <string name="failed_to_enter_lobby_dialog_text">Failed to enter lobby. Please check if your device is connected to the internet.</string>
+    <string name="failed_to_enter_lobby_dialog_ok_button">OK</string>
+</resources>
