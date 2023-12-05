@@ -319,7 +319,8 @@ For reference:
     * Adding, updating and deleting data
     * Reading data: Queries and observable queries
 
-Video lecture (in Portuguese): __(coming soon)__
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (12) Fluxos de dados em Android (parte 2)](https://www.youtube.com/watch?v=B8I71UfK-_k&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=13)
 
 For reference:
 * [Add Firebase to your Android project](https://firebase.google.com/docs/android/setup?hl=en&authuser=0)
@@ -333,3 +334,55 @@ For reference:
 * [Install, configure and integrate Local Emulator Suite](https://firebase.google.com/docs/emulator-suite/install_and_configure) 
 
 ### 01/12/2023 - National Holliyday
+
+## Week 13
+### 04/12/2023 - Execution on Android
+* User-facing and non-user-facing work
+* Automatic resource management in Android and its consequences on the programming model
+* Scheduling non-user-facing work: WorkManager API
+  * Motivation and use cases
+  * General description
+* Flows in Android, continued
+  * Creating flows from asynchronous APIs based on callbacks: `callbackFlow`
+* Android concurrency model, revisited
+  * Controlling the execution of operations on flows: `withContext` and `flowOn`
+* Navigation, user tasks, and back stack, revisited
+  * Reacting to changes in the Activity lifecycle: `repeatOnLifecycle`
+
+Video lecture (in Portuguese):
+* [Android @ ISEL - 2023 - (13) Execução em Android](https://www.youtube.com/watch?v=JHcrsgM6F2g&list=PL8XxoCaL3dBjc54gcE_CGnUPxwzSTAXyR&index=15)
+
+For reference:
+* [Processes and app lifecycle](https://developer.android.com/guide/components/activities/process-lifecycle)
+* [Schedule Task with WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+* [Kotlin flows on Android](https://developer.android.com/kotlin/flow#callback) 
+
+### 08/12/2023 - National Holliyday
+
+## Week 14 (preview)
+### 11/12/2023 - Final considerations
+* Presentation of the final version of the TicTacToe application
+  * Description of its architecture and key design decisions
+  * Considerations about the development method used (i.e., tests first)
+  * Critical analysis of the final outcome
+    * Areas for improvement to make the application production-ready
+* Brief historical perspective on the evolution of the Android programming model
+  * General description of Android programming model elements that were not used in the course and their role in modern applications
+  * Android Components: Services, BroadcastReceivers, and ContentProviders
+  * System services, e.g. ConnectivityManager, AlarmManager, NotificationManager, LocationManager, etc.
+
+Video lecture (in Portuguese): __(coming soon)__
+
+For reference:
+* [Android Components](https://developer.android.com/guide/components/fundamentals)
+
+For future reference:
+* [Services overview](https://developer.android.com/guide/components/services)
+* [Broadcasts overview](https://developer.android.com/guide/components/broadcasts)
+* [Content providers](https://developer.android.com/guide/topics/providers/content-providers)
+* [Schedule alarms](https://developer.android.com/training/scheduling/alarms)
+* [Create a notification](https://developer.android.com/develop/ui/views/notifications/build-notification)
+* [Build location-aware apps | Sensors and location](https://developer.android.com/develop/sensors-and-location/location)
+
+### 15/12/2023 - Practical class
+* Goal: Finishing thouches on the course project
