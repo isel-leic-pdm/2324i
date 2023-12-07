@@ -1,18 +1,10 @@
 package pt.isel.pdm.tictactoe.ui.game
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import pt.isel.pdm.tictactoe.helpers.viewModelInitWithSavedState
 import pt.isel.pdm.tictactoe.model.GameInfo
 import pt.isel.pdm.tictactoe.ui.BaseViewModelActivity
-import pt.isel.pdm.tictactoe.ui.lobby.LobbyViewModel
-import pt.isel.pdm.tictactoe.ui.theme.TicTacToeTheme
 
 class GameActivity : BaseViewModelActivity<GameViewModel>() {
     companion object {
@@ -23,6 +15,7 @@ class GameActivity : BaseViewModelActivity<GameViewModel>() {
         viewModelInitWithSavedState(this) {
             GameViewModel(
                 dependencyContainer.gameService,
+                dependencyContainer.userStatRepository
             )
         }
     }
@@ -30,13 +23,13 @@ class GameActivity : BaseViewModelActivity<GameViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val extra = intent.getParcelableExtra<GameInfo?>(GameInfoParamName)
-        if (extra == null) {
+        val gameInfo = intent.getParcelableExtra<GameInfo?>(GameInfoParamName)
+        if (gameInfo == null) {
             finish()
             return
         }
 
-        viewModel.init(extra)
+        viewModel.init(gameInfo)
 
         safeSetContent {
             GameScreen(
@@ -44,7 +37,7 @@ class GameActivity : BaseViewModelActivity<GameViewModel>() {
                 winner = viewModel.winner,
                 draw = viewModel.matchEndedWithDraw,
                 cellClicked = { viewModel.play(it) },
-                backPressed = {finish()}
+                backPressed = { finish() }
             )
 
 

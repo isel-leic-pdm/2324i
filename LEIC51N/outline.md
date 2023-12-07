@@ -282,9 +282,10 @@ For reference:
 * [Data Store API Reference](https://developer.android.com/jetpack/androidx/releases/datastore)
 
 ## Week 13 
+
 ### 07/12/2023 - State management: persistent application state
 * Persisting application state in a local relational DB using [Room](https://developer.android.com/training/data-storage/room#kotlin)
 * Architectural elements: 
-	* [Entities](https://developer.android.com/training/data-storage/room/defining-data);
-	* [DAOs](https://developer.android.com/training/data-storage/room/accessing-data), and;
+	* [Entities](https://developer.android.com/training/data-storage/room/defining-data)
+	* [DAOs](https://developer.android.com/training/data-storage/room/accessing-data)
 	* [Database](https://developer.android.com/training/data-storage/room#database)

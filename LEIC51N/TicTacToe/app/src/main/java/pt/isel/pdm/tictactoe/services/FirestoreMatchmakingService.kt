@@ -1,13 +1,11 @@
 package pt.isel.pdm.tictactoe.services
 
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import pt.isel.pdm.tictactoe.model.GameLobby
 import pt.isel.pdm.tictactoe.model.GameSession
 import pt.isel.pdm.tictactoe.services.firebase.FirestoreExtensions
-import pt.isel.pdm.tictactoe.services.firebase.FirestoreGame
 import pt.isel.pdm.tictactoe.services.firebase.FirestoreLobby
 import pt.isel.pdm.tictactoe.services.firebase.waitForDocumentToChange
 import java.util.Random
@@ -94,7 +92,7 @@ class FirestoreMatchmakingService(
             //
             //  return game session
             //
-            return FirestoreExtensions.createGameSession(gameDoc.get().await())
+            return FirestoreExtensions.mapToGameSession(gameDoc.get().await())
         } catch (e: Exception) {
             if (lobbyDoc != null)
                 lobbyDoc.delete().await()
@@ -149,7 +147,7 @@ class FirestoreMatchmakingService(
         //Player 2 adds its player name and game starts
         gameRef.update(FirestoreExtensions.GamePlayer2Field, userName).await()
 
-        return FirestoreExtensions.createGameSession(gameRef.get().await())
+        return FirestoreExtensions.mapToGameSession(gameRef.get().await())
     }
 
 

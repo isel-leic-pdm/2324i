@@ -1,6 +1,5 @@
 package pt.isel.pdm.tictactoe.services
 
-import com.google.android.gms.common.internal.ServiceSpecificExtraArgs.GamesExtraArgs
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -44,7 +43,7 @@ class FirestoreGameService(
             if (gameDoc.getBoolean(FirestoreExtensions.GameIsPlayer1Turn) == game.isPlayer1Turn)
                 return@waitForDocumentToChange null
 
-            return@waitForDocumentToChange FirestoreExtensions.createGameSession(gameDoc)
+            return@waitForDocumentToChange FirestoreExtensions.mapToGameSession(gameDoc)
         }!!
     }
 
@@ -59,7 +58,7 @@ class FirestoreGameService(
                 .get()
                 .await()
 
-        return FirestoreExtensions.createGameSession(gamedoc)
+        return FirestoreExtensions.mapToGameSession(gamedoc)
     }
 
 }

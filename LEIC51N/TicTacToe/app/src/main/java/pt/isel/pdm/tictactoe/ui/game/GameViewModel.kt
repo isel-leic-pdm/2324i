@@ -4,18 +4,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import pt.isel.pdm.tictactoe.database.model.UserStat
 import pt.isel.pdm.tictactoe.model.Cell
 import pt.isel.pdm.tictactoe.model.CellState
 import pt.isel.pdm.tictactoe.model.Cells
 import pt.isel.pdm.tictactoe.model.GameInfo
 import pt.isel.pdm.tictactoe.model.GameSession
+import pt.isel.pdm.tictactoe.repository.UserStatRepository
 import pt.isel.pdm.tictactoe.services.GameService
 import pt.isel.pdm.tictactoe.ui.BaseViewModel
 
 class GameViewModel
     (
-    private val service: GameService
+    private val service: GameService,
+    private val userStatRepository: UserStatRepository
 ) : BaseViewModel() {
+
+    companion object {
+        const val DrawWinnerString = "____DRAW____"
+    }
 
     var remoteGame by mutableStateOf<GameSession?>(null)
     var winner by mutableStateOf<String?>(null)
@@ -65,16 +72,39 @@ class GameViewModel
         }
     }
 
-    private fun checkWin(playerMove: Boolean = true) {
+    private suspend fun checkWin(playerMove: Boolean = true) {
 
         if (_plays == board.size) {
             matchEndedWithDraw = true
-            winner = ""
+            winner = DrawWinnerString
+
         }
 
         if (Cells.checkPlayerWin(board)) {
             winner = if (playerMove) getPlayerName(_isPlayer1) else getPlayerName(!_isPlayer1)
         }
+
+        if (winner != null) {
+            val otherUserName = getPlayerName(!_info!!.isPlayer1)
+            var stat: UserStat
+            try {
+                stat = userStatRepository.getStat(otherUserName)
+
+            } catch (e: Exception) {
+                stat = userStatRepository.createStat(otherUserName)
+            }
+
+            if (winner == otherUserName)
+                stat = stat.copy(losses = stat.losses + 1)
+            else if (winner == DrawWinnerString)
+                stat = stat.copy(draws = stat.draws + 1)
+            else
+                stat = stat.copy(draws = stat.wins + 1)
+
+            userStatRepository.updateStat(stat)
+
+        }
+
     }
 
     private fun getPlayerName(player1: Boolean): String {

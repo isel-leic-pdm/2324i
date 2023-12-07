@@ -5,7 +5,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.suspendCancellableCoroutine
 import pt.isel.pdm.tictactoe.model.GameSession
-import pt.isel.pdm.tictactoe.services.FirestoreMatchmakingService
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -37,7 +36,7 @@ suspend fun <T> DocumentReference.waitForDocumentToChange(predicate: (DocumentSn
     }
 }
 
-sealed class FirestoreExtensions {
+class FirestoreExtensions {
     companion object {
 
         const val LobbyCollection = "lobbies"
@@ -55,7 +54,7 @@ sealed class FirestoreExtensions {
 
         const val EmptyGameBoard = "         "
 
-        fun createGameSession(gameDoc: DocumentSnapshot): GameSession {
+        fun mapToGameSession(gameDoc: DocumentSnapshot): GameSession {
             return FirestoreGame(
                 player1 = gameDoc.getString(GamePlayer1Field)!!,
                 player2 = gameDoc.getString(GamePlayer2Field)!!,

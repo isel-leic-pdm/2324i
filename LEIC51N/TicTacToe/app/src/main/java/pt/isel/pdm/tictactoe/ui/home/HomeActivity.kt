@@ -16,8 +16,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import pt.isel.pdm.tictactoe.database.model.UserStat
 import pt.isel.pdm.tictactoe.helpers.viewModelInitWithSavedState
 import pt.isel.pdm.tictactoe.model.CellState
 import pt.isel.pdm.tictactoe.model.Cells
@@ -43,7 +45,11 @@ class HomeActivity : BaseViewModelActivity<HomeViewModel>() {
         var started by mutableStateOf(false)
         var needsToSetupUser by mutableStateOf(true)
 
+
+
         lifecycleScope.launch {
+            val x =  dependencyContainer.userStatRepository.getAllStats()
+
             viewModel.userInfo.collect { usr ->
                 if (usr == null)
                     return@collect
