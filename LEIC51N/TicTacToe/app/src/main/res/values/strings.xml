@@ -11,4 +11,7 @@
     <string name="refresh">refresh\n</string>
     <string name="add">add</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="game_ended">Game Ended\n</string>
+    <string name="winner">winner</string>
+    <string name="draw">draw</string>
 </resources>

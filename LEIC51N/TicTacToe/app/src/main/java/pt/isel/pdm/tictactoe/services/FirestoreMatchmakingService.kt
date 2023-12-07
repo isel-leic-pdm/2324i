@@ -3,46 +3,30 @@ package pt.isel.pdm.tictactoe.services
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import pt.isel.pdm.tictactoe.model.GameLobby
 import pt.isel.pdm.tictactoe.model.GameSession
+import pt.isel.pdm.tictactoe.services.firebase.FirestoreExtensions
+import pt.isel.pdm.tictactoe.services.firebase.FirestoreGame
+import pt.isel.pdm.tictactoe.services.firebase.FirestoreLobby
+import pt.isel.pdm.tictactoe.services.firebase.waitForDocumentToChange
 import java.util.Random
 import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class FirestoreMatchmakingService(
     private val db: FirebaseFirestore
 ) : MatchmakingService {
 
-    companion object {
-        const val LobbyCollection = "lobbies"
 
-        const val LobbyDisplayNameField = "displayName"
-        const val LobbyGameIdField = "gameId"
-
-
-        const val GamesCollection = "games"
-        const val GamePlayer1Field = "player1"
-        const val GamePlayer2Field = "player2"
-        const val GameIsPlayer1Turn = "isPlayer1Turn"
-        const val GameIdField = "gameId"
-        const val GameBoardField = "board"
-
-        const val EmptyGameBoard = "         "
-
-    }
 
 
     override suspend fun getLobbies(): List<GameLobby> {
-        return db.collection(LobbyCollection)
+        return db.collection(FirestoreExtensions.LobbyCollection)
             .get()
             .await()
             .map {
                 FirestoreLobby(
-                    displayName = it.getString(LobbyDisplayNameField)!!,
+                    displayName = it.getString(FirestoreExtensions.LobbyDisplayNameField)!!,
                     id = it.id
                 )
             }
@@ -55,9 +39,9 @@ class FirestoreMatchmakingService(
         var gameDoc: DocumentReference? = null
         try {
             //criar lobby
-            lobbyDoc = db.collection(LobbyCollection).add(
+            lobbyDoc = db.collection(FirestoreExtensions.LobbyCollection).add(
                 hashMapOf(
-                    LobbyDisplayNameField to userName
+                    FirestoreExtensions.LobbyDisplayNameField to userName
                 )
             ).await()
 
@@ -70,7 +54,7 @@ class FirestoreMatchmakingService(
                 if (lobbySnapshot == null || lobbySnapshot.exists() == false)
                     throw Exception("Lobby not found")
 
-                val gameId = lobbySnapshot.getString(LobbyGameIdField)
+                val gameId = lobbySnapshot.getString(FirestoreExtensions.LobbyGameIdField)
 
                 if (gameId.isNullOrEmpty())
                     return@waitForDocumentToChange null
@@ -79,14 +63,14 @@ class FirestoreMatchmakingService(
 
             }
             //criar jogo
-            gameDoc = db.collection(GamesCollection).document(gameId!!)
+            gameDoc = db.collection(FirestoreExtensions.GamesCollection).document(gameId!!)
 
             gameDoc.set(
                 hashMapOf(
-                    GamePlayer1Field to userName,
-                    GameIsPlayer1Turn to Random().nextBoolean(),
-                    GameIdField to gameId,
-                    GameBoardField to EmptyGameBoard
+                    FirestoreExtensions.GamePlayer1Field to userName,
+                    FirestoreExtensions.GameIsPlayer1Turn to Random().nextBoolean(),
+                    FirestoreExtensions.GameIdField to gameId,
+                    FirestoreExtensions.GameBoardField to FirestoreExtensions.EmptyGameBoard
 
                 )
             ).await()
@@ -99,7 +83,7 @@ class FirestoreMatchmakingService(
                 if (gameSnapshot == null || gameSnapshot.exists() == false)
                     throw Exception("Game $gameId not found")
 
-                val player2 = gameSnapshot.getString(GamePlayer2Field)
+                val player2 = gameSnapshot.getString(FirestoreExtensions.GamePlayer2Field)
 
                 if (player2.isNullOrEmpty())
                     return@waitForDocumentToChange null
@@ -110,7 +94,7 @@ class FirestoreMatchmakingService(
             //
             //  return game session
             //
-            return createGameSession(gameDoc.get().await())
+            return FirestoreExtensions.createGameSession(gameDoc.get().await())
         } catch (e: Exception) {
             if (lobbyDoc != null)
                 lobbyDoc.delete().await()
@@ -129,10 +113,10 @@ class FirestoreMatchmakingService(
         //Player 2 sets unique name on lobby
         val gameId = userName + UUID.randomUUID().toString()
 
-        val lobbyReference = db.collection(LobbyCollection)
+        val lobbyReference = db.collection(FirestoreExtensions.LobbyCollection)
             .document(lobby.id)
 
-        lobbyReference.update(LobbyGameIdField, gameId)
+        lobbyReference.update(FirestoreExtensions.LobbyGameIdField, gameId)
             .await()
 
         lobbyReference.waitForDocumentToChange() { lobbySnapshot ->
@@ -153,7 +137,7 @@ class FirestoreMatchmakingService(
 
         //Player 2 checks if game with its id is created
 
-        val gameRef = db.collection(GamesCollection)
+        val gameRef = db.collection(FirestoreExtensions.GamesCollection)
             .document(gameId)
 
         val gameDoc = gameRef.get()
@@ -163,40 +147,12 @@ class FirestoreMatchmakingService(
             throw Exception("Failed to connect with a player")
 
         //Player 2 adds its player name and game starts
-        gameRef.update(GamePlayer2Field, userName).await()
+        gameRef.update(FirestoreExtensions.GamePlayer2Field, userName).await()
 
-        return createGameSession(gameRef.get().await())
-    }
-
-    private fun createGameSession(gameDoc: DocumentSnapshot): GameSession {
-        return FirestoreGame(
-            player1 = gameDoc.getString(GamePlayer1Field)!!,
-            player2 = gameDoc.getString(GamePlayer2Field)!!,
-            isPlayer1Turn = gameDoc.getBoolean(GameIsPlayer1Turn)!!,
-            gameId = gameDoc.getString(GameIdField)!!
-        )
+        return FirestoreExtensions.createGameSession(gameRef.get().await())
     }
 
 
-    class FirestoreLobby(
-        override val displayName: String,
-        override val id: String
-    ) : GameLobby {
-        override fun toString(): String {
-            return "FirestoreLobby(displayName='$displayName', gameId='$id')"
-        }
-    }
-
-    class FirestoreGame(
-        override val player1: String,
-        override val player2: String,
-        override val isPlayer1Turn: Boolean,
-        override val gameId: String, override val board: String = ""
-    ) : GameSession {
-        override fun toString(): String {
-            return "FirestoreGame(player1='$player1', player2='$player2', isPlayer1Turn=$isPlayer1Turn, gameId='$gameId', board='$board' )"
-        }
-    }
 
 
 }

@@ -2,6 +2,7 @@ package pt.isel.pdm.tictactoe
 
 import android.app.Application
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.room.Room
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import pt.isel.pdm.tictactoe.repository.DataStoreRepository
@@ -29,6 +30,11 @@ class TicTacToeApplication() : Application(), DependencyContainer {
 
     override fun onCreate() {
         super.onCreate()
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            TicTacToeApplication::class.java, "database-name"
+        ).build()
     }
 
     override val userRepository: UserRepository by lazy {

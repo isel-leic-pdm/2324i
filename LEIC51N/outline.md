@@ -280,3 +280,11 @@ For reference:
 * [State and Jetpack Composes](https://developer.android.com/jetpack/compose/state#use-other-types-of-state-in-jetpack-compose)
 * [Data Store](https://developer.android.com/topic/libraries/architecture/datastore)
 * [Data Store API Reference](https://developer.android.com/jetpack/androidx/releases/datastore)
+
+## Week 13 
+### 07/12/2023 - State management: persistent application state
+* Persisting application state in a local relational DB using [Room](https://developer.android.com/training/data-storage/room#kotlin)
+* Architectural elements: 
+	* [Entities](https://developer.android.com/training/data-storage/room/defining-data);
+	* [DAOs](https://developer.android.com/training/data-storage/room/accessing-data), and;
+	* [Database](https://developer.android.com/training/data-storage/room#database)

@@ -34,7 +34,6 @@ class LobbyActivity : BaseViewModelActivity<LobbyViewModel>() {
                 if (game == null)
                     return@collect
 
-
                 navigate<GameActivity> {
                     it.putExtra(GameActivity.GameInfoParamName, game)
                 }
