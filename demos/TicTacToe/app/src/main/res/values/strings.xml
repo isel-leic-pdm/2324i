@@ -24,4 +24,10 @@
     <string name="failed_to_enter_lobby_dialog_title">Fatal Error</string>
     <string name="failed_to_enter_lobby_dialog_text">Failed to enter lobby. Please check if your device is connected to the internet.</string>
     <string name="failed_to_enter_lobby_dialog_ok_button">OK</string>
+
+    <!-- Gameplay screen -->
+    <string name="game_screen_waiting">Joining match</string>
+    <string name="game_screen_your_turn">It\'s your turn</string>
+    <string name="game_screen_opponent_turn">Opponent\'s turn</string>
+    <string name="game_screen_forfeit">Forfeit</string>
 </resources>

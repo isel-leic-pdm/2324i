@@ -1,8 +1,5 @@
-package isel.pdm.demos.tictactoe.domain
+package isel.pdm.demos.tictactoe.domain.user
 
-import isel.pdm.demos.tictactoe.domain.user.UserInfo
-import isel.pdm.demos.tictactoe.domain.user.toUserInfoOrNull
-import isel.pdm.demos.tictactoe.domain.user.validateUserInfoParts
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

@@ -6,19 +6,24 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
-import isel.pdm.demos.tictactoe.domain.game.Lobby
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.RosterUpdated
+import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
+import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
+import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.utils.MockMainDispatcherRule
 import isel.pdm.demos.tictactoe.utils.SuspendingGate
 import isel.pdm.demos.tictactoe.utils.xAssertIs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -36,7 +41,7 @@ class LobbyScreenViewModelTests {
     @get:Rule
     val rule = MockMainDispatcherRule()
 
-    private val testLobby = mockk<Lobby> {
+    private val testLobby: Lobby = mockk(relaxed = true) {
         val localPlayer = slot<PlayerInfo>()
         coEvery { enter(capture(localPlayer)) } returns flow {
             emit(RosterUpdated(
@@ -45,6 +50,21 @@ class LobbyScreenViewModelTests {
                     addAll(otherTestPlayersInLobby)
                 }
             ))
+
+            delay(1000)
+            val challenge = Challenge(
+                challenger = otherTestPlayersInLobby.first(),
+                challenged = localPlayer.captured
+            )
+            emit(ChallengeReceived(challenge))
+        }
+
+        val opponent = slot<PlayerInfo>()
+        coEvery { issueChallenge(capture(opponent)) } answers {
+            Challenge(
+                challenger = localPlayer.captured,
+                challenged = opponent.captured
+            )
         }
 
         coEvery { leave() } returns Unit
@@ -108,6 +128,75 @@ class LobbyScreenViewModelTests {
     }
 
     @Test
+    fun sendChallenge_produces_SentChallenge() = runTest {
+        // Arrange
+        val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
+        val insideLobbyGate = SuspendingGate()
+        val sentChallengeGate = SuspendingGate()
+        var collectedState: LobbyScreenState? = null
+
+        sut.enterLobby()
+        val collectJob = launch {
+            sut.screenState.collect {
+                collectedState = it
+                when (it) {
+                    is InsideLobby -> insideLobbyGate.open()
+                    is SentChallenge -> sentChallengeGate.open()
+                    else -> {}
+                }
+            }
+        }
+
+        withTimeout(10000) { insideLobbyGate.await() }
+
+        // Act
+        val opponent = otherTestPlayersInLobby.first()
+        sut.sendChallenge(opponent)
+
+        // Assert
+        sentChallengeGate.awaitAndThenAssert(10000) {
+            collectJob.cancelAndJoin()
+            val state = xAssertIs<SentChallenge>(collectedState)
+            assertEquals(localTestUserInfo, state.localPlayer.info)
+            assertEquals(opponent, state.challenge.challenged)
+        }
+    }
+
+    @Test
+    fun received_challenge_produces_IncomingChallenge() = runTest {
+        // Arrange
+        val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
+        val insideLobbyGate = SuspendingGate()
+        val incomingChallengeGate = SuspendingGate()
+        var collectedState: LobbyScreenState? = null
+
+        sut.enterLobby()
+        val collectJob = launch {
+            sut.screenState.collect {
+                collectedState = it
+                when (it) {
+                    is InsideLobby -> insideLobbyGate.open()
+                    is IncomingChallenge -> incomingChallengeGate.open()
+                    else -> {}
+                }
+            }
+        }
+
+        withTimeout(10000) { insideLobbyGate.await() }
+
+        // Act
+        // Assert
+        incomingChallengeGate.awaitAndThenAssert(10000) {
+            collectJob.cancelAndJoin()
+            val state = xAssertIs<IncomingChallenge>(collectedState) {
+                "Expected IncomingChallenge, but got ${collectedState?.javaClass?.simpleName}"
+            }
+            assertEquals(localTestUserInfo, state.localPlayer.info)
+            assertEquals(otherTestPlayersInLobby.first(), state.challenge.challenger)
+        }
+    }
+
+    @Test
     fun leaveLobby_produces_OutsideLobby() = runTest {
         // Arrange
         val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
@@ -151,6 +240,12 @@ class LobbyScreenViewModelTests {
         val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
         sut.leaveLobby()
     }
+
+    @Test(expected = IllegalStateException::class)
+    fun sendChallenge_when_not_inside_throws() {
+        val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
+        sut.sendChallenge(otherTestPlayersInLobby.first())
+    }
 }
 
 private val localTestUserInfo = UserInfo("local", "test motto")
@@ -159,4 +254,10 @@ private val otherTestPlayersInLobby: List<PlayerInfo> = buildList {
     repeat(3) {
         add(PlayerInfo(UserInfo("remote $it", "motto")))
     }
+}
+
+suspend inline fun SuspendingGate.awaitAndThenAssert(timeout: Long, block: () -> Unit) {
+    try { withTimeout(timeout) { await() } }
+    catch (_: TimeoutCancellationException) { }
+    finally { block() }
 }

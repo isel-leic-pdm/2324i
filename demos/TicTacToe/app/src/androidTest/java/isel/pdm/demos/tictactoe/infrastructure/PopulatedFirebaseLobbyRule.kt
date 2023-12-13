@@ -2,8 +2,9 @@ package isel.pdm.demos.tictactoe.infrastructure
 
 import androidx.test.platform.app.InstrumentationRegistry
 import isel.pdm.demos.tictactoe.TicTacToeTestApplication
-import isel.pdm.demos.tictactoe.domain.game.Lobby
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
+import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -32,6 +33,22 @@ class PopulatedFirebaseLobbyRule : TestRule {
             .collection(LOBBY)
             .document(player.id.toString())
             .set(player.toDocumentContent())
+            .await()
+    }
+
+    suspend fun getChallengeInfo(challengedPlayer: PlayerInfo): Challenge? =
+        testApp.emulatedFirestoreDb
+            .collection(LOBBY)
+            .document(challengedPlayer.id.toString())
+            .get()
+            .await()
+            .toChallengeOrNull()
+
+    suspend fun updateChallengerInfo(challengedPlayer: PlayerInfo, challenger: PlayerInfo) {
+        testApp.emulatedFirestoreDb
+            .collection(LOBBY)
+            .document(challengedPlayer.id.toString())
+            .update(CHALLENGER_FIELD, challenger.toDocumentContent())
             .await()
     }
 

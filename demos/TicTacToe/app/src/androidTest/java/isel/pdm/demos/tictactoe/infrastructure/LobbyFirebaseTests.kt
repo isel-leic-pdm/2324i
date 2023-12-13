@@ -1,13 +1,15 @@
 package isel.pdm.demos.tictactoe.infrastructure
 
-import isel.pdm.demos.tictactoe.domain.game.LobbyEvent
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.RosterUpdated
+import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
+import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.utils.SuspendingGate
+import isel.pdm.demos.tictactoe.utils.awaitAndThenAssert
 import isel.pdm.demos.tictactoe.utils.xAssertIs
+import isel.pdm.demos.tictactoe.utils.xAssertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -134,7 +136,6 @@ class LobbyFirebaseTests {
         var lastCollectedLobbyEvent: LobbyEvent? = null
         val collectJob = launch {
             sut.enter(localTestPlayer).collect {
-                println("collected $it")
                 lastCollectedLobbyEvent = it
                 if (hasEntered(it)) {
                     gateLobbyEntered.open()
@@ -160,10 +161,75 @@ class LobbyFirebaseTests {
             assertTrue(rosterUpdated.players.containsAll(expectedInLobby))
         }
     }
-}
 
-suspend inline fun SuspendingGate.awaitAndThenAssert(timeout: Long, block: () -> Unit) {
-    try { withTimeout(timeout) { await() } }
-    catch (_: TimeoutCancellationException) { }
-    finally { block() }
+    @Test
+    fun issueChallenge_updates_challenged_player_document() = runBlocking {
+        // Arrange
+        val sut = rule.lobby
+        val challengedPlayer = otherTestPlayersInLobby.first()
+        val gateLobbyEntered = SuspendingGate()
+
+        fun hasEntered(evt: LobbyEvent) =
+            evt is RosterUpdated && evt.players.containsAll(otherTestPlayersInLobby + localTestPlayer)
+
+        val collectJob = launch {
+            sut.enter(localTestPlayer).collect {
+                if (hasEntered(it)) {
+                    gateLobbyEntered.open()
+                }
+            }
+        }
+
+        withTimeout(10000) { gateLobbyEntered.await() }
+
+        // Act: the local player issues a challenge to the first player in the lobby
+        sut.issueChallenge(challengedPlayer)
+
+        // Assert
+        collectJob.cancelAndJoin()
+        val challenge = rule.getChallengeInfo(challengedPlayer)
+        xAssertNotNull(challenge)
+        assertEquals(localTestPlayer, challenge.challenger)
+        assertEquals(challengedPlayer, challenge.challenged)
+    }
+
+    @Test
+    fun updating_local_player_doc_with_challenger_info_issues_ChallengeReceived() = runBlocking {
+        // Arrange
+        val sut = rule.lobby
+        val challengerPlayer = otherTestPlayersInLobby.first()
+        val challengeReceivedGate = SuspendingGate()
+        val gateLobbyEntered = SuspendingGate()
+
+        var collectedLobbyEvent: LobbyEvent? = null
+        val collectJob = launch {
+            sut.enter(localTestPlayer).collect {
+                when (it) {
+                    is RosterUpdated -> {
+                        if (it.players.containsAll(otherTestPlayersInLobby + localTestPlayer)) {
+                            gateLobbyEntered.open()
+                        }
+                    }
+                    is ChallengeReceived -> {
+                        collectedLobbyEvent = it
+                        challengeReceivedGate.open()
+                    }
+                }
+            }
+        }
+
+       // Act: updated local player doc with  the  challenger info as soon as the local player enters the lobby
+        withTimeout(10000) { gateLobbyEntered.await() }
+        rule.updateChallengerInfo(localTestPlayer, challengerPlayer)
+
+        // Assert
+        challengeReceivedGate.awaitAndThenAssert(10000) {
+            collectJob.cancelAndJoin()
+            val challengeReceived = xAssertIs<ChallengeReceived>(collectedLobbyEvent) {
+                "Expected ChallengeReceived bot got $collectedLobbyEvent instead"
+            }
+            assertEquals(challengerPlayer, challengeReceived.challenge.challenger)
+            assertEquals(localTestPlayer, challengeReceived.challenge.challenged)
+        }
+    }
 }

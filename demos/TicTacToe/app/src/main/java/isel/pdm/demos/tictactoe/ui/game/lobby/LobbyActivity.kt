@@ -3,7 +3,6 @@ package isel.pdm.demos.tictactoe.ui.game.lobby
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -13,11 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import isel.pdm.demos.tictactoe.DependenciesContainer
 import isel.pdm.demos.tictactoe.R
-import isel.pdm.demos.tictactoe.TAG
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.ErrorAlert
 import isel.pdm.demos.tictactoe.ui.common.UserInfoExtra
 import isel.pdm.demos.tictactoe.ui.common.toUserInfo
+import isel.pdm.demos.tictactoe.ui.game.play.GamePlayActivity
 import isel.pdm.demos.tictactoe.ui.preferences.UserPreferencesActivity
 import kotlinx.coroutines.launch
 
@@ -62,15 +61,16 @@ class LobbyActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.v(TAG, "LobbyActivity: starting repeatOnLifecycle on thread ${Thread.currentThread().name}")
                 vm.enterLobby()
                 try {
-                    vm.screenState.collect { _ ->
-                        // TODO
+                    vm.screenState.collect { state ->
+                        if (state is SentChallenge)
+                            GamePlayActivity.navigateTo(this@LobbyActivity, state.localPlayer, state.challenge)
+                        if (state is IncomingChallenge)
+                            GamePlayActivity.navigateTo(this@LobbyActivity, state.localPlayer, state.challenge)
                     }
                 }
                 finally {
-                    Log.v(TAG, "LobbyActivity: ending repeatOnLifecycle on thread ${Thread.currentThread().name}")
                     vm.leaveLobby()
                 }
             }
@@ -84,7 +84,7 @@ class LobbyActivity : ComponentActivity() {
 
             LobbyScreen(
                 playersInLobby = playersInLobby,
-                onPlayerSelected = { TODO() },
+                onPlayerSelected = { vm.sendChallenge(it) },
                 onNavigateBackRequested = { finish() },
                 onNavigateToPreferencesRequested = { UserPreferencesActivity.navigateTo(this, userInfoExtra) }
             )
