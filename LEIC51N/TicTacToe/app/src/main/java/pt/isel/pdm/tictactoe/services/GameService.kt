@@ -11,4 +11,7 @@ interface GameService {
     suspend fun getGameSession(info : GameInfo): GameSession
     suspend fun play(game: GameSession, idx: Int, isPlayer1: Boolean) : GameSession
     suspend fun waitForOtherPlayer(game: GameSession) : GameSession
+    suspend fun deleteGame(remoteGame: GameSession)
 }
+
+class GameForfeitedException : Exception(){}

@@ -11,6 +11,7 @@ import pt.isel.pdm.tictactoe.model.Cells
 import pt.isel.pdm.tictactoe.model.GameInfo
 import pt.isel.pdm.tictactoe.model.GameSession
 import pt.isel.pdm.tictactoe.repository.UserStatRepository
+import pt.isel.pdm.tictactoe.services.GameForfeitedException
 import pt.isel.pdm.tictactoe.services.GameService
 import pt.isel.pdm.tictactoe.ui.BaseViewModel
 
@@ -63,12 +64,25 @@ class GameViewModel
             _plays++
             checkWin()
 
-            remoteGame = service.play(remoteGame!!, idx, _isPlayer1)
+            try {
+                remoteGame = service.play(remoteGame!!, idx, _isPlayer1)
+
+            }catch (e : GameForfeitedException)
+            {
+                winner = getPlayerName(_isPlayer1)
+            }
 
             if (winner != null)
                 return@loadingAndErrorAwareScope
 
             waitForOtherPlayerMove()
+        }
+    }
+
+
+    fun deleteGame() {
+        loadingAndErrorAwareScope {
+            service.deleteGame(remoteGame!!)
         }
     }
 
@@ -114,8 +128,12 @@ class GameViewModel
     }
 
     private suspend fun waitForOtherPlayerMove() {
-        remoteGame = service.waitForOtherPlayer(remoteGame!!)
-        fillBoard()
+        try {
+            remoteGame = service.waitForOtherPlayer(remoteGame!!)
+            fillBoard()
+        } catch (e: GameForfeitedException) {
+            winner = getPlayerName(_isPlayer1)
+        }
         checkWin(false)
     }
 
@@ -134,4 +152,5 @@ class GameViewModel
             _plays++
         }
     }
+
 }
