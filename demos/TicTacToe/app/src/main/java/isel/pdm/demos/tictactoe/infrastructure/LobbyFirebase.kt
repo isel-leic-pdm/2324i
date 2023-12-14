@@ -1,17 +1,16 @@
 package isel.pdm.demos.tictactoe.infrastructure
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import isel.pdm.demos.tictactoe.TAG
-import isel.pdm.demos.tictactoe.domain.game.Challenge
-import isel.pdm.demos.tictactoe.domain.game.Lobby
-import isel.pdm.demos.tictactoe.domain.game.LobbyEvent
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.RosterUpdated
+import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
+import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
+import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
@@ -60,15 +59,16 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
         state = Entering
 
         return callbackFlow {
-            Log.v(TAG, "LobbyFirebase: Inside callbackFlow on thread ${Thread.currentThread().name}")
-
             val localPlayerDocRef = getPlayerDocRef(localPlayer)
             state = InsideLobby(localPlayer, localPlayerDocRef, this)
             val roasterUpdatedSubscription = subscribeRoasterUpdated(this)
+            val challengeReceivedSubscription = subscribeChallengeReceived(localPlayerDocRef, this)
+
             localPlayerDocRef.set(localPlayer.info.toDocumentContent()).await()
 
             awaitClose {
                 roasterUpdatedSubscription.remove()
+                challengeReceivedSubscription.remove()
                 localPlayerDocRef.delete()
                 state = Idle
             }
@@ -76,7 +76,14 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
     }
 
     override suspend fun issueChallenge(to: PlayerInfo): Challenge {
-        TODO("Not yet implemented")
+        state.let {
+            check(it is InsideLobby) { "The local player is not inside the lobby" }
+            db.collection(LOBBY)
+                .document(to.id.toString())
+                .update(CHALLENGER_FIELD, it.localPlayer.toDocumentContent())
+                .await()
+            return Challenge(challenger = it.localPlayer, challenged = to)
+        }
     }
 
     override suspend fun leave() {
@@ -89,12 +96,23 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
 
     private fun subscribeRoasterUpdated(flow: ProducerScope<LobbyEvent>) =
         db.collection(LOBBY).addSnapshotListener { snapshot, error ->
-            Log.v(TAG, "LobbyFirebase: Inside snapshot callback on thread ${Thread.currentThread().name}")
             when {
                 error != null -> flow.close(error)
                 snapshot != null -> flow.trySend(RosterUpdated(snapshot.toPlayerList()))
             }
         }
+
+    private fun subscribeChallengeReceived(
+        localPlayerDocRef: DocumentReference,
+        flow: ProducerScope<LobbyEvent>
+    ) = localPlayerDocRef.addSnapshotListener { snapshot, error ->
+        when {
+            error != null -> flow.close(error)
+            snapshot != null -> snapshot.toChallengeOrNull()?.let {
+                flow.trySend(ChallengeReceived(it))
+            }
+        }
+    }
 
     private fun getPlayerDocRef(localPlayer: PlayerInfo) =
         db.collection(LOBBY).document(localPlayer.id.toString())
@@ -132,6 +150,10 @@ fun PlayerInfo.toDocumentContent() = mapOf(
     CHALLENGER_ID_FIELD to id.toString()
 )
 
+/**
+ * Extension function used to convert challenge documents stored in the Firestore DB
+ * into [Challenge] instances.
+ */
 @Suppress("UNCHECKED_CAST")
 fun DocumentSnapshot.toChallengeOrNull(): Challenge? {
     val docData = data
@@ -155,6 +177,10 @@ fun DocumentSnapshot.toPlayerInfo() = PlayerInfo(
     id = UUID.fromString(id)
 )
 
+/**
+ * Extension function used to convert player info documents stored in the Firestore DB
+ * into [PlayerInfo] instances.
+ */
 fun playerInfoFromDocContent(properties: Map<String, Any>) = PlayerInfo(
     info = UserInfo(
         nick = properties[NICK_FIELD] as String,

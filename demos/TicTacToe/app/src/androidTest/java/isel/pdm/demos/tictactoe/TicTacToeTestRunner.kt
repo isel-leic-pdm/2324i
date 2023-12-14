@@ -10,14 +10,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.slot
-import isel.pdm.demos.tictactoe.domain.game.Lobby
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.RosterUpdated
+import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfoRepository
-import isel.pdm.demos.tictactoe.infrastructure.otherTestPlayersInLobby
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.emptyFlow
 
 /**
  * The service locator to be used in the instrumented tests.
@@ -40,16 +36,7 @@ class TicTacToeTestApplication : DependenciesContainer, Application() {
 
     override var lobby: Lobby =
         mockk(relaxed = true) {
-            val localPlayer = slot<PlayerInfo>()
-            coEvery { enter(capture(localPlayer)) } returns flow {
-                emit(RosterUpdated(
-                    buildList {
-                        add(localPlayer.captured)
-                        addAll(otherTestPlayersInLobby)
-                    }
-                ))
-            }
-
+            coEvery { enter(any()) } returns emptyFlow()
             coEvery { leave() } returns Unit
         }
 }

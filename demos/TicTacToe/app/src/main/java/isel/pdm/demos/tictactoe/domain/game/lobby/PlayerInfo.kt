@@ -1,4 +1,4 @@
-package isel.pdm.demos.tictactoe.domain.game
+package isel.pdm.demos.tictactoe.domain.game.lobby
 
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import java.util.UUID

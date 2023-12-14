@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import isel.pdm.demos.tictactoe.R
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.NavigationHandlers
 import isel.pdm.demos.tictactoe.ui.common.TopBar

@@ -1,4 +1,4 @@
-package isel.pdm.demos.tictactoe.domain.game
+package isel.pdm.demos.tictactoe.domain.game.lobby
 
 import kotlinx.coroutines.flow.Flow
 

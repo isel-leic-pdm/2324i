@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.theme.TicTacToeTheme
 

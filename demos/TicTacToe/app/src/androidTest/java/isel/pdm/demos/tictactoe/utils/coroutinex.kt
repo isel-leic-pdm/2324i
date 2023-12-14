@@ -1,8 +1,10 @@
 package isel.pdm.demos.tictactoe.utils
 
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -63,4 +65,15 @@ class SuspendingGate {
             latch.countDown()
     }
     suspend fun await() = latch.await()
+}
+
+/**
+ * Suspends the calling coroutine until the gate is opened, or the timeout expires.
+ * @param timeout The timeout in milliseconds.
+ * @param block The block to execute after the gate is opened, or the timeout expires.
+ */
+suspend inline fun SuspendingGate.awaitAndThenAssert(timeout: Long, block: () -> Unit) {
+    try { withTimeout(timeout) { await() } }
+    catch (_: TimeoutCancellationException) { }
+    finally { block() }
 }

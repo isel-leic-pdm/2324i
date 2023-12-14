@@ -27,6 +27,7 @@
         <activity android:name=".ui.preferences.UserPreferencesActivity" />
 
         <activity android:name=".ui.game.lobby.LobbyActivity" />
+        <activity android:name=".ui.game.play.GamePlayActivity" />
     </application>
 
 </manifest>

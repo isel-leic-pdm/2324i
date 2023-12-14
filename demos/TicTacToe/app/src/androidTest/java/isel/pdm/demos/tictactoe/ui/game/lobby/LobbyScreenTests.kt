@@ -6,7 +6,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import isel.pdm.demos.tictactoe.domain.game.PlayerInfo
+import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.ui.common.NavigateBackTag
 import isel.pdm.demos.tictactoe.ui.common.NavigateToPreferencesTag
