@@ -5,13 +5,19 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import pt.isel.pdm.tictactoe.DependencyContainer
-import pt.isel.pdm.tictactoe.ui.home.HomeActivity
 
-abstract class BaseActivity : ComponentActivity()
-{
+abstract class BaseActivity() : ComponentActivity() {
+    private lateinit var backButtonCallback: OnBackPressedCallback
     protected val dependencyContainer by lazy { (application as DependencyContainer) }
     protected val activityTag: String = this.javaClass.simpleName
+    protected var backAware: Boolean
+        get() = backButtonCallback.isEnabled
+        set(enable) {
+            backButtonCallback.isEnabled = enable
+        }
+
 
     protected inline fun <reified T> navigate(
         noinline apply: ((Intent) -> Unit)? = null
@@ -25,10 +31,20 @@ abstract class BaseActivity : ComponentActivity()
         this.startActivity(intent)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(activityTag, "onCreate")
-        super.onCreate(savedInstanceState, persistentState)
+        super.onCreate(savedInstanceState)
+
+        backButtonCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                backPressed()
+            }
+
+        }
+
+        onBackPressedDispatcher.addCallback(this, backButtonCallback)
     }
+
 
     override fun onStart() {
         Log.d(activityTag, "onStart")
@@ -44,5 +60,7 @@ abstract class BaseActivity : ComponentActivity()
         Log.d(activityTag, "onDestroy")
         super.onDestroy()
     }
+
+    protected open fun backPressed() {}
 
 }

@@ -2,6 +2,7 @@ package pt.isel.pdm.tictactoe.services
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import pt.isel.pdm.tictactoe.model.GameLobby
 import pt.isel.pdm.tictactoe.model.GameSession
@@ -10,12 +11,11 @@ import pt.isel.pdm.tictactoe.services.firebase.FirestoreLobby
 import pt.isel.pdm.tictactoe.services.firebase.waitForDocumentToChange
 import java.util.Random
 import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 
 class FirestoreMatchmakingService(
     private val db: FirebaseFirestore
 ) : MatchmakingService {
-
-
 
 
     override suspend fun getLobbies(): List<GameLobby> {
@@ -77,7 +77,7 @@ class FirestoreMatchmakingService(
             lobbyDoc.delete().await()
 
             //esperar por P2 name
-            gameDoc.waitForDocumentToChange() { gameSnapshot ->
+            gameDoc.waitForDocumentToChange(timeout = 10.seconds) { gameSnapshot ->
                 if (gameSnapshot == null || gameSnapshot.exists() == false)
                     throw Exception("Game $gameId not found")
 
@@ -149,8 +149,6 @@ class FirestoreMatchmakingService(
 
         return FirestoreExtensions.mapToGameSession(gameRef.get().await())
     }
-
-
 
 
 }

@@ -57,7 +57,11 @@ class HomeActivity : BaseViewModelActivity<HomeViewModel>() {
                 needsToSetupUser = false
 
                 if (started)
+                {
                     navigate<LobbyActivity>()
+                    finish()
+                }
+
             }
         }
 

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -39,9 +40,19 @@ open class BaseViewModel : ViewModel() {
             function(cs)
         } catch (e: Exception) {
             error = e.toString()
-            Log.e(viewModelTag, e.toString(),e)
+            Log.e(viewModelTag, e.toString(), e)
         }
     }
 
+    protected suspend fun ignoreCancelationException(
+        cs: CoroutineScope,
+        function: suspend CoroutineScope.() -> Unit
+    ) {
+        try {
+            function(cs)
+        } catch (e: CancellationException) {
+            Log.e(viewModelTag, e.toString(), e)
+        }
+    }
 
 }

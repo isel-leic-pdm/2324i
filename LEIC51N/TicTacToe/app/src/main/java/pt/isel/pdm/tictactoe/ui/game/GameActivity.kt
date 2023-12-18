@@ -29,6 +29,8 @@ class GameActivity : BaseViewModelActivity<GameViewModel>() {
             return
         }
 
+        backAware = true
+
         viewModel.init(gameInfo)
 
         safeSetContent {
@@ -44,6 +46,11 @@ class GameActivity : BaseViewModelActivity<GameViewModel>() {
         }
     }
 
+    override fun backPressed() {
+        super.backPressed()
+        viewModel.deleteGame()
+        finish()
+    }
 
 }
 

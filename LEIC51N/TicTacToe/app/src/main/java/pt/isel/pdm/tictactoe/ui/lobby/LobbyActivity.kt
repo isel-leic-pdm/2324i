@@ -41,7 +41,6 @@ class LobbyActivity : BaseViewModelActivity<LobbyViewModel>() {
             }
         }
 
-        viewModel.refreshLobbies()
         safeSetContent {
 
             TicTacToeTheme {
@@ -51,13 +50,38 @@ class LobbyActivity : BaseViewModelActivity<LobbyViewModel>() {
                 ) {
                     LobbyScreen(
                         lobbies = viewModel.lobbyList,
-                        createNewLobby = { viewModel.startNewLobbyAndWait() },
+                        createNewLobby = {
+                            backAware = true
+                            viewModel.startNewLobbyAndWait()
+                        },
                         refreshLobbies = { viewModel.refreshLobbies() },
-                        lobbyClicked = { lobby -> viewModel.joinLobby(lobby) }
+                        lobbyClicked = { lobby ->
+                            backAware = true
+                            viewModel.joinLobby(lobby)
+                        }
                     )
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.refreshLobbies()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        backAware = false
+        viewModel.cancelPendingRequests()
+    }
+
+    override fun backPressed() {
+        super.backPressed()
+        viewModel.cancelPendingRequests()
+        backAware = false
+
+
     }
 }
 

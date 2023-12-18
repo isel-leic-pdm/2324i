@@ -2,6 +2,7 @@ package pt.isel.pdm.tictactoe.services
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.tasks.await
 import pt.isel.pdm.tictactoe.model.GameInfo
 import pt.isel.pdm.tictactoe.model.GameSession
@@ -25,12 +26,21 @@ class FirestoreGameService(
         val move = if (isPlayer1) GameService.Player1Move else GameService.Player2Move
         board.setCharAt(idx, move)
 
-        getGameDocument(game.gameId).update(
-            hashMapOf(
-                FirestoreExtensions.GameBoardField to board.toString(),
-                FirestoreExtensions.GameIsPlayer1Turn to !game.isPlayer1Turn
-            ) as Map<String, Any>
-        ).await()
+        try {
+
+            getGameDocument(game.gameId).update(
+                hashMapOf(
+                    FirestoreExtensions.GameBoardField to board.toString(),
+                    FirestoreExtensions.GameIsPlayer1Turn to !game.isPlayer1Turn
+                ) as Map<String, Any>
+            ).await()
+        } catch (e: FirebaseFirestoreException) {
+
+            if (e.code == FirebaseFirestoreException.Code.NOT_FOUND)
+                throw GameForfeitedException()
+
+            throw e;
+        }
 
         return getGameSession(game.gameId)
     }
@@ -38,13 +48,17 @@ class FirestoreGameService(
     override suspend fun waitForOtherPlayer(game: GameSession): GameSession {
         return getGameDocument(game.gameId).waitForDocumentToChange { gameDoc ->
             if (gameDoc == null || gameDoc.exists() == false)
-                throw InvalidObjectException("Game object no longer exists")
+                throw GameForfeitedException()
 
             if (gameDoc.getBoolean(FirestoreExtensions.GameIsPlayer1Turn) == game.isPlayer1Turn)
                 return@waitForDocumentToChange null
 
             return@waitForDocumentToChange FirestoreExtensions.mapToGameSession(gameDoc)
         }!!
+    }
+
+    override suspend fun deleteGame(remoteGame: GameSession) {
+        getGameDocument(remoteGame.gameId).delete().await()
     }
 
     private fun getGameDocument(gameId: String): DocumentReference {
