@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import isel.pdm.demos.tictactoe.domain.IOState
-import isel.pdm.demos.tictactoe.domain.Saving
+import isel.pdm.demos.tictactoe.domain.IOState.Saving
 import isel.pdm.demos.tictactoe.domain.idle
 import isel.pdm.demos.tictactoe.domain.saved
 import isel.pdm.demos.tictactoe.domain.saving

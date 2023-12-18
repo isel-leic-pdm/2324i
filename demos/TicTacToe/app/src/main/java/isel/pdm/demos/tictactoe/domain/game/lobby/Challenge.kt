@@ -1,5 +1,7 @@
 package isel.pdm.demos.tictactoe.domain.game.lobby
 
+import isel.pdm.demos.tictactoe.domain.game.play.Marker
+
 /**
  * Data type that characterizes challenges.
  * @property challenger     The challenger information
@@ -12,3 +14,19 @@ data class Challenge(val challenger: PlayerInfo, val challenged: PlayerInfo)
  */
 val Challenge.firstToMove: PlayerInfo
     get() = challenger
+
+val Challenge.secondToMove: PlayerInfo
+    get() = challenged
+
+/**
+ * Function used to computes the player marker for the given challenge.
+ * @param player The player information
+ * @return the player marker
+ * @throws IllegalArgumentException if the player is not part of the challenge
+ */
+fun Challenge.getMarkerFor(player: PlayerInfo): Marker =
+    when (player) {
+        firstToMove -> Marker.firstToMove
+        secondToMove -> Marker.firstToMove.other
+        else -> throw IllegalArgumentException("Player is not part of the challenge")
+    }

@@ -3,9 +3,6 @@ package isel.pdm.demos.tictactoe.ui.main
 import io.mockk.coEvery
 import io.mockk.mockk
 import isel.pdm.demos.tictactoe.domain.IOState
-import isel.pdm.demos.tictactoe.domain.Idle
-import isel.pdm.demos.tictactoe.domain.Loaded
-import isel.pdm.demos.tictactoe.domain.Loading
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfoRepository
 import isel.pdm.demos.tictactoe.utils.MockMainDispatcherRule
@@ -55,7 +52,7 @@ class MainScreenViewModelTests {
         }
 
         // Assert
-        assertTrue("Expected Idle bot got $collectedState instead", collectedState is Idle)
+        assertTrue("Expected Idle bot got $collectedState instead", collectedState is IOState.Idle)
     }
 
     @Test
@@ -67,7 +64,7 @@ class MainScreenViewModelTests {
         var lastCollectedState: IOState<UserInfo?>? = null
         val collectJob = launch {
             sut.userInfo.collectLatest {
-                if (it is Loaded) {
+                if (it is IOState.Loaded) {
                     lastCollectedState = it
                     gate.open()
                 }
@@ -82,7 +79,7 @@ class MainScreenViewModelTests {
         }
 
         // Assert
-        val loaded = lastCollectedState as? Loaded
+        val loaded = lastCollectedState as? IOState.Loaded
         assertNotNull("Expected Loaded but got $lastCollectedState instead", loaded)
         assertEquals(testUserInfo, loaded?.value?.getOrNull())
     }
@@ -96,7 +93,7 @@ class MainScreenViewModelTests {
         var lastCollectedState: IOState<UserInfo?>? = null
         val collectJob = launch {
             sut.userInfo.collect {
-                if (it is Loading) {
+                if (it is IOState.Loading) {
                     lastCollectedState = it
                     gate.open()
                 }
@@ -111,7 +108,7 @@ class MainScreenViewModelTests {
         }
 
         // Assert
-        val loading = lastCollectedState as? Loading
+        val loading = lastCollectedState as? IOState.Loading
         assertNotNull("Expected Loading but got $lastCollectedState instead", loading)
     }
 

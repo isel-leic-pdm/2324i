@@ -25,14 +25,16 @@ class BoardTests {
         Assert.assertNotNull(move)
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun `making a move on a non empty tile throws`() {
         // Arrange
         val at = Coordinate(row = 0, column = 0)
         val sut = Board().placeMarker(Marker.firstToMove, at)
 
-        // Act
-        sut.placeMarker(Marker.firstToMove.other, at)
+        // Act & Assert
+        Assert.assertThrows(IllegalArgumentException::class.java) {
+            sut.placeMarker(Marker.firstToMove.other, at)
+        }
     }
 
     @Test

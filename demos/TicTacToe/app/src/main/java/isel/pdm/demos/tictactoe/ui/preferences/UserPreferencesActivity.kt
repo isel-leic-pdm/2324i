@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.lifecycleScope
 import isel.pdm.demos.tictactoe.DependenciesContainer
 import isel.pdm.demos.tictactoe.R
-import isel.pdm.demos.tictactoe.domain.Saved
+import isel.pdm.demos.tictactoe.domain.IOState.Saved
 import isel.pdm.demos.tictactoe.domain.getOrNull
 import isel.pdm.demos.tictactoe.domain.idle
 import isel.pdm.demos.tictactoe.domain.user.UserInfo

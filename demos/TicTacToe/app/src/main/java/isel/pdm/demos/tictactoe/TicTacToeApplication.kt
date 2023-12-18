@@ -10,8 +10,10 @@ import com.google.firebase.firestore.MemoryCacheSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.play.Match
 import isel.pdm.demos.tictactoe.domain.user.UserInfoRepository
 import isel.pdm.demos.tictactoe.infrastructure.LobbyFirebase
+import isel.pdm.demos.tictactoe.infrastructure.MatchFirebase
 import isel.pdm.demos.tictactoe.infrastructure.UserInfoDataStore
 
 const val TAG = "TicTacToeApp"
@@ -22,6 +24,7 @@ const val TAG = "TicTacToeApp"
 interface DependenciesContainer {
     val userInfoRepository: UserInfoRepository
     val lobby: Lobby
+    val matchFactory: () -> Match
 }
 
 /**
@@ -49,4 +52,7 @@ class TicTacToeApplication : Application(), DependenciesContainer {
 
     override val lobby: Lobby
         get() = LobbyFirebase(emulatedFirestoreDb)
+
+    override val matchFactory: () -> Match
+        get() = { MatchFirebase(emulatedFirestoreDb) }
 }

@@ -1,9 +1,7 @@
 package isel.pdm.demos.tictactoe.infrastructure
 
-import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
 import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
 import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.utils.SuspendingGate
 import isel.pdm.demos.tictactoe.utils.awaitAndThenAssert
@@ -61,7 +59,7 @@ class LobbyFirebaseTests {
         val expectedEventGate = SuspendingGate()
 
         fun isExpectedLobbyEvent(evt: LobbyEvent) =
-            evt is RosterUpdated && evt.players.containsAll(expectedInLobby)
+            evt is LobbyEvent.RosterUpdated && evt.players.containsAll(expectedInLobby)
 
         // Act
         var collectedEvent: LobbyEvent? = null
@@ -77,7 +75,7 @@ class LobbyFirebaseTests {
         expectedEventGate.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
             // Assert
-            val rosterUpdated = xAssertIs<RosterUpdated>(collectedEvent) {
+            val rosterUpdated = xAssertIs<LobbyEvent.RosterUpdated>(collectedEvent) {
                 "Expected RosterUpdated bot got $collectedEvent instead"
             }
             assertEquals(expectedInLobby.size, rosterUpdated.players.size)
@@ -94,7 +92,7 @@ class LobbyFirebaseTests {
         val expectedEventGate = SuspendingGate()
 
         fun isExpectedLobbyEvent(evt: LobbyEvent) =
-            evt is RosterUpdated && evt.players.contains(newPlayer)
+            evt is LobbyEvent.RosterUpdated && evt.players.contains(newPlayer)
 
         var collectedLobbyEvent: LobbyEvent? = null
         val collectJob = launch {
@@ -114,7 +112,7 @@ class LobbyFirebaseTests {
         expectedEventGate.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
             // Assert
-            val rosterUpdated = xAssertIs<RosterUpdated>(collectedLobbyEvent) {
+            val rosterUpdated = xAssertIs<LobbyEvent.RosterUpdated>(collectedLobbyEvent) {
                 "Expected RosterUpdated bot got $collectedLobbyEvent instead"
             }
             val expectedInLobby = otherTestPlayersInLobby + localTestPlayer + newPlayer
@@ -131,7 +129,7 @@ class LobbyFirebaseTests {
         val gateFlowClosed = SuspendingGate()
 
         fun hasEntered(evt: LobbyEvent) =
-            evt is RosterUpdated && evt.players.containsAll(otherTestPlayersInLobby + localTestPlayer)
+            evt is LobbyEvent.RosterUpdated && evt.players.containsAll(otherTestPlayersInLobby + localTestPlayer)
 
         var lastCollectedLobbyEvent: LobbyEvent? = null
         val collectJob = launch {
@@ -153,7 +151,7 @@ class LobbyFirebaseTests {
         gateFlowClosed.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
             // Assert
-            val rosterUpdated = xAssertIs<RosterUpdated>(lastCollectedLobbyEvent) {
+            val rosterUpdated = xAssertIs<LobbyEvent.RosterUpdated>(lastCollectedLobbyEvent) {
                 "Expected RosterUpdated bot got $lastCollectedLobbyEvent instead"
             }
             val expectedInLobby = otherTestPlayersInLobby
@@ -170,7 +168,7 @@ class LobbyFirebaseTests {
         val gateLobbyEntered = SuspendingGate()
 
         fun hasEntered(evt: LobbyEvent) =
-            evt is RosterUpdated && evt.players.containsAll(otherTestPlayersInLobby + localTestPlayer)
+            evt is LobbyEvent.RosterUpdated && evt.players.containsAll(otherTestPlayersInLobby + localTestPlayer)
 
         val collectJob = launch {
             sut.enter(localTestPlayer).collect {
@@ -205,12 +203,12 @@ class LobbyFirebaseTests {
         val collectJob = launch {
             sut.enter(localTestPlayer).collect {
                 when (it) {
-                    is RosterUpdated -> {
+                    is LobbyEvent.RosterUpdated -> {
                         if (it.players.containsAll(otherTestPlayersInLobby + localTestPlayer)) {
                             gateLobbyEntered.open()
                         }
                     }
-                    is ChallengeReceived -> {
+                    is LobbyEvent.ChallengeReceived -> {
                         collectedLobbyEvent = it
                         challengeReceivedGate.open()
                     }
@@ -225,7 +223,7 @@ class LobbyFirebaseTests {
         // Assert
         challengeReceivedGate.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
-            val challengeReceived = xAssertIs<ChallengeReceived>(collectedLobbyEvent) {
+            val challengeReceived = xAssertIs<LobbyEvent.ChallengeReceived>(collectedLobbyEvent) {
                 "Expected ChallengeReceived bot got $collectedLobbyEvent instead"
             }
             assertEquals(challengerPlayer, challengeReceived.challenge.challenger)

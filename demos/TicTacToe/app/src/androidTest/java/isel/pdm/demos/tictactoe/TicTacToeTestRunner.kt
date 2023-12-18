@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import io.mockk.coEvery
 import io.mockk.mockk
 import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.play.Match
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfoRepository
 import kotlinx.coroutines.flow.emptyFlow
@@ -39,6 +40,14 @@ class TicTacToeTestApplication : DependenciesContainer, Application() {
             coEvery { enter(any()) } returns emptyFlow()
             coEvery { leave() } returns Unit
         }
+
+    override var matchFactory: () -> Match = {
+        mockk(relaxed = true) {
+            coEvery { start(any(), any()) } returns emptyFlow()
+            coEvery { makeMove(any()) } returns Unit
+            coEvery { forfeit() } returns Unit
+        }
+    }
 }
 
 @Suppress("unused")

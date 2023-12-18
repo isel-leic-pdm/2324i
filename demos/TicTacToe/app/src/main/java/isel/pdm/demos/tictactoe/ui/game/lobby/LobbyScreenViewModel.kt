@@ -7,11 +7,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import isel.pdm.demos.tictactoe.TAG
 import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
-import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
 import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
 import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.EnteringLobby
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.IncomingChallenge
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.InsideLobby
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.LobbyAccessError
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.OutsideLobby
+import isel.pdm.demos.tictactoe.ui.game.lobby.LobbyScreenState.SentChallenge
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,23 +24,48 @@ import kotlinx.coroutines.launch
 
 /**
  *  Sum type that represents the possible states of the lobby screen..
- *
- *  [EnteringLobby] means that the player is entering the lobby.
- *  [InsideLobby] means that the player is inside the lobby.
- *  [OutsideLobby] means that the player is outside the lobby.
- *  [LobbyAccessError] means that an error occurred while accessing the lobby.
- *  [IncomingChallenge] means that a match is about to start because a remote player challenged
- *  the local player
- *  [SentChallenge] means that a match is about to start because the local player challenged
- *  another player in the lobby
  */
-sealed class LobbyScreenState
-data object EnteringLobby : LobbyScreenState()
-data class InsideLobby(val localPlayer: PlayerInfo, val otherPlayers: List<PlayerInfo>) : LobbyScreenState()
-data object OutsideLobby : LobbyScreenState()
-data class LobbyAccessError(val cause: Throwable) : LobbyScreenState()
-data class IncomingChallenge(val localPlayer: PlayerInfo, val challenge: Challenge) : LobbyScreenState()
-data class SentChallenge(val localPlayer: PlayerInfo, val challenge: Challenge) : LobbyScreenState()
+sealed interface LobbyScreenState {
+
+    /**
+     * Means that the player is entering the lobby.
+     */
+    data object EnteringLobby : LobbyScreenState
+
+    /**
+     * Means that the player is inside the lobby.
+     * @property localPlayer the information of the local player.
+     * @property otherPlayers the information of the other players in the lobby.
+     */
+    data class InsideLobby(val localPlayer: PlayerInfo, val otherPlayers: List<PlayerInfo>) : LobbyScreenState
+
+    /**
+     * Means that the player is outside the lobby.
+     */
+    data object OutsideLobby : LobbyScreenState
+
+    /**
+     * Means that an error occurred while accessing the lobby.
+     * @property cause the cause of the error.
+     */
+    data class LobbyAccessError(val cause: Throwable) : LobbyScreenState
+
+    /**
+     * Means that a match is about to start because a remote player challenged
+     * the local player.
+     * @property localPlayer the information of the local player.
+     * @property challenge the challenge information.
+     */
+    data class IncomingChallenge(val localPlayer: PlayerInfo, val challenge: Challenge) : LobbyScreenState
+
+    /**
+     * Means that a match is about to start because the local player challenged
+     * another player in the lobby.
+     * @property localPlayer the information of the local player.
+     * @property challenge the challenge information.
+     */
+    data class SentChallenge(val localPlayer: PlayerInfo, val challenge: Challenge) : LobbyScreenState
+}
 
 /**
  * The view model for the lobby screen.
@@ -78,11 +108,11 @@ class LobbyScreenViewModel(
             val localPlayerInfo = PlayerInfo(userInfo)
             try {
                 lobby.enter(localPlayerInfo).collect { evt ->
-                    if (evt is RosterUpdated && evt.players.contains(localPlayerInfo)) {
+                    if (evt is LobbyEvent.RosterUpdated && evt.players.contains(localPlayerInfo)) {
                         val otherPlayersInLobby = evt.players.filter { it != localPlayerInfo }
                         _screenStateFlow.value = InsideLobby(localPlayerInfo, otherPlayersInLobby)
                     }
-                    if (evt is ChallengeReceived) {
+                    if (evt is LobbyEvent.ChallengeReceived) {
                         _screenStateFlow.value = IncomingChallenge(localPlayerInfo, evt.challenge)
                     }
                 }

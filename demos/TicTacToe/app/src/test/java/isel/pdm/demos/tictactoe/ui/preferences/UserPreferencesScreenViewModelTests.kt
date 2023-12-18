@@ -3,9 +3,6 @@ package isel.pdm.demos.tictactoe.ui.preferences
 import io.mockk.coEvery
 import io.mockk.mockk
 import isel.pdm.demos.tictactoe.domain.IOState
-import isel.pdm.demos.tictactoe.domain.Idle
-import isel.pdm.demos.tictactoe.domain.Saved
-import isel.pdm.demos.tictactoe.domain.Saving
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.domain.user.UserInfoRepository
 import isel.pdm.demos.tictactoe.ui.main.MainScreenViewModel
@@ -55,7 +52,7 @@ class UserPreferencesScreenViewModelTests {
         }
 
         // Assert
-        Assert.assertTrue("Expected Idle bot got $collectedState instead", collectedState is Idle)
+        Assert.assertTrue("Expected Idle bot got $collectedState instead", collectedState is IOState.Idle)
     }
 
     @Test
@@ -67,7 +64,7 @@ class UserPreferencesScreenViewModelTests {
         var lastCollectedState: IOState<UserInfo?>? = null
         val collectJob = launch {
             sut.ioState.collectLatest {
-                if (it is Saved) {
+                if (it is IOState.Saved) {
                     lastCollectedState = it
                     gate.open()
                 }
@@ -82,7 +79,7 @@ class UserPreferencesScreenViewModelTests {
         }
 
         // Assert
-        val saved = lastCollectedState as? Saved
+        val saved = lastCollectedState as? IOState.Saved
         Assert.assertNotNull("Expected Saved but got $lastCollectedState instead", saved)
         Assert.assertEquals(testUserInfo, saved?.value?.getOrNull())
     }
@@ -96,7 +93,7 @@ class UserPreferencesScreenViewModelTests {
         var lastCollectedState: IOState<UserInfo?>? = null
         val collectJob = launch {
             sut.ioState.collect {
-                if (it is Saving) {
+                if (it is IOState.Saving) {
                     lastCollectedState = it
                     gate.open()
                 }
@@ -111,7 +108,7 @@ class UserPreferencesScreenViewModelTests {
         }
 
         // Assert
-        val saving = lastCollectedState as? Saving
+        val saving = lastCollectedState as? IOState.Saving
         Assert.assertNotNull("Expected Saving but got $lastCollectedState instead", saving)
     }
 
@@ -136,7 +133,7 @@ class UserPreferencesScreenViewModelTests {
         var lastCollectedState: IOState<UserInfo?>? = null
         val collectJob = launch {
             sut.ioState.collectLatest {
-                if (it is Saved) {
+                if (it is IOState.Saved) {
                     lastCollectedState = it
                     gate.open()
                 }

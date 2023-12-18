@@ -6,11 +6,16 @@ package isel.pdm.demos.tictactoe.domain.game.play
 sealed interface Game {
 
     /**
+     * The game board, which is common to all game states.
+     */
+    val board: Board
+
+    /**
      * Represents ongoing games.
      * @property turn the marker of the player to move next
      * @property board the game board
      */
-    data class Ongoing(val turn: Marker, val board: Board) : Game
+    data class Ongoing(val turn: Marker, override val board: Board) : Game
 
     /**
      * Represents finished games.
@@ -21,15 +26,20 @@ sealed interface Game {
      * Represents finished games with no winner.
      * @property board the game board
      */
-    data class Draw(val board: Board) : Finished
+    data class Draw(override val board: Board) : Finished
 
     /**
-     * Represents finished games with a winner. NOte that the winner can be declared
+     * Represents finished games with a winner. Note that the winner can be declared
      * even if the game is not finished, if the opponent forfeits.
      * @property winner the marker of the winner
      * @property board the game board
+     * @property wasForfeited true if the game was forfeited, false otherwise
      */
-    data class HasWinner(val winner: Marker, val board: Board) : Finished
+    data class HasWinner(
+        val winner: Marker,
+        override val board: Board,
+        val wasForfeited: Boolean = false
+    ) : Finished
 }
 
 /**
@@ -65,9 +75,13 @@ fun Game.makeMove(at: Coordinate): Game {
  * @param forfeitMarker the marker of the player who forfeited the game, or null
  * if the forfeit is to be attributed to the current player.
  */
-fun Game.forfeit(forfeitMarker: Marker? = null): Game {
+fun Game.forfeit(forfeitMarker: Marker? = null): Game.HasWinner {
     check(this is Game.Ongoing)
-    return Game.HasWinner(winner = (forfeitMarker ?: turn).other, board)
+    return Game.HasWinner(
+        winner = (forfeitMarker ?: turn).other,
+        board = board,
+        wasForfeited = true
+    )
 }
 
 /**
@@ -85,3 +99,10 @@ fun Board.hasWon(marker: Marker): Boolean =
     getRows().any { row -> row.all { it == marker } } ||
         getColumns().any { column -> column.all { it == marker } } ||
             getDiagonals().toList().any { diagonal -> diagonal.all { it == marker } }
+
+
+/**
+ * Utility function that checks whether it's the local player turn or not.
+ */
+fun Game.isLocalPlayerTurn(localPlayerMarker: Marker): Boolean =
+    this is Game.Ongoing && turn == localPlayerMarker

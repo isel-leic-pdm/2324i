@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="GamePlayActivityTests">
+        <State />
+      </entry>
+      <entry key="Tests in 'isel.pdm.demos.tictactoe'">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -16,7 +22,25 @@
             </Target>
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2023-12-06T10:24:52.252260Z" />
+          <multipleDevicesSelectedInDropDown value="true" />
+          <targetsSelectedWithDialog>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/Copy_of_Pixel_4a_API_33.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetsSelectedWithDialog>
         </State>
+      </entry>
+      <entry key="pressing_back_finishes_activity()">
+        <State />
+      </entry>
+      <entry key="pressing_back_forfeits_the_game()">
+        <State />
       </entry>
     </value>
   </component>

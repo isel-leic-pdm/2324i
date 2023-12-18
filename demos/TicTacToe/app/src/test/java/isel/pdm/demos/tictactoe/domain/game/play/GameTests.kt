@@ -4,6 +4,7 @@ import isel.pdm.demos.tictactoe.utils.xAssertIs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GameTests {
@@ -135,5 +136,21 @@ class GameTests {
         // Assert
         xAssertIs<Game.HasWinner>(gameAfterForfeit)
         assertEquals(firstTurn.other, gameAfterForfeit.winner)
+        assertTrue(gameAfterForfeit.wasForfeited)
+    }
+
+    @Test
+    fun `forfeit on an Ongoing game with a forfeit marker attributes the win to the other marker`() {
+        // Arrange
+        val sut = startGame()
+        val firstTurn = sut.turn
+
+        // Act
+        val gameAfterForfeit = sut.forfeit(forfeitMarker = firstTurn)
+
+        // Assert
+        xAssertIs<Game.HasWinner>(gameAfterForfeit)
+        assertEquals(firstTurn.other, gameAfterForfeit.winner)
+        assertTrue(gameAfterForfeit.wasForfeited)
     }
 }

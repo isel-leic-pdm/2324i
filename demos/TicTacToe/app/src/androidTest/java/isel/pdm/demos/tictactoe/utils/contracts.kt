@@ -23,7 +23,7 @@ fun <T> xAssertNotNull(value: T?) {
 }
 
 @OptIn(ExperimentalContracts::class)
-inline fun <reified T : Any> xAssertIs(value: Any?, lazyMessage: () -> String): T {
+inline fun <reified T : Any> xAssertIs(value: Any?, lazyMessage: () -> String = { "" }): T {
     contract {
         returns() implies (value is T)
     }

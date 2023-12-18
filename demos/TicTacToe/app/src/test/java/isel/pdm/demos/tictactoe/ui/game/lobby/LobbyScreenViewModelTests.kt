@@ -7,10 +7,9 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
 import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
-import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
 import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
+import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
 import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import isel.pdm.demos.tictactoe.utils.MockMainDispatcherRule
 import isel.pdm.demos.tictactoe.utils.SuspendingGate
@@ -44,7 +43,7 @@ class LobbyScreenViewModelTests {
     private val testLobby: Lobby = mockk(relaxed = true) {
         val localPlayer = slot<PlayerInfo>()
         coEvery { enter(capture(localPlayer)) } returns flow {
-            emit(RosterUpdated(
+            emit(LobbyEvent.RosterUpdated(
                 buildList {
                     add(localPlayer.captured)
                     addAll(otherTestPlayersInLobby)
@@ -56,7 +55,7 @@ class LobbyScreenViewModelTests {
                 challenger = otherTestPlayersInLobby.first(),
                 challenged = localPlayer.captured
             )
-            emit(ChallengeReceived(challenge))
+            emit(LobbyEvent.ChallengeReceived(challenge))
         }
 
         val opponent = slot<PlayerInfo>()
@@ -75,13 +74,13 @@ class LobbyScreenViewModelTests {
         // Arrange
         val sut = LobbyScreenViewModel(testLobby, localTestUserInfo)
         val insideLobbyGate = SuspendingGate()
-        var collectedState: InsideLobby? = null
+        var collectedState: LobbyScreenState.InsideLobby? = null
 
         // Act
         val collectJob = launch {
             sut.enterLobby()
             sut.screenState.collect {
-                if (it is InsideLobby) {
+                if (it is LobbyScreenState.InsideLobby) {
                     collectedState = it
                     insideLobbyGate.open()
                 }
@@ -92,7 +91,7 @@ class LobbyScreenViewModelTests {
         collectJob.cancelAndJoin()
 
         // Assert
-        val state = xAssertIs<InsideLobby>(collectedState)
+        val state = xAssertIs<LobbyScreenState.InsideLobby>(collectedState)
         assertEquals(otherTestPlayersInLobby.size, state.otherPlayers.size)
         assertTrue(state.otherPlayers.containsAll(otherTestPlayersInLobby))
     }
@@ -111,7 +110,7 @@ class LobbyScreenViewModelTests {
         val collectJob = launch {
             sut.screenState.collect {
                 collectedState = it
-                if (it is LobbyAccessError)
+                if (it is LobbyScreenState.LobbyAccessError)
                     errorGate.open()
             }
         }
@@ -123,7 +122,7 @@ class LobbyScreenViewModelTests {
         collectJob.cancelAndJoin()
 
         // Assert
-        val state = xAssertIs<LobbyAccessError>(collectedState)
+        val state = xAssertIs<LobbyScreenState.LobbyAccessError>(collectedState)
         assertEquals(expectedException.message, state.cause.message)
     }
 
@@ -140,8 +139,8 @@ class LobbyScreenViewModelTests {
             sut.screenState.collect {
                 collectedState = it
                 when (it) {
-                    is InsideLobby -> insideLobbyGate.open()
-                    is SentChallenge -> sentChallengeGate.open()
+                    is LobbyScreenState.InsideLobby -> insideLobbyGate.open()
+                    is LobbyScreenState.SentChallenge -> sentChallengeGate.open()
                     else -> {}
                 }
             }
@@ -156,7 +155,7 @@ class LobbyScreenViewModelTests {
         // Assert
         sentChallengeGate.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
-            val state = xAssertIs<SentChallenge>(collectedState)
+            val state = xAssertIs<LobbyScreenState.SentChallenge>(collectedState)
             assertEquals(localTestUserInfo, state.localPlayer.info)
             assertEquals(opponent, state.challenge.challenged)
         }
@@ -175,8 +174,8 @@ class LobbyScreenViewModelTests {
             sut.screenState.collect {
                 collectedState = it
                 when (it) {
-                    is InsideLobby -> insideLobbyGate.open()
-                    is IncomingChallenge -> incomingChallengeGate.open()
+                    is LobbyScreenState.InsideLobby -> insideLobbyGate.open()
+                    is LobbyScreenState.IncomingChallenge -> incomingChallengeGate.open()
                     else -> {}
                 }
             }
@@ -188,7 +187,7 @@ class LobbyScreenViewModelTests {
         // Assert
         incomingChallengeGate.awaitAndThenAssert(10000) {
             collectJob.cancelAndJoin()
-            val state = xAssertIs<IncomingChallenge>(collectedState) {
+            val state = xAssertIs<LobbyScreenState.IncomingChallenge>(collectedState) {
                 "Expected IncomingChallenge, but got ${collectedState?.javaClass?.simpleName}"
             }
             assertEquals(localTestUserInfo, state.localPlayer.info)
@@ -209,8 +208,8 @@ class LobbyScreenViewModelTests {
             sut.screenState.collect {
                 collectedState = it
                 when (it) {
-                    is InsideLobby -> insideLobbyGate.open()
-                    is OutsideLobby -> outsideLobbyGate.open()
+                    is LobbyScreenState.InsideLobby -> insideLobbyGate.open()
+                    is LobbyScreenState.OutsideLobby -> outsideLobbyGate.open()
                     else -> {}
                 }
             }
@@ -225,7 +224,7 @@ class LobbyScreenViewModelTests {
         collectJob.cancelAndJoin()
 
         // Assert
-        xAssertIs<OutsideLobby>(collectedState)
+        xAssertIs<LobbyScreenState.OutsideLobby>(collectedState)
     }
 
     @Test(expected = IllegalStateException::class)

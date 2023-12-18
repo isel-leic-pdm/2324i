@@ -6,11 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
-import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
 import isel.pdm.demos.tictactoe.domain.game.lobby.Lobby
 import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
 import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
@@ -20,47 +18,22 @@ import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
 /**
- * Sum type that represents the possible states of the lobby.
- */
-sealed class LobbyState
-
-/**
- * Represents the idle state of the lobby, i.e. when the local player is not inside the lobby.
- */
-data object Idle : LobbyState()
-
-/**
- * Represents the state of the lobby when the local player is entering the lobby, but is not yet inside.
- * This state is used to prevent the local player from entering the lobby more than once.
- */
-data object Entering : LobbyState()
-
-/**
- * Represents the state of the lobby when the local player is inside the lobby.
- * @property localPlayer The local player's info.
- * @property localPlayerDocRef The reference to the local player's document in the Firestore DB.
- * @property producer The [ProducerScope] used to produce the lobby events, or to the close the flow
- */
-data class InsideLobby(
-    val localPlayer: PlayerInfo,
-    val localPlayerDocRef: DocumentReference,
-    val producer: ProducerScope<LobbyEvent>
-) : LobbyState()
-
-/**
  * Implementation of the Game's lobby using Firebase's Firestore.
  */
 class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
 
-    private var state: LobbyState = Idle
+    /**
+     * The current state of the lobby.
+     */
+    private var state: LobbyState = LobbyState.Idle
 
     override suspend fun enter(localPlayer: PlayerInfo): Flow<LobbyEvent> {
-        check(state is Idle) { "The local player is already inside the lobby" }
-        state = Entering
+        check(state is LobbyState.Idle) { "The local player is already inside the lobby" }
+        state = LobbyState.Entering
 
         return callbackFlow {
             val localPlayerDocRef = getPlayerDocRef(localPlayer)
-            state = InsideLobby(localPlayer, localPlayerDocRef, this)
+            state = LobbyState.InsideLobby(localPlayer, localPlayerDocRef, this)
             val roasterUpdatedSubscription = subscribeRoasterUpdated(this)
             val challengeReceivedSubscription = subscribeChallengeReceived(localPlayerDocRef, this)
 
@@ -70,14 +43,14 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
                 roasterUpdatedSubscription.remove()
                 challengeReceivedSubscription.remove()
                 localPlayerDocRef.delete()
-                state = Idle
+                state = LobbyState.Idle
             }
         }
     }
 
     override suspend fun issueChallenge(to: PlayerInfo): Challenge {
         state.let {
-            check(it is InsideLobby) { "The local player is not inside the lobby" }
+            check(it is LobbyState.InsideLobby) { "The local player is not inside the lobby" }
             db.collection(LOBBY)
                 .document(to.id.toString())
                 .update(CHALLENGER_FIELD, it.localPlayer.toDocumentContent())
@@ -88,7 +61,7 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
 
     override suspend fun leave() {
         state.let {
-            check(it is InsideLobby) { "The local player is not inside the lobby" }
+            check(it is LobbyState.InsideLobby) { "The local player is not inside the lobby" }
             it.localPlayerDocRef.delete().await()
             it.producer.close()
         }
@@ -98,7 +71,7 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
         db.collection(LOBBY).addSnapshotListener { snapshot, error ->
             when {
                 error != null -> flow.close(error)
-                snapshot != null -> flow.trySend(RosterUpdated(snapshot.toPlayerList()))
+                snapshot != null -> flow.trySend(LobbyEvent.RosterUpdated(snapshot.toPlayerList()))
             }
         }
 
@@ -109,7 +82,7 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
         when {
             error != null -> flow.close(error)
             snapshot != null -> snapshot.toChallengeOrNull()?.let {
-                flow.trySend(ChallengeReceived(it))
+                flow.trySend(LobbyEvent.ChallengeReceived(it))
             }
         }
     }
@@ -117,6 +90,40 @@ class LobbyFirebase(private val db: FirebaseFirestore) : Lobby {
     private fun getPlayerDocRef(localPlayer: PlayerInfo) =
         db.collection(LOBBY).document(localPlayer.id.toString())
 }
+
+/**
+ * Sum type that represents the possible states of the lobby.
+ */
+private sealed interface LobbyState {
+    /**
+     * Represents the idle state of the lobby, i.e. when the local player is not inside the lobby.
+     */
+    data object Idle : LobbyState
+
+    /**
+     * Represents the state of the lobby when the local player is entering the lobby, but is not yet inside.
+     * This state is used to prevent the local player from entering the lobby more than once.
+     */
+    data object Entering : LobbyState
+
+    /**
+     * Represents the state of the lobby when the local player is inside the lobby.
+     * @property localPlayer The local player's info.
+     * @property localPlayerDocRef The reference to the local player's document in the Firestore DB.
+     * @property producer The [ProducerScope] used to produce the lobby events, or to the close the flow
+     */
+    data class InsideLobby(
+        val localPlayer: PlayerInfo,
+        val localPlayerDocRef: DocumentReference,
+        val producer: ProducerScope<LobbyEvent>
+    ) : LobbyState
+}
+
+/**
+ * The following declarations are used to convert the domain objects to/from the Firestore DB documents.
+ * They should only be accessible from this file, but are declared as public to allow testing
+ * In a multi-module project we would use the "internal" modifier instead and declare the tests in the same module
+ */
 
 /**
  * Names of the fields used in the document representations.

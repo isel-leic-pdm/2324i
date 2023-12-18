@@ -9,10 +9,10 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.slot
 import isel.pdm.demos.tictactoe.domain.game.lobby.Challenge
-import isel.pdm.demos.tictactoe.domain.game.lobby.ChallengeReceived
+import isel.pdm.demos.tictactoe.domain.game.lobby.LobbyEvent
 import isel.pdm.demos.tictactoe.domain.game.lobby.PlayerInfo
-import isel.pdm.demos.tictactoe.domain.game.lobby.RosterUpdated
 import isel.pdm.demos.tictactoe.domain.user.UserInfo
+import isel.pdm.demos.tictactoe.infrastructure.localTestPlayer
 import isel.pdm.demos.tictactoe.infrastructure.otherTestPlayersInLobby
 import isel.pdm.demos.tictactoe.ui.common.ErrorAlertDismissButtonTestTag
 import isel.pdm.demos.tictactoe.ui.common.ErrorAlertTestTag
@@ -40,7 +40,6 @@ class LobbyActivityTests {
     }
     private val testUserInfo = UserInfo("test", "test")
     private val testIntent = LobbyActivity.createIntent(testApplication, testUserInfo)
-
 
     @Test
     fun initially_the_lobby_screen_is_displayed() {
@@ -166,7 +165,7 @@ class LobbyActivityTests {
         testApplication.lobby = mockk(relaxed = true) {
             val localPlayer = slot<PlayerInfo>()
             coEvery { enter(capture(localPlayer)) } returns flow {
-                emit(RosterUpdated(
+                emit(LobbyEvent.RosterUpdated(
                     buildList {
                         add(localPlayer.captured)
                         addAll(otherTestPlayersInLobby)
@@ -174,6 +173,10 @@ class LobbyActivityTests {
                 ))
                 enteredGate.open()
             }
+            coEvery { issueChallenge(any()) } returns Challenge(
+                    challenger = localTestPlayer,
+                    challenged = otherTestPlayersInLobby.first()
+                )
             coEvery { leave() } returns Unit
         }
 
@@ -194,7 +197,7 @@ class LobbyActivityTests {
         testApplication.lobby = mockk(relaxed = true) {
             val localPlayer = slot<PlayerInfo>()
             coEvery { enter(capture(localPlayer)) } returns flow {
-                emit(RosterUpdated(
+                emit(LobbyEvent.RosterUpdated(
                     buildList {
                         add(localPlayer.captured)
                         addAll(otherTestPlayersInLobby)
@@ -205,7 +208,7 @@ class LobbyActivityTests {
                     challenger = otherTestPlayersInLobby.first(),
                     challenged = localPlayer.captured
                 )
-                emit(ChallengeReceived(challenge))
+                emit(LobbyEvent.ChallengeReceived(challenge))
                 challengeGate.open()
             }
             coEvery { leave() } returns Unit

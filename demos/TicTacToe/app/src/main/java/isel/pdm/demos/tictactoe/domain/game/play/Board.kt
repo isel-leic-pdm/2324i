@@ -12,6 +12,18 @@ typealias BoardDiagonal = List<Marker?>
 data class Board(
     private val tiles: List<List<Marker?>> = List(BOARD_SIDE) { List(BOARD_SIDE) { null } }
 ) {
+    companion object {
+        val EMPTY = Board()
+
+        fun fromMovesList(moves: List<Marker?>) = Board(
+            tiles = List(size = BOARD_SIDE, init = { row ->
+                List(size = BOARD_SIDE, init = { col ->
+                    moves[row * BOARD_SIDE + col]
+                })
+            })
+        )
+    }
+
     /**
      * Overloads the indexing operator for getting the move at the given coordinates.
      * @param at    the board's coordinate
@@ -79,5 +91,11 @@ data class Board(
         first = List(BOARD_SIDE) { i -> tiles[i][i] },
         second = List(BOARD_SIDE) { i -> tiles[i][BOARD_SIDE - i - 1] }
     )
+
+    /**
+     * Checks whether the board is empty or not.
+     * @return true if the board is empty, false otherwise
+     */
+    fun isEmpty(): Boolean = tiles.all { row -> row.all { it == null } }
 }
 

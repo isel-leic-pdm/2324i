@@ -64,9 +64,9 @@ class LobbyActivity : ComponentActivity() {
                 vm.enterLobby()
                 try {
                     vm.screenState.collect { state ->
-                        if (state is SentChallenge)
+                        if (state is LobbyScreenState.SentChallenge)
                             GamePlayActivity.navigateTo(this@LobbyActivity, state.localPlayer, state.challenge)
-                        if (state is IncomingChallenge)
+                        if (state is LobbyScreenState.IncomingChallenge)
                             GamePlayActivity.navigateTo(this@LobbyActivity, state.localPlayer, state.challenge)
                     }
                 }
@@ -77,20 +77,22 @@ class LobbyActivity : ComponentActivity() {
         }
 
         setContent {
-            val currentState = vm.screenState.collectAsState(EnteringLobby).value
+            val currentState = vm.screenState.collectAsState(LobbyScreenState.EnteringLobby).value
             val playersInLobby =
-                if (currentState is InsideLobby) currentState.otherPlayers
+                if (currentState is LobbyScreenState.InsideLobby) currentState.otherPlayers
                 else emptyList()
 
             LobbyScreen(
                 playersInLobby = playersInLobby,
-                onPlayerSelected = { vm.sendChallenge(it) },
+                onPlayerSelected = {
+                    vm.sendChallenge(it)
+                },
                 onNavigateBackRequested = { finish() },
                 onNavigateToPreferencesRequested = { UserPreferencesActivity.navigateTo(this, userInfoExtra) }
             )
 
             currentState.let {
-                if (it is LobbyAccessError)
+                if (it is LobbyScreenState.LobbyAccessError)
                     ErrorAlert(
                         title = R.string.failed_to_enter_lobby_dialog_title,
                         message = R.string.failed_to_enter_lobby_dialog_text,

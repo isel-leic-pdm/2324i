@@ -26,8 +26,20 @@
     <string name="failed_to_enter_lobby_dialog_ok_button">OK</string>
 
     <!-- Gameplay screen -->
-    <string name="game_screen_waiting">Joining match</string>
+    <string name="game_screen_no_title"> </string>
+    <string name="game_screen_waiting_to_join">Joining match</string>
     <string name="game_screen_your_turn">It\'s your turn</string>
     <string name="game_screen_opponent_turn">Opponent\'s turn</string>
     <string name="game_screen_forfeit">Forfeit</string>
+    <string name="game_screen_match_ended">Match ended</string>
+
+    <string name="match_ended_dialog_title">Match ended</string>
+    <string name="match_ended_dialog_text_local_won">Congratulations, you won!</string>
+    <string name="match_ended_dialog_text_opponent_won">Your opponent has won.</string>
+    <string name="match_ended_dialog_text_tied_match">The match is tied</string>
+    <string name="match_ended_ok_button">OK</string>
+
+    <string name="starting_match_dialog_title">Match is starting</string>
+    <string name="starting_match_dialog_text">Waiting for opponent to join</string>
+    <string name="starting_match_cancel_button">Cancel</string>
 </resources>

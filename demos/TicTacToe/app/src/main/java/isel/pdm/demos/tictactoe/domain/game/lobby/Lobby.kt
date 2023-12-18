@@ -4,13 +4,20 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Sum type used to describe events occurring while the player is in the lobby.
- *
- * [RosterUpdated] to describe changes in the set of players in the lobby
- * [ChallengeReceived] when a challenge is received by the local player.
  */
-sealed class LobbyEvent
-data class RosterUpdated(val players: List<PlayerInfo>) : LobbyEvent()
-data class ChallengeReceived(val challenge: Challenge) : LobbyEvent()
+sealed interface LobbyEvent {
+    /**
+     * Signals that the roster of players in the lobby has changed.
+     * @property players the new roster of players
+     */
+    data class RosterUpdated(val players: List<PlayerInfo>) : LobbyEvent
+
+    /**
+     * Signals that a challenge was received by the local player.
+     * @property challenge the challenge information
+     */
+    data class ChallengeReceived(val challenge: Challenge) : LobbyEvent
+}
 
 /**
  * Exception thrown when the lobby is unreachable.
