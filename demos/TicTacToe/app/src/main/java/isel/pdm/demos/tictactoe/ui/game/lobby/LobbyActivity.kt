@@ -84,9 +84,7 @@ class LobbyActivity : ComponentActivity() {
 
             LobbyScreen(
                 playersInLobby = playersInLobby,
-                onPlayerSelected = {
-                    vm.sendChallenge(it)
-                },
+                onPlayerSelected = { vm.sendChallenge(it) },
                 onNavigateBackRequested = { finish() },
                 onNavigateToPreferencesRequested = { UserPreferencesActivity.navigateTo(this, userInfoExtra) }
             )

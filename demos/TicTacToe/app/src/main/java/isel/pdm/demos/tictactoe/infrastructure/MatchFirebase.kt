@@ -1,5 +1,6 @@
 package isel.pdm.demos.tictactoe.infrastructure
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -78,7 +79,6 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
 
         val updatedGame = matchState.game.makeMove(at)
         updateGame(updatedGame, matchState.gameId)
-        matchState = matchState.copy(game = updatedGame)
     }
 
     override suspend fun forfeit() {
@@ -115,13 +115,17 @@ class MatchFirebase(private val db: FirebaseFirestore) : Match {
                 when {
                     error != null -> flow.close(error)
                     snapshot != null -> {
-                        when (val it = snapshot.toGameOrNull()) {
-                            is Game.HasWinner -> flow.trySend(MatchEvent.Ended(it, it.winner))
-                            is Game.Draw -> flow.trySend(MatchEvent.Ended(it, winner = null))
-                            is Game.Ongoing ->
-                                if (it.board.isEmpty()) flow.trySend(MatchEvent.Started(it))
-                                else flow.trySend(MatchEvent.MoveMade(it))
-                            else -> flow.close()
+                        val updatedGame = snapshot.toGameOrNull()
+                        if (updatedGame == null) flow.close(IllegalStateException("Game not found"))
+                        else {
+                            matchState = matchState.copy(game = updatedGame)
+                            when (updatedGame) {
+                                is Game.HasWinner -> flow.trySend(MatchEvent.Ended(updatedGame, updatedGame.winner))
+                                is Game.Draw -> flow.trySend(MatchEvent.Ended(updatedGame, winner = null))
+                                is Game.Ongoing ->
+                                    if (updatedGame.board.isEmpty()) flow.trySend(MatchEvent.Started(updatedGame))
+                                    else flow.trySend(MatchEvent.MoveMade(updatedGame))
+                            }
                         }
                     }
                     else -> flow.close()
@@ -211,7 +215,8 @@ private fun DocumentSnapshot.toGameOrNull(): Game? = data?.let {
     when {
         board.isTied() -> Game.Draw(board)
         forfeit != null -> Game.HasWinner(winner = forfeit.other, board = board, wasForfeited = true)
-        board.hasWon(turn.other) -> Game.HasWinner(winner = turn, board = board)
+        board.hasWon(turn.other) -> Game.HasWinner(winner = turn.other, board = board)
+        board.hasWon(turn) -> Game.HasWinner(winner = turn, board = board)
         else -> Game.Ongoing(turn, board)
     }
 }

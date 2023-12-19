@@ -241,6 +241,45 @@ class MatchFirebaseTests {
     }
 
     @Test
+    fun makeMove_when_its_local_player_turn_succeeds() = runBlocking {
+        // Arrange
+        val sut = rule.match
+        val challenge = rule.locallyInitiatedChallenge
+        val localPlayer = challenge.challenged
+
+        val startedEventGate = SuspendingGate()
+        val expectedEventGate = SuspendingGate()
+        var startedEvent: MatchEvent.Started? = null
+
+        val collectJob = launch {
+            sut.start(localPlayer, challenge).collect {
+                if (it is MatchEvent.Started) {
+                    startedEvent = it
+                    startedEventGate.open()
+                }
+                if (it is MatchEvent.MoveMade) {
+                    expectedEventGate.open()
+                }
+            }
+        }
+
+        withTimeout(5000) { startedEventGate.await() }
+
+        // Simulate remote player move
+        val playedAt = Coordinate(0, 0)
+        val gameId = challenge.challenger.id.toString()
+        val game = startedEvent?.game?.makeMove(at = Coordinate(0, 0))
+        xAssertNotNull(game)
+        updateGame(rule.testApp, gameId, game)
+
+        // Act & Assert
+        expectedEventGate.awaitAndThenAssert(5000) {
+            collectJob.cancelAndJoin()
+            sut.makeMove(at = Coordinate(1, 1))
+        }
+    }
+
+    @Test
     fun forfeit_event_is_produced_when_remote_player_forfeits() = runBlocking {
         // Arrange
         val sut = rule.match

@@ -132,7 +132,9 @@ class GamePlayScreenViewModel(private val match: Match) : ViewModel() {
      */
     fun makeMove(at: Coordinate) {
         check(_screenStateFlow.value is GamePlayScreenState.Started)
-        viewModelScope.launch { match.makeMove(at) }
+        viewModelScope.launch {
+            match.makeMove(at)
+        }
     }
 
     /**

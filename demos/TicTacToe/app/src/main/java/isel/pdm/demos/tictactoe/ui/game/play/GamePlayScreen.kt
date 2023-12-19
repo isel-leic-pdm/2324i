@@ -84,6 +84,7 @@ fun GamePlayScreen(
                         .fillMaxSize(),
                 )
                 Button(
+                    enabled = state !is GamePlayScreenState.Finished,
                     onClick = onForfeitRequested,
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier.testTag(ForfeitButtonTag)

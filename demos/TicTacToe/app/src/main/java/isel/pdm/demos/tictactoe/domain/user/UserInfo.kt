@@ -20,7 +20,7 @@ data class UserInfo(val nick: String, val motto: String? = null) {
  * @return true if the values are acceptable, false otherwise.
  */
 fun validateUserInfoParts(nick: String, motto: String?): Boolean {
-    return nick.isNotBlank() && motto?.isNotBlank() ?: true
+    return nick.isNotBlank()
 }
 
 /**
