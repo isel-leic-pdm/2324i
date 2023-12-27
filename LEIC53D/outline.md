@@ -359,7 +359,7 @@ For reference:
 
 ### 08/12/2023 - National Holliyday
 
-## Week 14 (preview)
+## Week 14
 ### 13/12/2023 (Part 1) - Final considerations
 * Presentation of the final version of the TicTacToe application
   * Description of its architecture and key design decisions
@@ -385,4 +385,9 @@ For future reference:
 * [Build location-aware apps | Sensors and location](https://developer.android.com/develop/sensors-and-location/location)
 
 ### 13/12/2023 (Part 2) and 15/12/2023 - Practical class
-* Goal: Finishing thouches on the course project
+* Goal: Finishing thouches on the course's project
+
+## Week 15
+### 20/12/2023 - Practical class
+* Goal: Finishing thouches on the course's project
+
